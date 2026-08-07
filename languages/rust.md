@@ -27,6 +27,22 @@ how to program in *some* language — just not Rust yet.
 - [`.chars()` — iterate a string by character](#chars)
 - [`usize` and underflow](#usize)
 - [`.max()` / `.min()` — pick the larger or smaller](#ord-max)
+- [`struct` — defining your own type](#struct)
+- [`type` — type aliases](#type-alias)
+- [`#[derive(Default)]` and `Self::default()`](#derive-default)
+- [`match` expressions](#match)
+- [`BTreeMap<K, V>` — a sorted map](#btreemap)
+- [`.range(...)` on a `BTreeMap`](#btreemap-range)
+- [`Option<T>` — a value that may be absent](#option)
+- [`?` — the question-mark operator](#question-mark)
+- [`let ... else` — bind or bail](#let-else)
+- [`.entry(...).or_default()`](#entry-or-default)
+- [closures — `|x| ...`](#closures)
+- [iterator adapters — `.filter()`, `.map()`, `.collect()`, …](#iterator-adapters)
+- [`impl Trait` in argument position](#impl-trait-arg)
+- [lifetimes — `<'a>`](#lifetimes)
+- [`format!` — building strings](#format)
+- [`.to_owned()` / `.clone()` — making an owned copy](#to-owned-clone)
 
 ## `use` declarations {#use}
 
@@ -414,3 +430,396 @@ Same effect, three lines instead of one. `.max()` is just the tidy, idiomatic fo
 of that comparison, and it reads as exactly what it does.
 
 First seen in: [3. Longest Substring Without Repeating Characters](../problems/0003-longest-substring-without-repeating-characters/solution.rs.md)
+
+## `struct` — defining your own type {#struct}
+
+**In one line:** bundles a few named values into one new type you can name and pass
+around.
+
+`impl Solution` in earlier problems used a type LeetCode handed us. Here we define
+our own:
+```rust
+struct TimedValue {
+    value: String,
+    expires_at: Option<Timestamp>,
+}
+```
+This says "a `TimedValue` is a `value` *and* an `expires_at`, together." You build one
+by naming every field — `TimedValue { value: v, expires_at: None }` — and read a field
+with a dot — `stored.value`. Fields are private to the defining module by default,
+which is fine here since everything lives in one file. A struct with methods gets an
+[`impl` block](#impl) (that's where `is_alive_at` attaches to `TimedValue`).
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `type` — type aliases {#type-alias}
+
+**In one line:** gives a long type a short, meaningful name — no new type, just a
+nickname.
+
+`type Record = BTreeMap<String, TimedValue>;` means "wherever I write `Record`, read
+`BTreeMap<String, TimedValue>`." It's purely a readability tool: `Record` and the full
+spelling are interchangeable to the compiler. We use it so signatures read as
+`fn capture_live_fields(record: &Record, ...)` instead of dragging the whole nested map
+type through every line. Distinct aliases (`Record` vs `SnapshotRecord`) also *document
+intent* even though both are `BTreeMap`s.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `#[derive(Default)]` and `Self::default()` {#derive-default}
+
+**In one line:** asks the compiler to write the "empty starting value" of a type for
+you.
+
+`#[derive(Default)]` on top of a struct auto-generates a `default()` constructor that
+fills every field with *its* default (an empty `HashMap`, an empty `BTreeMap`, and so
+on). Then:
+```rust
+pub fn new() -> Self {
+    Self::default()
+}
+```
+`Self` is a stand-in for "the type this `impl` is for" (`InMemoryDatabase`), so
+`Self::default()` builds a fresh empty database. We expose it as `new()` by convention.
+Without the derive you'd hand-write `InMemoryDatabase { records: HashMap::new(),
+backups: BTreeMap::new() }` — fine now, but the derive keeps `new()` correct
+automatically if you add a field later.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `match` expressions {#match}
+
+**In one line:** picks a branch by comparing a value against several *patterns*, and
+must cover every case.
+
+[`if let`](#if-let) handles one case and ignores the rest; `match` is the full form
+when you want to handle all of them:
+```rust
+match self.expires_at {
+    Some(expiry) => timestamp < expiry,
+    None => true,
+}
+```
+Read it as "if there's a deadline, are we before it? if there's none, it's alive." The
+compiler *forces* you to cover every variant of an [`Option`](#option) — leave off the
+`None` arm and it won't compile — which is how `match` stops you forgetting a case.
+Each arm is an expression, so the whole `match` evaluates to a value (here, the `bool`
+the function returns).
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `BTreeMap<K, V>` — a sorted map {#btreemap}
+
+**In one line:** like a [`HashMap`](#hashmap), but it keeps its keys in **sorted
+order**, so it can answer range and prefix questions.
+
+This is Rust's spelling of the [sorted map](../glossary/sorted-map.md) concept, backed
+by a balanced tree. Same everyday methods as `HashMap` — `.insert`, `.get`, `.remove`,
+`.iter` — with two differences that matter:
+- **Ordering:** `.iter()` yields entries **sorted by key**, always. That's why
+  `scan_at` comes out sorted with no sort step.
+- **Cost:** lookups are `O(log n)` instead of `HashMap`'s average `O(1)` — the price of
+  keeping order.
+
+We use it for the *inner* record (`BTreeMap<String, TimedValue>`) so fields stay sorted
+for prefix scans, and for the *backup shelf* (`BTreeMap<Timestamp, Snapshot>`) so
+"latest backup at or before T" is a fast [range](#btreemap-range) query. The outer map
+stays a `HashMap` because it's only ever looked up by exact key.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `.range(...)` on a `BTreeMap` {#btreemap-range}
+
+**In one line:** walks only the slice of the map between two bounds, instead of the
+whole thing — the payoff for keeping keys sorted.
+
+**What it does.** `map.range(a..)` iterates entries with key ≥ `a`, in order;
+`map.range(..=b)` iterates entries with key ≤ `b`. Because a `BTreeMap` is sorted, it
+jumps to the boundary in `O(log n)` and then walks — it never touches keys outside the
+range.
+
+**The two uses here, traced.**
+- Prefix scan: `record.range(prefix.to_owned()..)` starts at the first field ≥ `prefix`,
+  and [`.take_while(...)`](#iterator-adapters) stops as soon as a field no longer starts
+  with `prefix`. Together that reads exactly the prefix block — `O(log F + M)`.
+- Latest backup: `self.backups.range(..=timestamp_to_restore).next_back()` takes all
+  backups at or before the target and `.next_back()` grabs the **last** one — i.e. the
+  most recent. `.next_back()` works because a range is a double-ended iterator you can
+  read from either end.
+
+**The gotcha we hit — why `prefix.to_owned()`.** The natural `record.range(prefix..)`
+where `prefix: &str` **does not compile**. Rust tries to compare using `&str`, then
+needs `String: Borrow<&str>` (so it can view a stored `String` key as your bound's
+type), and that trait impl doesn't exist — you get *"the trait `Borrow<&str>` is not
+implemented for `String`."* The clean fix is to make the bound an owned `String` with
+`prefix.to_owned()`, so both sides are `String` and the comparison just works. It costs
+one small allocation, alongside the `Vec` the scan already builds — a fair price for a
+line that reads plainly.
+
+**Why bother instead of filtering.** `record.iter().filter(|(f, _)| f.starts_with(prefix))`
+would also work — but it scans **all** `F` fields every time. The range walk touches
+only the matches. On a large record that's the whole difference between `O(F)` and
+`O(log F + M)`.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `Option<T>` — a value that may be absent {#option}
+
+**In one line:** Rust's answer to `null` — a value is either `Some(thing)` or `None`,
+and the compiler makes you handle both.
+
+[`if let`](#if-let) already showed `Option` in a lookup; here it's also a *stored* and
+*returned* type. `expires_at: Option<Timestamp>` means "a deadline **or** nothing"
+(`None` = never expires). `get_at(...) -> Option<&str>` means "the value **or** nothing"
+(`None` = absent or expired). Because there's no `null`, a missing value can't sneak
+past you — you can't use the inner value without first opening the `Option` (via
+[`match`](#match), [`if let`](#if-let), [`?`](#question-mark), or a method).
+
+**`.map` on an `Option`.** `stored.expires_at.map(|expiry| expiry - timestamp)`
+transforms the value *inside* a `Some`, leaving `None` untouched: `Some(25)` becomes
+`Some(15)`, `None` stays `None`. It's the tidy way to say "if there is a deadline,
+convert it to a remaining duration; if there isn't, there still isn't."
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `?` — the question-mark operator {#question-mark}
+
+**In one line:** unwraps a `Some`/`Ok` and, on `None`/`Err`, *returns early* from the
+whole function with that same empty result.
+
+**Trace it.**
+```rust
+let stored = self.records.get(key)?.get(field)?;
+```
+- `self.records.get(key)` is `Option<&Record>`.
+- `?` says: if that's `None`, **stop and return `None` from `get_at` right now**;
+  otherwise hand back the `&Record` inside and keep going.
+- `.get(field)?` does the same one level deeper.
+
+So by the line after, `stored` is a plain `&TimedValue` — both "missing key" and
+"missing field" have already been dealt with by bailing out. It only works because
+`get_at` itself returns an `Option`, so there's a `None` for `?` to return.
+
+**Without it.** You'd nest two matches:
+```rust
+let record = match self.records.get(key) {
+    Some(r) => r,
+    None => return None,
+};
+let stored = match record.get(field) {
+    Some(s) => s,
+    None => return None,
+};
+```
+Six lines of ceremony for what `?` says in two characters. That "bail out on absence,
+otherwise unwrap and continue" is the pattern `?` exists for.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `let ... else` — bind or bail {#let-else}
+
+**In one line:** unwrap a value into a variable that stays in scope, and if it isn't
+there, run an `else` block that must *leave* (return, break, continue).
+
+**Trace it.**
+```rust
+let Some(record) = self.records.get_mut(key) else {
+    return false;
+};
+record.remove(field);
+```
+- `self.records.get_mut(key)` is `Option<&mut Record>`.
+- `let Some(record) = ... else { return false; }` says: if it's `Some`, bind the inside
+  to `record` **and carry on with `record` usable below**; if it's `None`, run the
+  `else`, which here returns `false`.
+
+The key contrast with [`if let`](#if-let): with `if let`, the unwrapped value lives only
+*inside* the `if` block, which pushes the rest of your logic one indent deeper each
+time. `let ... else` unwraps and keeps the value at the **top level**, so the happy path
+reads as a flat sequence instead of a staircase of nested blocks. That's why it fits the
+"check a precondition, then get on with it" style of `delete_at`, `scan_by_prefix_at`,
+and `restore`.
+
+**The rule:** the `else` block must diverge — `return`, `break`, `continue`, or panic —
+because after it, Rust needs `record` to definitely exist. An `else` that fell through
+without leaving wouldn't compile.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `.entry(...).or_default()` {#entry-or-default}
+
+**In one line:** looks up a key and, if it's missing, inserts a fresh empty value —
+then hands you a mutable reference either way.
+
+```rust
+self.records.entry(key.to_owned()).or_default().insert(field, ...);
+```
+Reading it: `.entry(key)` finds the slot for `key`; `.or_default()` says "if that slot
+is empty, put a [`Default`](#derive-default) value there first" — for a `BTreeMap` that's
+an empty map — and returns a `&mut` to whatever's now in the slot; then `.insert(...)`
+adds the field to that record. It's the one-liner for "get this key's record, creating an
+empty one on first use."
+
+**Without it** you'd branch by hand:
+```rust
+if !self.records.contains_key(key) {
+    self.records.insert(key.to_owned(), BTreeMap::new());
+}
+self.records.get_mut(key).unwrap().insert(field, ...);
+```
+— two lookups and an [`.unwrap()`](#unwrap). `.entry().or_default()` does it in one
+lookup and no unwrap. (Its cousin `.or_insert_with(...)` lets you supply a custom
+starting value instead of the default.)
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## closures — `|x| ...` {#closures}
+
+**In one line:** a small anonymous function written inline, often to tell an iterator
+adapter *what* to do to each item.
+
+`|expiry| expiry - timestamp` is a function with one parameter `expiry` whose body is
+`expiry - timestamp`. The `| |` hold the parameters; what follows is the body. Closures
+can **capture** variables from around them — here `timestamp` isn't a parameter, it's
+grabbed from the enclosing function — which is exactly why they're handier than a
+top-level `fn` for these one-off transforms.
+
+You'll see them destructure tuples too: `|(field, _)| field.starts_with(prefix)` takes
+one `(key, value)` item, binds `field` to the first part, and `_` throws away the
+second. They feed the [iterator adapters](#iterator-adapters) below and methods like
+[`Option::map`](#option).
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## iterator adapters — `.filter()`, `.map()`, `.collect()`, … {#iterator-adapters}
+
+**In one line:** chainable steps that describe a transformation over a sequence, doing
+no work until something asks for the results.
+
+An iterator is a lazy stream of items. **Adapters** reshape the stream; a **consumer**
+runs it. Trace the chain in `format_live_fields`:
+```rust
+fields
+    .filter(|(_, stored)| stored.is_alive_at(timestamp))
+    .map(|(field, stored)| format!("{field}({})", stored.value))
+    .collect()
+```
+- start: a stream of `(&String, &TimedValue)` pairs.
+- `.filter(pred)` keeps only items where the [closure](#closures) returns `true` — here,
+  the live ones. Still a stream.
+- `.map(f)` transforms each surviving item — here into a `String` like `name(alice)`.
+  Still a stream.
+- `.collect()` is the **consumer**: it runs the whole chain and gathers the results into
+  a collection — a `Vec<String>` here, inferred from the return type.
+
+Two more used in this solution:
+- `.filter_map(f)` combines filter + map: the closure returns an [`Option`](#option), and
+  `Some(x)` keeps `x` while `None` drops the item. `capture_live_state` uses it to build
+  a snapshot key only when its record has live fields.
+- `.take_while(pred)` yields items until the first time `pred` is false, then **stops** —
+  which is what ends a prefix [range](#btreemap-range) walk at the edge of the block.
+
+**Why chains over loops.** Each adapter is zero-cost (it compiles down to the same loop
+you'd write by hand) but reads as a sentence: *filter to live, format each, collect*. And
+nothing allocates until `.collect()`.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `impl Trait` in argument position {#impl-trait-arg}
+
+**In one line:** a parameter type that says "any type that can do X," instead of naming
+one concrete type.
+
+```rust
+fn format_live_fields<'a>(
+    fields: impl Iterator<Item = (&'a String, &'a TimedValue)>,
+    timestamp: Timestamp,
+) -> Vec<String>
+```
+`fields: impl Iterator<Item = ...>` means "pass me **anything** that iterates over
+`(&String, &TimedValue)` pairs." That's what lets **one** function serve both callers:
+`scan_at` passes a plain map iterator, and `scan_by_prefix_at` passes a
+`range(...).take_while(...)` chain — two *different* concrete iterator types, both
+accepted here.
+
+**Why not name the type?** You can't, sanely. The type of a `.range(..).take_while(..)`
+chain is a monstrous nested generic the compiler builds internally; writing it out would
+be unreadable and would change if you tweaked the chain. `impl Trait` lets you say what
+the value *does* (it iterates) rather than *what it is*.
+
+**Why not `&[...]` or `Vec`?** Taking a slice or vector would force each caller to first
+*collect* its items into an allocation just to hand them over — defeating the point.
+Accepting `impl Iterator` means the items stream straight through with no middle
+collection.
+
+(The `<'a>` is a [lifetime](#lifetimes) — see below — tying the borrowed `&String`s in
+the items to the same borrow, so the compiler knows how long they live.)
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## lifetimes — `<'a>` {#lifetimes}
+
+**In one line:** a label the compiler uses to check that a borrow doesn't outlive the
+data it points into — you're naming a borrow so its span can be tracked, not creating
+anything at runtime.
+
+**The idea first.** Every reference (`&T`) borrows something that lives somewhere. Rust
+must be sure the reference is gone before the thing it points to is. Usually it figures
+this out silently. Sometimes — when references flow *through* a function's signature in a
+non-obvious way — you have to give the borrow a name so the compiler can connect the
+dots. That name is a lifetime, written `'a` (an apostrophe plus a word).
+
+**Where it shows up here.**
+```rust
+fn format_live_fields<'a>(
+    fields: impl Iterator<Item = (&'a String, &'a TimedValue)>,
+    ...
+```
+The iterator yields items that *contain borrows* — `&String` and `&TimedValue`. The
+`<'a>` declares a lifetime named `a`, and tagging both references with it says "these two
+borrows share one lifetime `'a`, and the iterator's items are valid for as long as `'a`
+lasts." It ties the borrowed field names and values to the record they came from, so the
+compiler can guarantee we don't hold them after that record is gone.
+
+**Without it.** Drop the `<'a>` and write `Item = (&String, &TimedValue)` and the
+compiler objects that it can't tell how long those references are meant to live — the
+borrows are "unconstrained." Naming the lifetime resolves it. (It's needed here, but not
+on simpler borrows like `&self` methods, where Rust infers the lifetime for you — that
+inference is called *elision*.)
+
+**Runtime cost:** none. Lifetimes are erased after checking; they exist only to prove the
+code is memory-safe at compile time.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `format!` — building strings {#format}
+
+**In one line:** builds a `String` from a template with `{}` holes filled by values.
+
+`format!("{field}({})", stored.value)` produces a string like `name(alice)`. Two filling
+styles appear: `{field}` pulls the variable named `field` directly into the hole (a
+"captured identifier"), while the empty `{}` is filled by the next argument,
+`stored.value`. It's the same templating as `println!`, except `format!` *returns* the
+string instead of printing it.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `.to_owned()` / `.clone()` — making an owned copy {#to-owned-clone}
+
+**In one line:** turn a borrowed view into an owned value you can store, or duplicate an
+owned value so you have your own.
+
+Map keys and stored values must be **owned** — a `HashMap<String, ...>` owns its `String`
+keys; it can't hold a borrowed `&str` that might vanish. So when we store, we convert:
+- `key.to_owned()` turns the borrowed `&str` parameter into an owned `String` to use as a
+  key. (`.to_owned()` and `.to_string()` do the same thing for `&str` → `String`;
+  `to_owned` is the general "borrowed → owned" name.)
+- `stored.value.clone()` duplicates an existing `String` when we need a second owned copy
+  (building a snapshot from live data, or rebuilding live data from a snapshot).
+
+Each of these allocates, so they're not free — but storing in an owned collection genuinely
+*requires* ownership, so the copies are necessary, not waste. The rule of thumb: borrow
+(`&str`, `&T`) in function signatures for cheap reads; reach for `.to_owned()`/`.clone()`
+only at the moment you must *keep* the data.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
