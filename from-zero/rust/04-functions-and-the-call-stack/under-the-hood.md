@@ -28,8 +28,8 @@ on, and every return is a tray popped off.
 When `main` called `double(x)`, the `5` sitting in `x` was **copied** into `double`'s
 own box `n`. They are two separate boxes on two separate trays. So if `double` changed
 `n`, `main`'s `x` wouldn't move at all — different boxes. (That's how it works for
-simple numbers; the fuller story of what gets copied and what doesn't is the very next
-lesson, Concept 05 — and it's the start of ownership.)
+simple numbers; the fuller story of what gets copied and what doesn't is the coming
+soon in Concept 06 — and it's the start of ownership.)
 
 ## Predict the memory
 ```rust
@@ -58,5 +58,7 @@ Two questions before you peek:
 </details>
 
 ## Next
-- [Concept 05 — `Copy` types](../README.md): exactly which values get copied like this
-  `5` did, and which ones can't be — the doorway to ownership.
+- [Concept 05 — Expressions, statements, and return](../05-expressions-statements-and-return/use-it.md):
+  first, a short detour on how a value actually comes *out* of a function (that
+  no-semicolon rule). Then Concept 06 — `Copy` types — picks up the "what gets copied?"
+  question from just above.

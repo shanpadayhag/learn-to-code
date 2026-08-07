@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="338" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">A semicolon throws the value away</text>
+  <text x="32" y="63" font-size="14" fill="#57606a">the last line of a block is its value — unless a <tspan font-family="ui-monospace, monospace" fill="#1f2328">;</tspan> turns it into a statement</text>
+
+  <!-- LEFT: no semicolon -->
+  <rect x="32" y="82" width="270" height="222" rx="10" fill="#eef7f0" stroke="#2da44e"/>
+  <text x="52" y="108" font-size="14" font-weight="700" fill="#1a7f37">no semicolon</text>
+  <rect x="52" y="122" width="150" height="40" rx="6" fill="#fff" stroke="#8c959f"/>
+  <text x="127" y="148" font-size="18" fill="#1f2328" text-anchor="middle" font-family="ui-monospace, monospace">n * 2</text>
+  <line x1="127" y1="168" x2="127" y2="212" stroke="#2da44e" stroke-width="2"/>
+  <polygon points="127,216 121,205 133,205" fill="#2da44e"/>
+  <text x="220" y="194" font-size="20" fill="#0b3d91" font-weight="700">10</text>
+  <rect x="52" y="230" width="220" height="48" rx="6" fill="#fff" stroke="#2da44e"/>
+  <text x="162" y="259" font-size="14" fill="#1a7f37" text-anchor="middle">value comes out → handed back ✓</text>
+
+  <!-- RIGHT: with semicolon -->
+  <rect x="338" y="82" width="270" height="222" rx="10" fill="#fbeef0" stroke="#cf222e"/>
+  <text x="358" y="108" font-size="14" font-weight="700" fill="#cf222e">with a semicolon</text>
+  <rect x="358" y="122" width="150" height="40" rx="6" fill="#fff" stroke="#8c959f"/>
+  <text x="430" y="148" font-size="18" fill="#1f2328" text-anchor="middle" font-family="ui-monospace, monospace">n * 2<tspan fill="#cf222e" font-weight="700">;</tspan></text>
+  <line x1="433" y1="168" x2="433" y2="200" stroke="#cf222e" stroke-width="2"/>
+  <polygon points="433,204 427,193 439,193" fill="#cf222e"/>
+  <text x="520" y="188" font-size="20" fill="#8c959f" font-weight="700" text-decoration="line-through">10</text>
+  <text x="520" y="206" font-size="12" fill="#cf222e">discarded</text>
+  <rect x="358" y="230" width="230" height="48" rx="6" fill="#fff" stroke="#cf222e"/>
+  <text x="473" y="252" font-size="14" fill="#cf222e" text-anchor="middle" font-family="ui-monospace, monospace">()  — nothing comes out</text>
+  <text x="473" y="270" font-size="12" fill="#57606a" text-anchor="middle">promised i32 → won't compile</text>
+</svg>

@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 05 — *`Copy` types* (up next)
+**Current:** Concept 06 — *`Copy` types* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -22,18 +22,19 @@ exercises. This table is the source of truth for where you are.
 | 02 | [Frozen by default, and `mut`](02-frozen-by-default-and-mut/use-it.md) | ✅ done |
 | 03 | [Types have sizes](03-types-have-sizes/use-it.md) | ✅ done |
 | 04 | [Functions and the call stack](04-functions-and-the-call-stack/use-it.md) | ✅ done |
+| 05 | [Expressions, statements, and return](05-expressions-statements-and-return/use-it.md) | ✅ done |
 
 ### Phase 2 — The heap, and where ownership becomes obvious
 
 | # | Concept | Status |
 |---|---------|--------|
-| 05 | `Copy` types | ⬜ up next |
-| 06 | The heap, and `String` | ⬜ planned |
-| 07 | Ownership and moves | ⬜ planned |
-| 08 | `.clone()` (the inefficient fix) | ⬜ planned |
-| 09 | Borrowing with `&` (the efficient answer) | ⬜ planned |
-| 10 | `&mut` and the borrow rules | ⬜ planned |
-| 11 | Slices | ⬜ planned |
+| 06 | `Copy` types | ⬜ up next |
+| 07 | The heap, and `String` | ⬜ planned |
+| 08 | Ownership and moves | ⬜ planned |
+| 09 | `.clone()` (the inefficient fix) | ⬜ planned |
+| 10 | Borrowing with `&` (the efficient answer) | ⬜ planned |
+| 11 | `&mut` and the borrow rules | ⬜ planned |
+| 12 | Slices | ⬜ planned |
 
 ### Later — macro-phases (firmed up as we reach them)
 
