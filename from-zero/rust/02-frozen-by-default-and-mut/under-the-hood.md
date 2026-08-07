@@ -18,13 +18,15 @@ So mutation is *in place*: same slot, same address, new contents. That's the who
 mechanical difference between a `mut` variable and a frozen one — a frozen variable is
 written **once** and never again.
 
-## "Frozen" is a compile-time rule, not a runtime lock
-Here's the part experienced programmers often expect to work differently: immutability
-in Rust costs **nothing** at runtime. There is no lock, no flag, no check while the
-program runs. `let x = 5;` (no `mut`) just means the **compiler refuses to emit** a
-second write to that box — it's a rule enforced entirely *before* the program runs. A
-frozen `i32` and a `mut` `i32` are byte-for-byte identical in memory; the only
-difference is which writes the compiler will allow you to type.
+## "Frozen" isn't a padlock the program carries around
+You might picture "frozen" as Rust snapping a little padlock on the box and checking it
+every time the program runs. It's nothing like that. Being frozen costs the running
+program **nothing** — no padlock, no checking, no slowdown. `let x = 5;` (without `mut`)
+simply tells the **compiler** — the helper that reads your code *before* it ever runs —
+to refuse any line that tries to change `x`. It catches the mistake while you're still
+typing, then steps out of the way. A frozen box and a changeable (`mut`) box look
+exactly the same in memory; the only difference is which changes the compiler will let
+you write.
 
 ## Why this isn't the same as re-declaring
 The [Use it](use-it.md) lesson noted that `let x = 6;` (a second `let`) is different
