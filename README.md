@@ -1,11 +1,13 @@
-# LeetCode Solutions
+# Learn to Code
 
-A personal study-and-reference repository. Every problem gets a beginner-friendly
-walkthrough that assumes **zero** programming background, the cleanest optimal
-solution code, and links into a shared [glossary](glossary/README.md) of concepts.
+A personal study-and-reference repository for learning to program — worked LeetCode
+solutions, reusable interview patterns, **from-scratch language courses**, and a
+shared [glossary](glossary/README.md) of concepts. Everything is written
+beginner-first, assuming **zero** programming background, and cross-linked so one
+idea explains the next.
 
-The goal is twofold: **learn** the idea behind each problem deeply enough to
-re-derive it, and **document** it well enough to grab the answer at a glance later.
+The goal is twofold: **learn** each idea deeply enough to re-derive it, and
+**document** it well enough to grab at a glance later.
 
 ## Problems
 
