@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="338" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">The type decides how big the box is</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">same value <tspan font-weight="700" fill="#1f2328">5</tspan> — but the box is a different size, because the type is different</text>
+
+  <!-- i32 : 4 cells -->
+  <text x="64" y="108" font-size="14" fill="#1f2328" font-family="ui-monospace, monospace">i32 — 4 bytes</text>
+  <rect x="64" y="118" width="104" height="52" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <line x1="90" y1="118" x2="90" y2="170" stroke="#b6cdf2"/>
+  <line x1="116" y1="118" x2="116" y2="170" stroke="#b6cdf2"/>
+  <line x1="142" y1="118" x2="142" y2="170" stroke="#b6cdf2"/>
+  <text x="116" y="152" font-size="26" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+
+  <!-- i64 : 8 cells -->
+  <text x="64" y="216" font-size="14" fill="#1f2328" font-family="ui-monospace, monospace">i64 — 8 bytes</text>
+  <rect x="64" y="226" width="208" height="52" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <line x1="90" y1="226" x2="90" y2="278" stroke="#b6cdf2"/>
+  <line x1="116" y1="226" x2="116" y2="278" stroke="#b6cdf2"/>
+  <line x1="142" y1="226" x2="142" y2="278" stroke="#b6cdf2"/>
+  <line x1="168" y1="226" x2="168" y2="278" stroke="#b6cdf2"/>
+  <line x1="194" y1="226" x2="194" y2="278" stroke="#b6cdf2"/>
+  <line x1="220" y1="226" x2="220" y2="278" stroke="#b6cdf2"/>
+  <line x1="246" y1="226" x2="246" y2="278" stroke="#b6cdf2"/>
+  <text x="168" y="260" font-size="26" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+
+  <text x="300" y="150" font-size="13" fill="#57606a">each little cell</text>
+  <text x="300" y="170" font-size="13" fill="#57606a">is one byte</text>
+
+  <line x1="32" y1="300" x2="608" y2="300" stroke="#e1e4e8"/>
+  <text x="32" y="326" font-size="13" fill="#57606a">Rust must know each box's size <tspan fill="#1f2328">before the program runs</tspan> — and the type is where that size comes from.</text>
+</svg>
