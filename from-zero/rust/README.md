@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 01 — *a number in a variable* (not started yet)
+**Current:** Concept 02 — *frozen by default, and `mut`* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -18,8 +18,8 @@ exercises. This table is the source of truth for where you are.
 
 | # | Concept | Status |
 |---|---------|--------|
-| 01 | A number in a variable | ⬜ up next |
-| 02 | Frozen by default, and `mut` | ⬜ planned |
+| 01 | [A number in a variable](01-a-number-in-a-variable/use-it.md) | ✅ done |
+| 02 | Frozen by default, and `mut` | ⬜ up next |
 | 03 | Types have sizes | ⬜ planned |
 | 04 | Functions and the call stack | ⬜ planned |
 

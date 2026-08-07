@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="338" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="44" font-size="20" font-weight="700" fill="#1f2328">The stack, running <tspan font-family="ui-monospace, monospace">main()</tspan></text>
+  <text x="32" y="70" font-size="14" fill="#57606a"><tspan font-family="ui-monospace, monospace" fill="#1f2328">let x = 5;</tspan>  →  one named box, written into the frame</text>
+
+  <rect x="32" y="92" width="576" height="176" rx="10" fill="#ffffff" stroke="#8c959f" stroke-dasharray="5 4"/>
+  <text x="48" y="116" font-size="13" fill="#57606a" font-family="ui-monospace, monospace">main()'s stack frame</text>
+
+  <rect x="64" y="136" width="200" height="112" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="164" y="166" font-size="15" fill="#57606a" text-anchor="middle" font-family="ui-monospace, monospace">x</text>
+  <line x1="88" y1="176" x2="240" y2="176" stroke="#b6cdf2"/>
+  <text x="164" y="222" font-size="44" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+
+  <text x="300" y="170" font-size="15" fill="#1f2328">a box labeled <tspan font-family="ui-monospace, monospace" font-weight="700">x</tspan>,</text>
+  <text x="300" y="194" font-size="15" fill="#1f2328">holding the bits for <tspan font-weight="700">5</tspan></text>
+  <text x="300" y="226" font-size="13" fill="#57606a">type <tspan font-family="ui-monospace, monospace">i32</tspan> → exactly 4 bytes wide</text>
+
+  <text x="32" y="300" font-size="13" fill="#57606a">When <tspan font-family="ui-monospace, monospace">main</tspan> ends, the whole frame is thrown away — and <tspan font-family="ui-monospace, monospace">x</tspan> vanishes with it.</text>
+</svg>
