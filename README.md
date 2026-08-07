@@ -9,6 +9,14 @@ idea explains the next.
 The goal is twofold: **learn** each idea deeply enough to re-derive it, and
 **document** it well enough to grab at a glance later.
 
+## Courses
+
+From-scratch, learn-by-doing courses that build a language up one idea at a time.
+
+- [From-Zero](from-zero/README.md) — learn a language by *seeing what happens in
+  memory*, one concept per lesson, with run-it exercises. First track:
+  [Rust](from-zero/rust/README.md).
+
 ## Problems
 
 | # | Title | Difficulty | Languages | Pattern |
