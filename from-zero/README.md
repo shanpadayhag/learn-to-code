@@ -24,6 +24,27 @@ you can *see* what it's for. It's built for people who learn by visualizing.
 - **It's interactive.** Working through this with the tutor? Just ask *"what should I
   learn today?"* and it resumes from where you left off, one problem at a time.
 
+## How lessons are structured
+
+Each concept is a numbered folder, so the repo reads in learning order:
+
+```
+<track>/NN-concept-slug/
+├── use-it.md          # surface syntax: how to write it, what it does
+├── under-the-hood.md  # the memory picture beneath it
+├── diagrams/          # memory diagrams as .svg (crisp, theme-aware)
+│   └── *.svg
+└── exercises/
+    ├── N-starter.rs   # what you write ( // your code here )
+    └── N-solution.rs  # the answer to check against
+```
+
+Every solution file is **verified to actually compile and run** before it ships — no
+hand-waved code. (For contributors: drop the solution into a throwaway
+`cargo new` project, or run it with `rustc solution.rs && ./solution`, and confirm the
+output the lesson claims.) The memory pictures are checked against real Rust behavior
+the same way.
+
 ## Tracks
 
 | Language | Status | Start here |
