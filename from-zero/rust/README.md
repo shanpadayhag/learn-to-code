@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 04 — *functions and the call stack* (up next)
+**Current:** Concept 05 — *`Copy` types* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -21,13 +21,13 @@ exercises. This table is the source of truth for where you are.
 | 01 | [A number in a variable](01-a-number-in-a-variable/use-it.md) | ✅ done |
 | 02 | [Frozen by default, and `mut`](02-frozen-by-default-and-mut/use-it.md) | ✅ done |
 | 03 | [Types have sizes](03-types-have-sizes/use-it.md) | ✅ done |
-| 04 | Functions and the call stack | ⬜ up next |
+| 04 | [Functions and the call stack](04-functions-and-the-call-stack/use-it.md) | ✅ done |
 
 ### Phase 2 — The heap, and where ownership becomes obvious
 
 | # | Concept | Status |
 |---|---------|--------|
-| 05 | `Copy` types | ⬜ planned |
+| 05 | `Copy` types | ⬜ up next |
 | 06 | The heap, and `String` | ⬜ planned |
 | 07 | Ownership and moves | ⬜ planned |
 | 08 | `.clone()` (the inefficient fix) | ⬜ planned |
