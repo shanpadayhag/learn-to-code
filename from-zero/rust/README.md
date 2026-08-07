@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 02 — *frozen by default, and `mut`* (up next)
+**Current:** Concept 03 — *types have sizes* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -19,8 +19,8 @@ exercises. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 01 | [A number in a variable](01-a-number-in-a-variable/use-it.md) | ✅ done |
-| 02 | Frozen by default, and `mut` | ⬜ up next |
-| 03 | Types have sizes | ⬜ planned |
+| 02 | [Frozen by default, and `mut`](02-frozen-by-default-and-mut/use-it.md) | ✅ done |
+| 03 | Types have sizes | ⬜ up next |
 | 04 | Functions and the call stack | ⬜ planned |
 
 ### Phase 2 — The heap, and where ownership becomes obvious

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="358" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328"><tspan font-family="ui-monospace, monospace">x = 6;</tspan> overwrites the same box</text>
+  <text x="32" y="68" font-size="14" fill="#57606a">mutation rewrites the bytes in place — it does not make a new box</text>
+
+  <!-- before -->
+  <text x="112" y="108" font-size="13" fill="#57606a" text-anchor="middle">before</text>
+  <rect x="52" y="120" width="120" height="104" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="112" y="148" font-size="14" fill="#57606a" text-anchor="middle" font-family="ui-monospace, monospace">x</text>
+  <line x1="72" y1="158" x2="152" y2="158" stroke="#b6cdf2"/>
+  <text x="112" y="198" font-size="40" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+  <text x="112" y="244" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace, monospace">@ 0x7c</text>
+
+  <!-- arrow -->
+  <line x1="196" y1="172" x2="292" y2="172" stroke="#8c959f" stroke-width="2"/>
+  <polygon points="292,172 282,166 282,178" fill="#8c959f"/>
+  <text x="244" y="162" font-size="14" fill="#1f2328" text-anchor="middle" font-family="ui-monospace, monospace">x = 6;</text>
+
+  <!-- after -->
+  <text x="372" y="108" font-size="13" fill="#57606a" text-anchor="middle">after</text>
+  <rect x="312" y="120" width="120" height="104" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="372" y="148" font-size="14" fill="#57606a" text-anchor="middle" font-family="ui-monospace, monospace">x</text>
+  <line x1="332" y1="158" x2="412" y2="158" stroke="#b6cdf2"/>
+  <text x="372" y="198" font-size="40" fill="#0b3d91" text-anchor="middle" font-weight="700">6</text>
+  <text x="372" y="244" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace, monospace">@ 0x7c</text>
+
+  <text x="480" y="170" font-size="13" fill="#1f2328">same address</text>
+  <text x="480" y="190" font-size="13" fill="#1f2328"><tspan font-family="ui-monospace, monospace">0x7c</tspan> — the 4</text>
+  <text x="480" y="210" font-size="13" fill="#1f2328">bytes are just</text>
+  <text x="480" y="230" font-size="13" fill="#1f2328">rewritten</text>
+
+  <line x1="32" y1="284" x2="608" y2="284" stroke="#e1e4e8"/>
+  <text x="32" y="312" font-size="13" fill="#57606a">Without <tspan font-family="ui-monospace, monospace" fill="#1f2328">mut</tspan>, the compiler simply refuses to emit that second write — a</text>
+  <text x="32" y="332" font-size="13" fill="#57606a">compile-time rule, not a runtime lock. A frozen and a <tspan font-family="ui-monospace, monospace" fill="#1f2328">mut</tspan> value look identical in memory.</text>
+</svg>

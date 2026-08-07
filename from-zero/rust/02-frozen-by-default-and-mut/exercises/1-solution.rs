@@ -1,0 +1,8 @@
+// Exercise 1 — solution.
+
+fn main() {
+    let mut count = 0;
+    count = count + 1;
+    count = count + 1;
+    println!("{count}");
+}
