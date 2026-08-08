@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="358" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">let a = 5;  let b = a;</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">for a simple number, <tspan font-weight="700" fill="#1f2328">= a</tspan> stamps out a whole second box — two separate 5s</text>
+
+  <!-- box a -->
+  <text x="120" y="122" font-size="14" fill="#1f2328" font-family="ui-monospace, monospace" text-anchor="middle">a</text>
+  <rect x="72" y="132" width="96" height="60" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="120" y="172" font-size="30" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+
+  <!-- copy arrow -->
+  <text x="320" y="150" font-size="14" fill="#57606a" text-anchor="middle">copies the value</text>
+  <line x1="180" y1="162" x2="452" y2="162" stroke="#8a929c" stroke-width="2" stroke-dasharray="5 5"/>
+  <polygon points="452,162 442,156 442,168" fill="#8a929c"/>
+
+  <!-- box b -->
+  <text x="512" y="122" font-size="14" fill="#1f2328" font-family="ui-monospace, monospace" text-anchor="middle">b</text>
+  <rect x="464" y="132" width="96" height="60" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="512" y="172" font-size="30" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+
+  <!-- independence note -->
+  <line x1="32" y1="236" x2="608" y2="236" stroke="#e1e4e8"/>
+  <text x="32" y="268" font-size="15" fill="#1f2328" font-weight="700">Now change one:  b = 9;</text>
+  <rect x="72" y="284" width="96" height="52" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="120" y="318" font-size="24" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+  <text x="120" y="352" font-size="12" fill="#57606a" text-anchor="middle">a — untouched</text>
+  <rect x="464" y="284" width="96" height="52" rx="8" fill="#ffe0c2" stroke="#d98a2b" stroke-width="2"/>
+  <text x="512" y="318" font-size="24" fill="#a35a05" text-anchor="middle" font-weight="700">9</text>
+  <text x="512" y="352" font-size="12" fill="#57606a" text-anchor="middle">b — the only one that moved</text>
+</svg>

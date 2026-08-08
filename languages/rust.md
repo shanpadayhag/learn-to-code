@@ -43,6 +43,7 @@ how to program in *some* language — just not Rust yet.
 - [lifetimes — `<'a>`](#lifetimes)
 - [`format!` — building strings](#format)
 - [`.to_owned()` / `.clone()` — making an owned copy](#to-owned-clone)
+- [`Copy` types — values duplicated on assignment](#copy)
 
 ## `use` declarations {#use}
 
@@ -823,3 +824,30 @@ Each of these allocates, so they're not free — but storing in an owned collect
 only at the moment you must *keep* the data.
 
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `Copy` types — values duplicated on assignment {#copy}
+
+**In one line:** for small, stack-only types (`i32`, `bool`, `char`, `f64`, …),
+`let b = a` makes a second independent copy instead of sharing or moving — and `a`
+stays usable.
+
+**What actually happens.** These values live entirely on the stack; the value *is* its
+bytes. So `let b = a` just duplicates those bytes into a new box:
+
+```rust
+let mut a = 5;
+let b = a;   // b is a separate copy
+a = 99;      // only a changes; b is still 5
+```
+
+The same duplication happens when you pass one into a function — the argument is copied
+onto the callee's frame, so the caller's variable is untouched.
+
+**Why this matters / the "without it" contrast.** Not every type is `Copy`. A type that
+owns data elsewhere in memory (a `String`, which holds a pointer to heap data) is *not*
+`Copy`: for those, `let b = a` **moves** ownership and `a` becomes unusable, because
+duplicating the little stack pointer would leave two owners of one heap allocation. So
+`Copy` is Rust's marker for "safe and cheap to duplicate byte-for-byte." Knowing which
+camp a type is in is the foundation of ownership (moves).
+
+First seen in: [From-Zero Concept 06](../from-zero/rust/06-copy-types/use-it.md)

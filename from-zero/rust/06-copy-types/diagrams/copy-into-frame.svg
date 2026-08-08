@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">add_ten(score) — the number rides up as a copy</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">each tray is one function's frame; the value is <tspan font-weight="700" fill="#1f2328">copied</tspan> onto the new tray, not shared</text>
+
+  <!-- add_ten tray (top) -->
+  <rect x="360" y="96" width="240" height="120" rx="10" fill="#eef7ee" stroke="#5aa469" stroke-width="2"/>
+  <text x="376" y="120" font-size="13" fill="#3f7a4b" font-family="ui-monospace, monospace">add_ten's tray (on top)</text>
+  <text x="404" y="170" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace" text-anchor="middle">n</text>
+  <rect x="380" y="152" width="88" height="48" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="424" y="185" font-size="22" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+
+  <!-- main tray (bottom) -->
+  <rect x="40" y="240" width="240" height="120" rx="10" fill="#eef7ee" stroke="#5aa469" stroke-width="2"/>
+  <text x="56" y="264" font-size="13" fill="#3f7a4b" font-family="ui-monospace, monospace">main's tray</text>
+  <text x="100" y="314" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace" text-anchor="middle">score</text>
+  <rect x="60" y="296" width="88" height="48" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="104" y="329" font-size="22" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+
+  <!-- copy arrow -->
+  <line x1="150" y1="300" x2="378" y2="182" stroke="#8a929c" stroke-width="2" stroke-dasharray="5 5"/>
+  <polygon points="378,182 366,182 373,192" fill="#8a929c"/>
+  <text x="250" y="232" font-size="13" fill="#57606a" text-anchor="middle">copied up</text>
+
+  <text x="300" y="368" font-size="13" fill="#57606a" text-anchor="middle">when add_ten returns, its tray is thrown away — but <tspan font-weight="700" fill="#1f2328">score</tspan> back in main still holds its own 5</text>
+</svg>
