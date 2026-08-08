@@ -356,7 +356,14 @@ but LeetCode's signature hands us an owned `String`, so that's what we take. We 
 need to reach for the difference in this solution; we immediately walk it with
 [`.chars()`](#chars).
 
+Building and growing one: `String::from("Hi")` (or `"Hi".to_string()`) makes an owned
+`String` from a literal; `String::new()` starts an empty one. `.push_str("...")` appends
+text, `.push('c')` appends a single `char`, and `.len()` reports how many **bytes** it
+currently holds. On the stack a `String` is just a small fixed-size handle — a pointer to
+the heap, a length, and a capacity — which is why it isn't a [`Copy`](#copy) type.
+
 First seen in: [3. Longest Substring Without Repeating Characters](../problems/0003-longest-substring-without-repeating-characters/solution.rs.md)
+· grow/len methods in [From-Zero Concept 07](../from-zero/rust/07-the-heap-and-string/use-it.md)
 
 ## `.chars()` — iterate a string by character {#chars}
 

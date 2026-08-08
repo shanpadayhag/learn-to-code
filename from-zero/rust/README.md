@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 07 — *The heap, and `String`* (up next)
+**Current:** Concept 08 — *Ownership and moves* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -29,8 +29,8 @@ exercises. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 06 | [`Copy` types](06-copy-types/use-it.md) | ✅ done |
-| 07 | The heap, and `String` | ⬜ up next |
-| 08 | Ownership and moves | ⬜ planned |
+| 07 | [The heap, and `String`](07-the-heap-and-string/use-it.md) | ✅ done |
+| 08 | Ownership and moves | ⬜ up next |
 | 09 | `.clone()` (the inefficient fix) | ⬜ planned |
 | 10 | Borrowing with `&` (the efficient answer) | ⬜ planned |
 | 11 | `&mut` and the borrow rules | ⬜ planned |

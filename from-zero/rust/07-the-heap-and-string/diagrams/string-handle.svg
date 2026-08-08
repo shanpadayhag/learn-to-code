@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="658" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">let s = String::from("Hello");</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">a <tspan font-weight="700" fill="#1f2328">String</tspan> is a small fixed-size handle on the stack, pointing at the real text on the heap</text>
+
+  <!-- STACK side -->
+  <text x="150" y="104" font-size="13" fill="#3f7a4b" font-weight="700" text-anchor="middle">THE STACK</text>
+  <text x="150" y="122" font-size="12" fill="#57606a" text-anchor="middle">known, fixed size</text>
+  <rect x="40" y="136" width="220" height="150" rx="10" fill="#eef7ee" stroke="#5aa469" stroke-width="2"/>
+  <text x="56" y="160" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">s</text>
+  <!-- three fields -->
+  <rect x="56" y="172" width="188" height="32" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="66" y="193" font-size="12" fill="#57606a" font-family="ui-monospace, monospace">ptr</text>
+  <text x="150" y="193" font-size="12" fill="#0b3d91" font-family="ui-monospace, monospace" text-anchor="middle">•────────▶</text>
+  <rect x="56" y="210" width="188" height="32" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="66" y="231" font-size="12" fill="#57606a" font-family="ui-monospace, monospace">len</text>
+  <text x="234" y="231" font-size="13" fill="#0b3d91" font-family="ui-monospace, monospace" text-anchor="end">5</text>
+  <rect x="56" y="248" width="188" height="32" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="66" y="269" font-size="12" fill="#57606a" font-family="ui-monospace, monospace">capacity</text>
+  <text x="234" y="269" font-size="13" fill="#0b3d91" font-family="ui-monospace, monospace" text-anchor="end">5</text>
+
+  <!-- arrow across -->
+  <line x1="244" y1="188" x2="420" y2="210" stroke="#8a929c" stroke-width="2"/>
+  <polygon points="420,210 409,204 411,216" fill="#8a929c"/>
+
+  <!-- HEAP side -->
+  <text x="530" y="104" font-size="13" fill="#a35a05" font-weight="700" text-anchor="middle">THE HEAP</text>
+  <text x="530" y="122" font-size="12" fill="#57606a" text-anchor="middle">grows at runtime</text>
+  <rect x="410" y="188" width="230" height="80" rx="10" fill="#fff4e6" stroke="#d98a2b" stroke-width="2"/>
+  <g font-family="ui-monospace, monospace" font-weight="700" font-size="22" fill="#a35a05" text-anchor="middle">
+    <rect x="426" y="206" width="40" height="44" rx="5" fill="#ffe0c2" stroke="#d98a2b"/><text x="446" y="236">H</text>
+    <rect x="470" y="206" width="40" height="44" rx="5" fill="#ffe0c2" stroke="#d98a2b"/><text x="490" y="236">e</text>
+    <rect x="514" y="206" width="40" height="44" rx="5" fill="#ffe0c2" stroke="#d98a2b"/><text x="534" y="236">l</text>
+    <rect x="558" y="206" width="40" height="44" rx="5" fill="#ffe0c2" stroke="#d98a2b"/><text x="578" y="236">l</text>
+    <rect x="602" y="206" width="30" height="44" rx="5" fill="#ffe0c2" stroke="#d98a2b"/><text x="617" y="236">o</text>
+  </g>
+
+  <line x1="32" y1="316" x2="628" y2="316" stroke="#e1e4e8"/>
+  <text x="32" y="344" font-size="13" fill="#57606a"><tspan font-weight="700" fill="#1f2328">len</tspan> = bytes used right now.  <tspan font-weight="700" fill="#1f2328">capacity</tspan> = room reserved on the heap.  <tspan font-weight="700" fill="#1f2328">ptr</tspan> = where that room starts.</text>
+  <text x="32" y="368" font-size="13" fill="#57606a">The handle is the same tiny size no matter how long the text is — that's what lets it sit on the stack.</text>
+</svg>
