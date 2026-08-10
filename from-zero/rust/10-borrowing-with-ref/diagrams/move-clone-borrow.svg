@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">Three ways to give a function your string</text>
+  <text x="32" y="63" font-size="14" fill="#57606a">the whole arc in one picture — same goal, rising efficiency left to right</text>
+
+  <!-- MOVE column -->
+  <text x="128" y="98" font-size="14" font-weight="700" fill="#1f2328" text-anchor="middle">move</text>
+  <text x="128" y="116" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">f(text)</text>
+  <rect x="60" y="132" width="136" height="120" rx="10" fill="#fdecea" stroke="#e0917f"/>
+  <text x="128" y="160" font-size="12" fill="#c1442e" text-anchor="middle" font-weight="700">gives it away</text>
+  <rect x="84" y="176" width="88" height="34" rx="6" fill="#fff4e6" stroke="#d98a2b"/>
+  <text x="128" y="199" font-size="15" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+  <text x="128" y="234" font-size="11" fill="#57606a" text-anchor="middle">1 buffer, but</text>
+  <text x="128" y="248" font-size="11" fill="#c1442e" text-anchor="middle">caller loses it</text>
+
+  <!-- CLONE column -->
+  <text x="340" y="98" font-size="14" font-weight="700" fill="#1f2328" text-anchor="middle">clone</text>
+  <text x="340" y="116" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">f(text.clone())</text>
+  <rect x="272" y="132" width="136" height="120" rx="10" fill="#fef6e7" stroke="#e2b657"/>
+  <text x="340" y="160" font-size="12" fill="#a3791b" text-anchor="middle" font-weight="700">copies everything</text>
+  <rect x="288" y="176" width="70" height="30" rx="6" fill="#fff4e6" stroke="#d98a2b"/>
+  <text x="323" y="197" font-size="13" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+  <rect x="322" y="176" width="70" height="30" rx="6" fill="#fff4e6" stroke="#d98a2b"/>
+  <text x="357" y="197" font-size="13" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+  <text x="340" y="234" font-size="11" fill="#57606a" text-anchor="middle">2 buffers, both kept</text>
+  <text x="340" y="248" font-size="11" fill="#c1442e" text-anchor="middle">O(n) copy each time</text>
+
+  <!-- BORROW column -->
+  <text x="552" y="98" font-size="14" font-weight="700" fill="#1f2328" text-anchor="middle">borrow  ★</text>
+  <text x="552" y="116" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">f(&amp;text)</text>
+  <rect x="484" y="132" width="136" height="120" rx="10" fill="#eafbea" stroke="#87c193"/>
+  <text x="552" y="160" font-size="12" fill="#3f7a4b" text-anchor="middle" font-weight="700">just points</text>
+  <rect x="500" y="176" width="40" height="30" rx="6" fill="#eafbea" stroke="#5aa469"/>
+  <text x="520" y="197" font-size="11" fill="#3f7a4b" text-anchor="middle" font-family="ui-monospace,monospace">&amp;</text>
+  <rect x="560" y="176" width="52" height="30" rx="6" fill="#fff4e6" stroke="#d98a2b"/>
+  <text x="586" y="197" font-size="12" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+  <line x1="540" y1="191" x2="558" y2="191" stroke="#5aa469" stroke-width="2"/><polygon points="558,191 550,187 550,195" fill="#5aa469"/>
+  <text x="552" y="234" font-size="11" fill="#57606a" text-anchor="middle">1 buffer, caller</text>
+  <text x="552" y="248" font-size="11" fill="#3f7a4b" text-anchor="middle" font-weight="700">keeps it · few bytes</text>
+
+  <line x1="32" y1="300" x2="648" y2="300" stroke="#e1e4e8"/>
+  <text x="340" y="330" font-size="13" fill="#57606a" text-anchor="middle">Move loses the value; clone pays a full copy. Borrowing lets the function read it for the price of an address.</text>
+  <text x="340" y="356" font-size="13" fill="#3f7a4b" text-anchor="middle" font-weight="700">If you only need to look, borrow.</text>
+</svg>

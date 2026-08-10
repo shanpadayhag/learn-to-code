@@ -44,6 +44,7 @@ how to program in *some* language — just not Rust yet.
 - [`format!` — building strings](#format)
 - [`.to_owned()` / `.clone()` — making an owned copy](#to-owned-clone)
 - [`Copy` types — values duplicated on assignment](#copy)
+- [`&T` — shared references (borrowing)](#borrow)
 
 ## `use` declarations {#use}
 
@@ -858,3 +859,38 @@ duplicating the little stack pointer would leave two owners of one heap allocati
 camp a type is in is the foundation of ownership (moves).
 
 First seen in: [From-Zero Concept 06](../from-zero/rust/06-copy-types/use-it.md)
+
+## `&T` — shared references (borrowing) {#borrow}
+
+**In one line:** `&value` hands out a *reference* — a pointer that lets code read a value
+without owning it, so the owner keeps the value and nothing is copied.
+
+**What it's for.** Taking a value by ownership (`s: String`) *moves* it in, so the caller
+loses it; cloning copies the whole thing. When a function only needs to *read*, take a
+shared reference instead:
+
+```rust
+fn length(s: &String) -> usize { s.len() }
+
+let text = String::from("hello");
+let n = length(&text);   // borrow, don't move
+println!("{text}");      // still usable — text was never given away
+```
+
+The `&` appears twice: `&String` in the parameter type ("I take a reference"), and
+`&text` at the call ("borrow mine"). See also [`&` in patterns](#ref-pattern), which is
+the reverse move — peeling a reference back off in a pattern.
+
+**Two rules that make it safe and cheap.**
+- A reference may never **outlive** the value it points at — the compiler rejects any
+  reference that could dangle, so a borrow always points at live data. (The mechanism is
+  [lifetimes](#lifetimes).)
+- A plain `&T` is **read-only** (`shared`). You can hold many `&T` to the same value at
+  once, but none can mutate through it. To modify, use [`&mut`](#mut-ref) — the exclusive
+  reference — which is the counterpart with its own borrow rules.
+
+A reference is a fixed-size address regardless of how large the borrowed value is, so
+borrowing to read is the default in idiomatic Rust; take ownership only when you must
+*keep* the value.
+
+First seen in: [From-Zero Concept 10](../from-zero/rust/10-borrowing-with-ref/use-it.md)

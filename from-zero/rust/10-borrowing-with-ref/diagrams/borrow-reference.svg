@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="658" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">length(&amp;text)  — a reference just points, it owns nothing</text>
+  <text x="32" y="66" font-size="14" fill="#57606a"><tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">&amp;text</tspan> is a small pointer to text's handle — no move, no copied buffer</text>
+
+  <!-- the reference s -->
+  <text x="70" y="150" font-size="13" fill="#3f7a4b" font-family="ui-monospace, monospace">s  (= &amp;text)</text>
+  <rect x="60" y="158" width="96" height="34" rx="6" fill="#eafbea" stroke="#5aa469" stroke-width="2"/>
+  <text x="108" y="180" font-size="12" fill="#3f7a4b" text-anchor="middle" font-family="ui-monospace,monospace">•addr</text>
+  <text x="108" y="212" font-size="11" fill="#57606a" text-anchor="middle">borrows, owns nothing</text>
+
+  <!-- owner text handle -->
+  <text x="250" y="150" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">text  (the owner)</text>
+  <rect x="240" y="158" width="150" height="34" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="256" y="180" font-size="11" fill="#57606a" font-family="ui-monospace,monospace">ptr•  len5  cap5</text>
+
+  <!-- heap -->
+  <rect x="460" y="150" width="140" height="60" rx="8" fill="#fff4e6" stroke="#d98a2b" stroke-width="2"/>
+  <text x="530" y="176" font-size="11" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">heap</text>
+  <text x="530" y="200" font-size="20" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+
+  <!-- arrows: s -> text handle -> heap -->
+  <line x1="156" y1="175" x2="238" y2="175" stroke="#5aa469" stroke-width="2"/>
+  <polygon points="238,175 228,170 228,180" fill="#5aa469"/>
+  <line x1="390" y1="178" x2="458" y2="180" stroke="#4a7fd6" stroke-width="2"/>
+  <polygon points="458,180 448,175 448,185" fill="#4a7fd6"/>
+
+  <text x="197" y="150" font-size="11" fill="#3f7a4b" text-anchor="middle">points at</text>
+
+  <line x1="32" y1="252" x2="628" y2="252" stroke="#e1e4e8"/>
+  <text x="32" y="280" font-size="13" fill="#57606a">When the function ends, the reference <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">s</tspan> just disappears. It owned nothing, so <tspan font-weight="700" fill="#1f2328">nothing is freed.</tspan></text>
+  <text x="32" y="304" font-size="13" fill="#57606a"><tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">text</tspan> still owns its buffer the whole time — so back in main it's perfectly usable.</text>
+  <text x="32" y="336" font-size="13" fill="#3f7a4b" font-weight="700">Cost: a reference is just an address — a few fixed bytes. No heap text is copied.</text>
+  <text x="32" y="368" font-size="13" fill="#c1442e">A plain <tspan font-family="ui-monospace,monospace" font-weight="700">&amp;</tspan> borrow is read-only: you can look through it, but not change the value. (Changing = Concept 11.)</text>
+</svg>
