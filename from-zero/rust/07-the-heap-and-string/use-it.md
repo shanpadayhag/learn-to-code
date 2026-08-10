@@ -24,7 +24,7 @@ let c = String::new();           // an empty String, ready to grow
 A bare `"Hello"` in your code is *not* a `String` — it's a fixed literal baked into the
 program (its type is `&str`). `String::from` takes that literal and makes a growable,
 owned copy on the heap. (The full `String` vs `&str` split is in the
-[handbook](../../languages/rust.md#string); we only need `String` here.)
+[handbook](../../../languages/rust.md#string); we only need `String` here.)
 
 ## Growing it
 ```rust
