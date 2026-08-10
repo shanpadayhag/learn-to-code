@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="658" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">let s2 = s1.clone();  — a whole second buffer</text>
+  <text x="32" y="66" font-size="14" fill="#57606a"><tspan font-weight="700" fill="#1f2328">.clone()</tspan> copies the heap text too, so s1 and s2 each own a separate copy — both stay usable</text>
+
+  <!-- s1 handle -->
+  <text x="70" y="130" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">s1</text>
+  <rect x="60" y="138" width="130" height="30" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="74" y="158" font-size="11" fill="#57606a" font-family="ui-monospace, monospace">ptr•  len5  cap5</text>
+  <!-- buffer A -->
+  <rect x="250" y="120" width="150" height="66" rx="8" fill="#fff4e6" stroke="#d98a2b" stroke-width="2"/>
+  <text x="325" y="146" font-size="11" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">heap buffer A</text>
+  <text x="325" y="174" font-size="20" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+  <line x1="190" y1="153" x2="248" y2="153" stroke="#4a7fd6" stroke-width="2"/>
+  <polygon points="248,153 239,148 239,158" fill="#4a7fd6"/>
+
+  <!-- s2 handle -->
+  <text x="70" y="250" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">s2</text>
+  <rect x="60" y="258" width="130" height="30" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="74" y="278" font-size="11" fill="#57606a" font-family="ui-monospace, monospace">ptr•  len5  cap5</text>
+  <!-- buffer B -->
+  <rect x="250" y="240" width="150" height="66" rx="8" fill="#fff4e6" stroke="#d98a2b" stroke-width="2"/>
+  <text x="325" y="266" font-size="11" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">heap buffer B</text>
+  <text x="325" y="294" font-size="20" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+  <line x1="190" y1="273" x2="248" y2="273" stroke="#4a7fd6" stroke-width="2"/>
+  <polygon points="248,273 239,268 239,278" fill="#4a7fd6"/>
+
+  <!-- note on right -->
+  <text x="440" y="150" font-size="13" fill="#57606a">Two separate</text>
+  <text x="440" y="170" font-size="13" fill="#57606a">handles, and</text>
+  <text x="440" y="190" font-size="13" fill="#57606a">two separate</text>
+  <text x="440" y="210" font-size="13" fill="#57606a">heap buffers.</text>
+  <text x="440" y="238" font-size="13" fill="#1f2328" font-weight="700">Change one →</text>
+  <text x="440" y="258" font-size="13" fill="#1f2328" font-weight="700">the other is</text>
+  <text x="440" y="278" font-size="13" fill="#1f2328" font-weight="700">untouched.</text>
+
+  <line x1="32" y1="332" x2="628" y2="332" stroke="#e1e4e8"/>
+  <text x="32" y="360" font-size="13" fill="#57606a">A <tspan font-weight="700" fill="#1f2328">move</tspan> copied only the handle (a few bytes). A <tspan font-weight="700" fill="#1f2328">clone</tspan> also copies every byte of the text —</text>
+  <text x="32" y="384" font-size="13" fill="#c1442e">that's real work: <tspan font-weight="700">O(n)</tspan> in the length of the string. Cheap for "hello", costly for a megabyte.</text>
+</svg>
