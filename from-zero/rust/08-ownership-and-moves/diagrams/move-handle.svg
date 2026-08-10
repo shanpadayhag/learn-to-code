@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 420" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="658" height="418" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">let s2 = s1;  — the handle moves, the heap text does not</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">only the tiny handle is copied to s2, then <tspan font-weight="700" fill="#1f2328">s1 is switched off</tspan> — so the text has exactly one owner</text>
+
+  <!-- BEFORE -->
+  <text x="165" y="104" font-size="13" fill="#1f2328" font-weight="700" text-anchor="middle">before</text>
+  <!-- s1 handle -->
+  <text x="70" y="140" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">s1</text>
+  <rect x="60" y="148" width="120" height="30" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="72" y="168" font-size="11" fill="#57606a" font-family="ui-monospace, monospace">ptr•  len5  cap5</text>
+  <!-- heap -->
+  <rect x="210" y="120" width="120" height="90" rx="8" fill="#fff4e6" stroke="#d98a2b" stroke-width="2"/>
+  <text x="270" y="150" font-size="11" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">heap</text>
+  <text x="270" y="182" font-size="22" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+  <line x1="180" y1="163" x2="208" y2="163" stroke="#4a7fd6" stroke-width="2"/>
+  <polygon points="208,163 199,158 199,168" fill="#4a7fd6"/>
+
+  <!-- divider -->
+  <line x1="352" y1="96" x2="352" y2="300" stroke="#d0d7de" stroke-dasharray="4 4"/>
+
+  <!-- AFTER -->
+  <text x="500" y="104" font-size="13" fill="#1f2328" font-weight="700" text-anchor="middle">after</text>
+  <!-- s1 dead -->
+  <text x="392" y="140" font-size="13" fill="#b0b6bd" font-family="ui-monospace, monospace">s1</text>
+  <rect x="382" y="148" width="120" height="30" rx="5" fill="#eceff2" stroke="#c4cad1" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="394" y="168" font-size="11" fill="#b0b6bd" font-family="ui-monospace, monospace">ptr•  len5  cap5</text>
+  <text x="512" y="169" font-size="12" fill="#c1442e" font-weight="700">✗ invalid</text>
+  <!-- s2 alive -->
+  <text x="392" y="212" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">s2</text>
+  <rect x="382" y="220" width="120" height="30" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="394" y="240" font-size="11" fill="#57606a" font-family="ui-monospace, monospace">ptr•  len5  cap5</text>
+  <!-- one heap, unchanged -->
+  <rect x="540" y="160" width="96" height="90" rx="8" fill="#fff4e6" stroke="#d98a2b" stroke-width="2"/>
+  <text x="588" y="190" font-size="11" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">heap</text>
+  <text x="588" y="222" font-size="20" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hello</text>
+  <!-- only s2 points now -->
+  <line x1="502" y1="235" x2="538" y2="215" stroke="#4a7fd6" stroke-width="2"/>
+  <polygon points="538,215 528,214 531,224" fill="#4a7fd6"/>
+  <!-- s1's old arrow, faded and cut -->
+  <line x1="502" y1="163" x2="536" y2="180" stroke="#d9dde1" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <line x1="32" y1="322" x2="628" y2="322" stroke="#e1e4e8"/>
+  <text x="32" y="350" font-size="13" fill="#57606a">The heap text <tspan font-weight="700" fill="#1f2328">"hello"</tspan> was never duplicated — that would be wasteful, and would risk two owners.</text>
+  <text x="32" y="374" font-size="13" fill="#57606a">Instead Rust hands the single copy to s2 and retires s1. <tspan font-weight="700" fill="#1f2328">One value, one owner.</tspan></text>
+  <text x="32" y="398" font-size="13" fill="#c1442e">Using s1 now is a compile error: “borrow of moved value: s1”.</text>
+</svg>

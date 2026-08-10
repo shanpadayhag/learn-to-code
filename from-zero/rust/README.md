@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 08 — *Ownership and moves* (up next)
+**Current:** Concept 09 — *`.clone()` (the inefficient fix)* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -30,8 +30,8 @@ exercises. This table is the source of truth for where you are.
 |---|---------|--------|
 | 06 | [`Copy` types](06-copy-types/use-it.md) | ✅ done |
 | 07 | [The heap, and `String`](07-the-heap-and-string/use-it.md) | ✅ done |
-| 08 | Ownership and moves | ⬜ up next |
-| 09 | `.clone()` (the inefficient fix) | ⬜ planned |
+| 08 | [Ownership and moves](08-ownership-and-moves/use-it.md) | ✅ done |
+| 09 | `.clone()` (the inefficient fix) | ⬜ up next |
 | 10 | Borrowing with `&` (the efficient answer) | ⬜ planned |
 | 11 | `&mut` and the borrow rules | ⬜ planned |
 | 12 | Slices | ⬜ planned |
