@@ -228,7 +228,7 @@ First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs
 ## `&mut` — mutable references {#mut-ref}
 
 **In one line:** a borrow you're allowed to *change* the value through — the
-read-write counterpart to the read-only [`&`](#ref-pattern).
+read-write counterpart to the read-only [`&`](#borrow).
 
 **The two kinds of borrow.** Two Sum used `&`, a *shared* reference: you can look but
 not touch. `&mut` is an *exclusive* reference: you can modify the value in place,
@@ -253,6 +253,7 @@ a *reference through which you can mutate* the pointed-to value. `let mut result
 *and* it's a mutable reference (we write through it).
 
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
+· the borrow rules taught in [From-Zero Concept 11](../from-zero/rust/11-mut-references-and-borrow-rules/use-it.md)
 
 ## `while` loops {#while}
 

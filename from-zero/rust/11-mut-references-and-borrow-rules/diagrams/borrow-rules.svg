@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">The borrow rule: many readers OR one writer — never both</text>
+  <text x="32" y="63" font-size="14" fill="#57606a">the compiler enforces this at any moment, for every value</text>
+
+  <!-- Panel 1: many readers OK -->
+  <rect x="32" y="86" width="196" height="200" rx="10" fill="#eafbea" stroke="#87c193"/>
+  <text x="130" y="112" font-size="13" font-weight="700" fill="#3f7a4b" text-anchor="middle">many &amp; readers ✓</text>
+  <rect x="98" y="176" width="64" height="34" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="130" y="198" font-size="12" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">value</text>
+  <g stroke="#5aa469" stroke-width="2" fill="#5aa469">
+    <line x1="60" y1="140" x2="96" y2="180"/><polygon points="96,180 86,175 89,169"/>
+    <line x1="130" y1="132" x2="130" y2="174"/><polygon points="130,174 125,166 135,166"/>
+    <line x1="200" y1="140" x2="164" y2="180"/><polygon points="164,180 174,169 171,175"/>
+  </g>
+  <text x="60" y="134" font-size="11" fill="#3f7a4b" text-anchor="middle">&amp;</text>
+  <text x="130" y="126" font-size="11" fill="#3f7a4b" text-anchor="middle">&amp;</text>
+  <text x="200" y="134" font-size="11" fill="#3f7a4b" text-anchor="middle">&amp;</text>
+  <text x="130" y="238" font-size="11" fill="#57606a" text-anchor="middle">all read-only —</text>
+  <text x="130" y="254" font-size="11" fill="#57606a" text-anchor="middle">safe to share</text>
+
+  <!-- Panel 2: one writer OK -->
+  <rect x="242" y="86" width="196" height="200" rx="10" fill="#fdf3e0" stroke="#e2b657"/>
+  <text x="340" y="112" font-size="13" font-weight="700" fill="#a3791b" text-anchor="middle">one &amp;mut writer ✓</text>
+  <rect x="308" y="176" width="64" height="34" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="340" y="198" font-size="12" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">value</text>
+  <line x1="340" y1="140" x2="340" y2="174" stroke="#d98a2b" stroke-width="2"/>
+  <polygon points="340,174 335,166 345,166" fill="#d98a2b"/>
+  <text x="340" y="134" font-size="11" fill="#a3791b" text-anchor="middle" font-weight="700">&amp;mut</text>
+  <text x="340" y="238" font-size="11" fill="#57606a" text-anchor="middle">exclusive — the only</text>
+  <text x="340" y="254" font-size="11" fill="#57606a" text-anchor="middle">borrow that exists</text>
+
+  <!-- Panel 3: forbidden -->
+  <rect x="452" y="86" width="196" height="200" rx="10" fill="#fdecea" stroke="#e0917f"/>
+  <text x="550" y="112" font-size="13" font-weight="700" fill="#c1442e" text-anchor="middle">&amp;mut + any other ✗</text>
+  <rect x="518" y="176" width="64" height="34" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="550" y="198" font-size="12" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">value</text>
+  <line x1="500" y1="140" x2="524" y2="174" stroke="#d98a2b" stroke-width="2"/>
+  <text x="498" y="134" font-size="11" fill="#a3791b" text-anchor="middle" font-weight="700">&amp;mut</text>
+  <line x1="600" y1="140" x2="576" y2="174" stroke="#8a929c" stroke-width="2"/>
+  <text x="602" y="134" font-size="11" fill="#57606a" text-anchor="middle">&amp;</text>
+  <g stroke="#c1442e" stroke-width="4"><line x1="486" y1="128" x2="614" y2="222"/></g>
+  <text x="550" y="254" font-size="11" fill="#c1442e" text-anchor="middle">a reader could see</text>
+  <text x="550" y="270" font-size="11" fill="#c1442e" text-anchor="middle">half-finished writes</text>
+
+  <line x1="32" y1="308" x2="648" y2="308" stroke="#e1e4e8"/>
+  <text x="340" y="336" font-size="13" fill="#57606a" text-anchor="middle">One writer with no onlookers, or any number of onlookers with no writer. That's what makes in-place changes safe.</text>
+  <text x="340" y="360" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">two &amp;mut → E0499 · &amp;mut while &amp; exists → E0502</text>
+</svg>

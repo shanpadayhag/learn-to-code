@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 11 — *`&mut` and the borrow rules* (up next)
+**Current:** Concept 12 — *Slices* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -33,8 +33,8 @@ exercises. This table is the source of truth for where you are.
 | 08 | [Ownership and moves](08-ownership-and-moves/use-it.md) | ✅ done |
 | 09 | [`.clone()` (the inefficient fix)](09-clone-the-inefficient-fix/use-it.md) | ✅ done |
 | 10 | [Borrowing with `&` (the efficient answer)](10-borrowing-with-ref/use-it.md) | ✅ done |
-| 11 | `&mut` and the borrow rules | ⬜ up next |
-| 12 | Slices | ⬜ planned |
+| 11 | [`&mut` and the borrow rules](11-mut-references-and-borrow-rules/use-it.md) | ✅ done |
+| 12 | Slices | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 

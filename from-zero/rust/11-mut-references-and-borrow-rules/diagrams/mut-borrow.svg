@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="658" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">add_bang(&amp;mut text)  — change the owner's value in place</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">a <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">&amp;mut</tspan> reference reaches through and edits the real buffer — the change is visible to the owner after</text>
+
+  <!-- the &mut reference -->
+  <text x="70" y="150" font-size="13" fill="#a3791b" font-family="ui-monospace, monospace">s (= &amp;mut text)</text>
+  <rect x="60" y="158" width="120" height="34" rx="6" fill="#fdf3e0" stroke="#d98a2b" stroke-width="2"/>
+  <text x="120" y="180" font-size="12" fill="#a3791b" text-anchor="middle" font-family="ui-monospace,monospace">•addr (write)</text>
+  <text x="120" y="212" font-size="11" fill="#57606a" text-anchor="middle">exclusive: the only</text>
+  <text x="120" y="226" font-size="11" fill="#57606a" text-anchor="middle">borrow allowed right now</text>
+
+  <!-- owner handle -->
+  <text x="250" y="150" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">text (owner)</text>
+  <rect x="240" y="158" width="150" height="34" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="256" y="180" font-size="11" fill="#57606a" font-family="ui-monospace,monospace">ptr•  len2→3  cap...</text>
+
+  <!-- heap: hi -> hi! -->
+  <rect x="460" y="150" width="150" height="60" rx="8" fill="#fff4e6" stroke="#d98a2b" stroke-width="2"/>
+  <text x="535" y="176" font-size="11" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">heap</text>
+  <text x="518" y="200" font-size="20" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">hi</text>
+  <text x="556" y="200" font-size="20" fill="#c1442e" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">!</text>
+
+  <line x1="180" y1="175" x2="238" y2="175" stroke="#d98a2b" stroke-width="2"/>
+  <polygon points="238,175 228,170 228,180" fill="#d98a2b"/>
+  <line x1="390" y1="178" x2="458" y2="180" stroke="#4a7fd6" stroke-width="2"/>
+  <polygon points="458,180 448,175 448,185" fill="#4a7fd6"/>
+  <text x="209" y="150" font-size="11" fill="#a3791b" text-anchor="middle">writes through</text>
+
+  <line x1="32" y1="252" x2="628" y2="252" stroke="#e1e4e8"/>
+  <text x="32" y="280" font-size="13" fill="#57606a">This edits the <tspan font-weight="700" fill="#1f2328">owner's own</tspan> buffer — not a copy. So after the call, <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">text</tspan> is <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">"hi!"</tspan>.</text>
+  <text x="32" y="304" font-size="13" fill="#57606a">Compare Concept 06: a <tspan font-weight="700" fill="#1f2328">Copy</tspan> parameter changed only the function's copy. A <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">&amp;mut</tspan> changes the original.</text>
+  <text x="32" y="336" font-size="13" fill="#a3791b" font-weight="700">To lend mutably, the owner must be <tspan font-family="ui-monospace,monospace">let mut</tspan> — you can't hand out write-access to a frozen value.</text>
+</svg>
