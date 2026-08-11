@@ -20,8 +20,25 @@ s2 ┘
 Now recall the ownership rule: when a variable goes out of scope, its value is cleaned up
 and the heap buffer is freed. At the end of the block, `s1` frees the buffer... and then
 `s2` frees *the same buffer again*. Freeing memory twice is a real, dangerous bug — the
-classic **double free**. And even before scope ends, writing through one handle could
-move the buffer (Concept 07's growth), leaving the other handle pointing at freed memory.
+classic **[double free](../../../glossary/double-free.md)**.
+
+Why is that so bad? Freeing isn't just "forget about it" — it hands the buffer back to the
+system's memory manager (the *allocator*) so it can reuse that space for something else.
+Free it once and that's fine. Free it *twice* and three ugly things can happen:
+
+- The allocator's own records get corrupted, so a *later, innocent* `String::from` gets
+  handed a broken or overlapping chunk of memory — and the crash lands far from the real
+  bug.
+- In between the two frees, that buffer may already have been reused by some other value,
+  so now two live values secretly share one spot: writing to one silently changes the
+  other.
+- It's a well-known **security hole** — attackers deliberately trigger double frees to
+  trick the allocator into handing them memory they shouldn't have.
+
+And even before scope ends, writing through one handle could move the buffer (Concept 07's
+growth), leaving the other handle pointing at freed memory — the sibling bug,
+*use-after-free*. The full story, and why C and C++ leave you exposed to it, is in the
+[double free](../../../glossary/double-free.md) glossary entry.
 
 ## What a move actually does
 Rust's fix is simple and cheap. On `let s2 = s1`:
