@@ -45,6 +45,7 @@ how to program in *some* language — just not Rust yet.
 - [`.to_owned()` / `.clone()` — making an owned copy](#to-owned-clone)
 - [`Copy` types — values duplicated on assignment](#copy)
 - [`&T` — shared references (borrowing)](#borrow)
+- [slices — `&str` and `&[T]`](#slice)
 
 ## `use` declarations {#use}
 
@@ -895,3 +896,35 @@ borrowing to read is the default in idiomatic Rust; take ownership only when you
 *keep* the value.
 
 First seen in: [From-Zero Concept 10](../from-zero/rust/10-borrowing-with-ref/use-it.md)
+
+## slices — `&str` and `&[T]` {#slice}
+
+**In one line:** a slice is a reference to a *contiguous range* of a value — a pointer to
+where the range starts plus a length — so it borrows part of a collection without copying.
+
+**String slices.** `&s[start..end]` on a `String` yields a `&str`, a view into the
+existing heap buffer:
+
+```rust
+let s = String::from("hello world");
+let hello = &s[0..5];   // "hello"  (end is exclusive)
+let world = &s[6..11];  // "world"
+```
+
+Range shorthands: `[..n]` from the start, `[n..]` to the end, `[..]` the whole thing.
+
+**`&str` vs `String`.** A `String` *owns* growable heap text (ptr + len + capacity); a
+`&str` is a *borrowed* two-word view (ptr + len) that owns nothing. A string literal like
+`"hello"` is a `&str` pointing at read-only bytes baked into the program — same type as a
+slice of a `String`, just pointing at a different place. Prefer `&str` parameters for
+read-only text: they accept both literals and slices of a `String`. See
+[`String`](#string) and [`&T` borrowing](#borrow).
+
+**They obey the borrow rules.** A slice is a shared borrow, so while one is alive you
+can't take a `&mut` to grow the source (`push_str` fails with E0502) — the borrow checker
+prevents the slice from being left dangling if the buffer reallocated.
+
+**Array/vec slices.** The same idea gives `&[T]` — a window into an array or `Vec<T>`:
+`&numbers[1..3]` is a slice of two elements. Identical shape: pointer + length, no copy.
+
+First seen in: [From-Zero Concept 12](../from-zero/rust/12-slices/use-it.md)

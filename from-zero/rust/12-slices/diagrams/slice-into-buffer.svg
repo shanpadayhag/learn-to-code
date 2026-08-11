@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">let world = &amp;s[6..11];  — a window into the same buffer</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">a slice is a <tspan font-weight="700" fill="#1f2328">pointer + a length</tspan> that points into s's heap text — nothing is copied</text>
+
+  <!-- owner handle -->
+  <text x="70" y="120" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">s (owner)</text>
+  <rect x="60" y="128" width="150" height="30" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="74" y="148" font-size="11" fill="#57606a" font-family="ui-monospace,monospace">ptr•  len11  cap11</text>
+
+  <!-- heap buffer with indices -->
+  <text x="240" y="120" font-size="11" fill="#a35a05" font-family="ui-monospace,monospace">heap buffer</text>
+  <g font-family="ui-monospace, monospace" font-weight="700" font-size="18" text-anchor="middle">
+    <!-- hello (0..5) -->
+    <g fill="#a35a05">
+      <rect x="240" y="128" width="30" height="40" rx="4" fill="#ffe9cf" stroke="#d98a2b"/><text x="255" y="154">h</text>
+      <rect x="270" y="128" width="30" height="40" rx="4" fill="#ffe9cf" stroke="#d98a2b"/><text x="285" y="154">e</text>
+      <rect x="300" y="128" width="30" height="40" rx="4" fill="#ffe9cf" stroke="#d98a2b"/><text x="315" y="154">l</text>
+      <rect x="330" y="128" width="30" height="40" rx="4" fill="#ffe9cf" stroke="#d98a2b"/><text x="345" y="154">l</text>
+      <rect x="360" y="128" width="30" height="40" rx="4" fill="#ffe9cf" stroke="#d98a2b"/><text x="375" y="154">o</text>
+      <rect x="390" y="128" width="30" height="40" rx="4" fill="#ffe9cf" stroke="#d98a2b"/><text x="405" y="154"> </text>
+    </g>
+    <!-- world (6..11) highlighted -->
+    <g fill="#0b6b3a">
+      <rect x="420" y="128" width="30" height="40" rx="4" fill="#c9f0d4" stroke="#3f9d63" stroke-width="2"/><text x="435" y="154">w</text>
+      <rect x="450" y="128" width="30" height="40" rx="4" fill="#c9f0d4" stroke="#3f9d63" stroke-width="2"/><text x="465" y="154">o</text>
+      <rect x="480" y="128" width="30" height="40" rx="4" fill="#c9f0d4" stroke="#3f9d63" stroke-width="2"/><text x="495" y="154">r</text>
+      <rect x="510" y="128" width="30" height="40" rx="4" fill="#c9f0d4" stroke="#3f9d63" stroke-width="2"/><text x="525" y="154">l</text>
+      <rect x="540" y="128" width="30" height="40" rx="4" fill="#c9f0d4" stroke="#3f9d63" stroke-width="2"/><text x="555" y="154">d</text>
+    </g>
+  </g>
+  <!-- index ticks -->
+  <g font-family="ui-monospace,monospace" font-size="10" fill="#8a929c" text-anchor="middle">
+    <text x="255" y="182">0</text><text x="435" y="182">6</text><text x="555" y="182">10</text>
+  </g>
+  <!-- owner arrow to buffer start -->
+  <line x1="210" y1="143" x2="238" y2="148" stroke="#4a7fd6" stroke-width="2"/><polygon points="238,148 228,144 229,154" fill="#4a7fd6"/>
+
+  <!-- slice handle -->
+  <text x="70" y="250" font-size="13" fill="#0b6b3a" font-family="ui-monospace, monospace">world (slice, &amp;str)</text>
+  <rect x="60" y="258" width="150" height="30" rx="6" fill="#eafbea" stroke="#3f9d63" stroke-width="2"/>
+  <text x="74" y="278" font-size="11" fill="#0b6b3a" font-family="ui-monospace,monospace">ptr•  len5</text>
+  <!-- slice arrow to byte 6 -->
+  <path d="M210 273 C 320 273, 380 210, 435 172" fill="none" stroke="#3f9d63" stroke-width="2"/>
+  <polygon points="435,172 435,184 444,177" fill="#3f9d63"/>
+  <text x="300" y="300" font-size="12" fill="#0b6b3a">points at byte 6, spans 5 bytes → "world"</text>
+
+  <line x1="32" y1="322" x2="648" y2="322" stroke="#e1e4e8"/>
+  <text x="32" y="350" font-size="13" fill="#57606a">The slice holds no text of its own — just <tspan font-weight="700" fill="#1f2328">where it starts</tspan> and <tspan font-weight="700" fill="#1f2328">how long it is</tspan>. One buffer, borrowed.</text>
+  <text x="32" y="374" font-size="13" fill="#c1442e">Because it borrows s, you can't grow s while the slice is alive (E0502) — the borrow rules from Concept 11.</text>
+</svg>

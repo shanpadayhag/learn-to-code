@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 320" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="658" height="318" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">Range shorthands over "Rustacean"</text>
+  <text x="32" y="66" font-size="14" fill="#57606a"><tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">[..4]</tspan> = from the start · <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">[4..]</tspan> = to the end · same buffer, split at index 4</text>
+
+  <!-- letters -->
+  <g font-family="ui-monospace, monospace" font-weight="700" font-size="22" text-anchor="middle">
+    <g fill="#0b3d91">
+      <rect x="70" y="110" width="46" height="54" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/><text x="93" y="147">R</text>
+      <rect x="116" y="110" width="46" height="54" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/><text x="139" y="147">u</text>
+      <rect x="162" y="110" width="46" height="54" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/><text x="185" y="147">s</text>
+      <rect x="208" y="110" width="46" height="54" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/><text x="231" y="147">t</text>
+    </g>
+    <g fill="#a35a05">
+      <rect x="254" y="110" width="46" height="54" rx="5" fill="#ffe9cf" stroke="#d98a2b" stroke-width="2"/><text x="277" y="147">a</text>
+      <rect x="300" y="110" width="46" height="54" rx="5" fill="#ffe9cf" stroke="#d98a2b" stroke-width="2"/><text x="323" y="147">c</text>
+      <rect x="346" y="110" width="46" height="54" rx="5" fill="#ffe9cf" stroke="#d98a2b" stroke-width="2"/><text x="369" y="147">e</text>
+      <rect x="392" y="110" width="46" height="54" rx="5" fill="#ffe9cf" stroke="#d98a2b" stroke-width="2"/><text x="415" y="147">a</text>
+      <rect x="438" y="110" width="46" height="54" rx="5" fill="#ffe9cf" stroke="#d98a2b" stroke-width="2"/><text x="461" y="147">n</text>
+    </g>
+  </g>
+  <!-- index ticks -->
+  <g font-family="ui-monospace,monospace" font-size="11" fill="#8a929c" text-anchor="middle">
+    <text x="70" y="182">0</text><text x="254" y="182">4</text><text x="484" y="182">9</text>
+  </g>
+
+  <!-- brackets -->
+  <path d="M70 200 L70 210 L254 210 L254 200" fill="none" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="162" y="232" font-size="14" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">&amp;s[..4] → "Rust"</text>
+  <path d="M254 200 L254 210 L484 210 L484 200" fill="none" stroke="#d98a2b" stroke-width="2"/>
+  <text x="369" y="232" font-size="14" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">&amp;s[4..] → "acean"</text>
+
+  <line x1="32" y1="258" x2="628" y2="258" stroke="#e1e4e8"/>
+  <text x="32" y="286" font-size="13" fill="#57606a"><tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">[a..b]</tspan> includes a, excludes b. Omit a side to mean "start" or "end"; <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">[..]</tspan> is the whole thing.</text>
+</svg>
