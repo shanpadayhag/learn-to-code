@@ -461,7 +461,13 @@ with a dot — `stored.value`. Fields are private to the defining module by defa
 which is fine here since everything lives in one file. A struct with methods gets an
 [`impl` block](#impl) (that's where `is_alive_at` attaches to `TimedValue`).
 
+A struct owns its fields, and its fields sit next to each other in memory: a
+`Copy`-only struct lives entirely on the stack, while a field like `String` keeps its
+handle inline in the struct and its text on the heap. Moving the struct moves every
+field with it.
+
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+· taught from zero in [From-Zero Concept 13](../from-zero/rust/13-structs/use-it.md)
 
 ## `type` — type aliases {#type-alias}
 

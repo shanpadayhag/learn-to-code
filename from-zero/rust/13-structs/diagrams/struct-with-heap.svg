@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="658" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">User { name: String::from("Sam"), age: 30 }</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">a field can itself own heap data — its <tspan font-weight="700" fill="#1f2328">handle</tspan> sits inline in the struct, the text lives on the heap</text>
+
+  <!-- struct box on stack -->
+  <text x="70" y="116" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">u : User   (on the stack)</text>
+  <rect x="60" y="128" width="330" height="150" rx="10" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2"/>
+
+  <!-- name field: a String handle -->
+  <text x="84" y="152" font-size="12" fill="#57606a" font-family="ui-monospace,monospace">name: String</text>
+  <rect x="84" y="160" width="282" height="34" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="98" y="181" font-size="11" fill="#57606a" font-family="ui-monospace,monospace">ptr•   len 3   cap 3</text>
+
+  <!-- age field -->
+  <text x="84" y="224" font-size="12" fill="#57606a" font-family="ui-monospace,monospace">age: u32</text>
+  <rect x="84" y="232" width="130" height="34" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="149" y="255" font-size="18" fill="#0b3d91" text-anchor="middle" font-weight="700">30</text>
+
+  <!-- heap -->
+  <rect x="470" y="150" width="140" height="60" rx="8" fill="#fff4e6" stroke="#d98a2b" stroke-width="2"/>
+  <text x="540" y="176" font-size="11" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">heap</text>
+  <text x="540" y="200" font-size="20" fill="#a35a05" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">Sam</text>
+  <line x1="366" y1="177" x2="468" y2="178" stroke="#4a7fd6" stroke-width="2"/>
+  <polygon points="468,178 458,173 458,183" fill="#4a7fd6"/>
+
+  <line x1="32" y1="308" x2="628" y2="308" stroke="#e1e4e8"/>
+  <text x="32" y="336" font-size="13" fill="#57606a">The struct <tspan font-weight="700" fill="#1f2328">owns</tspan> both fields. Because <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">name</tspan> owns heap text, the whole User is not <tspan font-weight="700" fill="#1f2328">Copy</tspan> —</text>
+  <text x="32" y="360" font-size="13" fill="#57606a">moving the User moves every field with it, and dropping it frees the "Sam" buffer.</text>
+</svg>

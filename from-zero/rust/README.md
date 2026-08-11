@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 13 — *Structs* (up next) · Phase 3 begins
+**Current:** Concept 14 — *Enums* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -36,9 +36,18 @@ exercises. This table is the source of truth for where you are.
 | 11 | [`&mut` and the borrow rules](11-mut-references-and-borrow-rules/use-it.md) | ✅ done |
 | 12 | [Slices](12-slices/use-it.md) | ✅ done |
 
+### Phase 3 — Compound data (types you design)
+
+| # | Concept | Status |
+|---|---------|--------|
+| 13 | [Structs](13-structs/use-it.md) | ✅ done |
+| 14 | Enums | ⬜ up next |
+| 15 | `Option` (no more null) | ⬜ planned |
+| 16 | Pattern matching with `match` | ⬜ planned |
+
 ### Later — macro-phases (firmed up as we reach them)
 
-Compound data (structs · enums · `Option` · pattern matching) → collections &
+Collections &
 generics (`Vec` · `HashMap` · `<T>`) → traits → lifetimes → error handling
 (`Result` · `?`) → smart pointers (`Box` · `Rc` · `RefCell`) → closures & iterators →
 advanced (concurrency · `async` · `unsafe`).

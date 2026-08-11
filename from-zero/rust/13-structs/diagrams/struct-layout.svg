@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="338" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">let p = Point { x: 3, y: 4 };</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">a struct is its fields packed <tspan font-weight="700" fill="#1f2328">side by side</tspan> in memory — the field names are labels the compiler knows</text>
+
+  <!-- the struct box -->
+  <text x="120" y="112" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">p : Point</text>
+  <rect x="70" y="124" width="320" height="90" rx="10" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2"/>
+
+  <!-- field x -->
+  <rect x="94" y="146" width="130" height="48" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="159" y="140" font-size="12" fill="#57606a" font-family="ui-monospace,monospace" text-anchor="middle">x: i32</text>
+  <text x="159" y="178" font-size="24" fill="#0b3d91" text-anchor="middle" font-weight="700">3</text>
+  <!-- field y -->
+  <rect x="236" y="146" width="130" height="48" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="301" y="140" font-size="12" fill="#57606a" font-family="ui-monospace,monospace" text-anchor="middle">y: i32</text>
+  <text x="301" y="178" font-size="24" fill="#0b3d91" text-anchor="middle" font-weight="700">4</text>
+
+  <text x="420" y="168" font-size="13" fill="#57606a">one value,</text>
+  <text x="420" y="188" font-size="13" fill="#57606a">two fields,</text>
+  <text x="420" y="208" font-size="13" fill="#57606a">8 bytes total</text>
+
+  <line x1="32" y1="248" x2="608" y2="248" stroke="#e1e4e8"/>
+  <text x="32" y="276" font-size="13" fill="#57606a">Read a field with a dot: <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">p.x</tspan> is 3, <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">p.y</tspan> is 4.</text>
+  <text x="32" y="300" font-size="13" fill="#57606a">Both fields are <tspan font-weight="700" fill="#1f2328">i32</tspan> (all on the stack), so this whole Point is a plain stack value — like a labeled pair.</text>
+</svg>
