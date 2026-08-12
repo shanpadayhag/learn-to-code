@@ -129,6 +129,13 @@ If you ever feel you genuinely *need* two live `&mut`s to one value, that's usua
 compiler flagging a design where two things fight over one value — the fix is to arrange
 for one to hold it at a time, not to dodge the rule.
 
+> **One question we're parking on purpose:** what if the function is `async`? The
+> one-writer rule still holds there — you never get two live `&mut`s at once. But an
+> `.await` can *pause* a function mid-call while a borrow is still alive, so a `&mut`
+> can survive across the pause instead of returning right away. That longer lifetime is
+> a whole story of its own (futures, `Send`, `Pin`), so we come back to it in the async
+> track — not here.
+
 ## `mut` in two places — don't mix them up
 You've now seen `mut` in two different roles, and it's worth separating them cleanly:
 
