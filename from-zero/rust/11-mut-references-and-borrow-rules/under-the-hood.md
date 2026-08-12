@@ -37,6 +37,98 @@ scribbling over each other's changes. This is the same guarantee that makes data
 impossible when you get to threads much later — one rule, enforced at compile time, no
 runtime cost.
 
+## Two things that trip everyone up
+
+The one-writer rule sounds simple, but two honest questions come up almost immediately.
+Both come from reading "one writer" too literally, so let's settle them.
+
+### "Isn't the owner a writer *and* the borrowed `&mut` a second writer?"
+
+It looks like cheating: `main` owns `text` and can write to it, and now `add_bang` also
+gets to write to it through `&mut` — surely that's two writers?
+
+The missing piece: **the owner writing and a `&mut` are the same kind of thing — a
+write-permission — and there is only ever one of them.** Picture write-access as a single
+**pen**, and the value as a page only that pen can write on.
+
+- While `main` owns `text`, `main` holds the pen.
+- Calling `add_bang(&mut text)` **hands the pen to the function.** For the length of that
+  call, `main` does *not* have the pen and cannot write to `text`.
+- When the function returns, the pen comes **back** to `main`.
+
+There are never two writers — there's **one pen, passed back and forth**, never copied.
+"One `&mut` writer" means *one at any single instant*, not one forever.
+
+```rust
+fn add_bang(s: &mut String) { s.push('!'); }
+
+fn main() {
+    let mut text = String::from("hi");
+    add_bang(&mut text);   // pen lent to add_bang, returned when it ends
+    text.push('?');        // main has the pen back, so this is fine
+    println!("{text}");    // hi!?
+}
+```
+
+And the owner really *is* bound by the same rule — it isn't a privileged extra writer
+sitting outside it. Try to make the owner write while a borrow is still alive and the
+compiler counts the owner's own write as a *second* mutable borrow:
+
+```rust
+let mut text = String::from("hi");
+let writer = &mut text;   // pen handed to `writer`
+text.push('!');           // ❌ error[E0499]: cannot borrow `text` as mutable more than once
+println!("{writer}");     // writer still holds the pen here — so the two overlap
+```
+
+> `text.push('!')` is reported as the *second* mutable borrow. The owner needs the pen to
+> write, but `writer` still has it. Two hands, one pen.
+
+Why does the normal function call escape this? Because there's **no overlap in time**. The
+borrow is born at `&mut text` and dies the instant the call returns:
+
+```
+main holds pen ──▶ &mut text: pen handed to add_bang ──▶ it writes ──▶ returns, pen back to main
+                   └────────── borrow alive ONLY here ─────────┘
+```
+
+Two writes, yes — but never at the same moment.
+
+### "You can't borrow mutably twice — so how do two functions both do it?"
+
+The rule is **not** "you can't borrow mutably twice." It's "you can't have two mutable
+borrows alive *at the same time*." Sequentially, borrow mutably as often as you like:
+
+```rust
+fn add_bang(s: &mut String) { s.push('!'); }
+fn add_domain(s: &mut String) { s.push_str("@x.com"); }
+
+fn main() {
+    let mut text = String::from("sam");
+    add_bang(&mut text);     // borrow 1 — starts and ENDS on this line
+    add_domain(&mut text);   // borrow 2 — a brand-new borrow; borrow 1 is long gone
+    text.push('.');          // main writes too — also fine, nothing is borrowed now
+    println!("{text}");      // sam!@x.com.
+}
+```
+
+Each `&mut text` is a fresh loan of the pen, fully returned before the next line runs, so
+no two ever coexist. Your worry — "two functions that both need to borrow the same value"
+— has nothing to solve: just call them one after another.
+
+The *only* forbidden case is keeping two loans live **simultaneously**, e.g. by parking
+both in variables:
+
+```rust
+let a = &mut text;
+let b = &mut text;   // ❌ a is still used below, so now two pens exist at once
+println!("{a} {b}");
+```
+
+If you ever feel you genuinely *need* two live `&mut`s to one value, that's usually the
+compiler flagging a design where two things fight over one value — the fix is to arrange
+for one to hold it at a time, not to dodge the rule.
+
 ## `mut` in two places — don't mix them up
 You've now seen `mut` in two different roles, and it's worth separating them cleanly:
 
