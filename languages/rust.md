@@ -28,6 +28,7 @@ how to program in *some* language — just not Rust yet.
 - [`usize` and underflow](#usize)
 - [`.max()` / `.min()` — pick the larger or smaller](#ord-max)
 - [`struct` — defining your own type](#struct)
+- [`enum` — one of several shapes](#enum)
 - [`type` — type aliases](#type-alias)
 - [`#[derive(Default)]` and `Self::default()`](#derive-default)
 - [`match` expressions](#match)
@@ -468,6 +469,34 @@ field with it.
 
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
 · taught from zero in [From-Zero Concept 13](../from-zero/rust/13-structs/use-it.md)
+
+## `enum` — one of several shapes {#enum}
+
+**In one line:** defines a type whose value is *exactly one* of a fixed list of variants —
+the "or" to a [struct](#struct)'s "and."
+
+```rust
+enum Shape {
+    Circle(f64),          // a variant can carry its own data
+    Rectangle(f64, f64),  // different variants, different data
+}
+let s = Shape::Circle(2.0);   // build with Type::Variant(...)
+```
+
+A struct holds all its fields at once; an enum holds one variant at a time. Variants may
+be fieldless (`enum Light { Red, Yellow, Green }`) or carry data — a tuple like
+`Circle(f64)`, or named fields like `Move { x: i32, y: i32 }`. Construct with `::` and the
+variant name.
+
+**In memory** it's a **tag** (which variant) plus **one shared slot** sized for the
+largest variant, so an enum is as big as its biggest variant plus the tag — never the sum.
+A fieldless enum is just the tag (`Light` is 1 byte). Ownership carries over unchanged: if
+any variant owns heap data it's a move type, otherwise it can be `Copy`.
+
+To read one you [`match`](#if-let) on it, binding each variant's data into names. `Option`
+and `Result` are just enums from the standard library.
+
+First seen in: taught from zero in [From-Zero Concept 14](../from-zero/rust/14-enums/use-it.md)
 
 ## `type` — type aliases {#type-alias}
 

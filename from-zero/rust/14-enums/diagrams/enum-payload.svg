@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="418" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">enum Shape { Circle(f64), Rectangle(f64, f64) }</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">a <tspan font-weight="700" fill="#1f2328">tag</tspan> (which variant?) plus <tspan font-weight="700" fill="#1f2328">one shared slot</tspan> as big as the largest variant</text>
+
+  <!-- Circle row -->
+  <text x="32" y="118" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328">Shape::Circle(2.0)</text>
+  <!-- tag -->
+  <rect x="230" y="96" width="70" height="52" rx="8" fill="#ffe6cc" stroke="#d98a3d" stroke-width="2"/>
+  <text x="265" y="90" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">tag</text>
+  <text x="265" y="128" font-size="18" fill="#8a4b00" text-anchor="middle" font-weight="700">Circle</text>
+  <!-- payload slot 16 bytes, 8 used -->
+  <rect x="308" y="96" width="130" height="52" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="373" y="127" font-size="18" fill="#0b3d91" text-anchor="middle" font-weight="700">2.0</text>
+  <rect x="438" y="96" width="130" height="52" rx="6" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="503" y="122" font-size="12" fill="#8a94a0" text-anchor="middle">unused</text>
+  <text x="503" y="138" font-size="11" fill="#8a94a0" text-anchor="middle">(8 bytes)</text>
+
+  <!-- Rectangle row -->
+  <text x="32" y="220" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328">Shape::Rectangle(3.0, 4.0)</text>
+  <rect x="230" y="198" width="70" height="52" rx="8" fill="#ffe6cc" stroke="#d98a3d" stroke-width="2"/>
+  <text x="265" y="192" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">tag</text>
+  <text x="265" y="228" font-size="15" fill="#8a4b00" text-anchor="middle" font-weight="700">Rect</text>
+  <rect x="308" y="198" width="130" height="52" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="373" y="229" font-size="18" fill="#0b3d91" text-anchor="middle" font-weight="700">3.0</text>
+  <rect x="438" y="198" width="130" height="52" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="503" y="229" font-size="18" fill="#0b3d91" text-anchor="middle" font-weight="700">4.0</text>
+
+  <!-- brace / label for the shared slot -->
+  <text x="438" y="286" font-size="12" fill="#57606a" text-anchor="middle">↑ the same 16-byte slot, reused ↑</text>
+
+  <line x1="32" y1="312" x2="608" y2="312" stroke="#e1e4e8"/>
+  <text x="32" y="340" font-size="13" fill="#57606a">The slot is sized for the <tspan font-weight="700" fill="#1f2328">biggest</tspan> variant (Rectangle, 16 bytes). A Circle uses only the first 8</text>
+  <text x="32" y="360" font-size="13" fill="#57606a">and leaves the rest empty — the variants <tspan font-weight="700" fill="#1f2328">share</tspan> one slot because only one is active at a time.</text>
+  <text x="32" y="392" font-size="13" fill="#57606a">Total size: 8 (tag, padded so the f64 aligns) + 16 (payload) = <tspan font-weight="700" fill="#1f2328">24 bytes</tspan>, whichever variant it holds.</text>
+</svg>

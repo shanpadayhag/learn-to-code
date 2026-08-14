@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="338" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">enum Light { Red, Yellow, Green }</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">a fieldless enum carries no data — it is stored as a single small number, the <tspan font-weight="700" fill="#1f2328">tag</tspan></text>
+
+  <!-- the mapping -->
+  <text x="60" y="118" font-size="15" font-family="ui-monospace,monospace" fill="#1f2328">Red</text>
+  <text x="150" y="118" font-size="15" fill="#57606a">is stored as</text>
+  <rect x="260" y="100" width="46" height="46" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="283" y="132" font-size="24" fill="#0b3d91" text-anchor="middle" font-weight="700">0</text>
+
+  <text x="60" y="176" font-size="15" font-family="ui-monospace,monospace" fill="#1f2328">Yellow</text>
+  <text x="150" y="176" font-size="15" fill="#57606a">is stored as</text>
+  <rect x="260" y="158" width="46" height="46" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="283" y="190" font-size="24" fill="#0b3d91" text-anchor="middle" font-weight="700">1</text>
+
+  <text x="60" y="234" font-size="15" font-family="ui-monospace,monospace" fill="#1f2328">Green</text>
+  <text x="150" y="234" font-size="15" fill="#57606a">is stored as</text>
+  <rect x="260" y="216" width="46" height="46" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="283" y="248" font-size="24" fill="#0b3d91" text-anchor="middle" font-weight="700">2</text>
+
+  <!-- callout -->
+  <rect x="360" y="100" width="240" height="162" rx="10" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2"/>
+  <text x="480" y="140" font-size="14" fill="#57606a" text-anchor="middle">a whole Light value is</text>
+  <text x="480" y="176" font-size="30" fill="#0b3d91" text-anchor="middle" font-weight="700">1 byte</text>
+  <text x="480" y="210" font-size="13" fill="#57606a" text-anchor="middle">three possibilities fit</text>
+  <text x="480" y="230" font-size="13" fill="#57606a" text-anchor="middle">easily in one byte</text>
+
+  <line x1="32" y1="290" x2="608" y2="290" stroke="#e1e4e8"/>
+  <text x="32" y="316" font-size="13" fill="#57606a">The names are compile-time labels; at runtime a fieldless enum is just its tag number.</text>
+</svg>

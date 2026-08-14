@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 14 — *Enums* (up next)
+**Current:** Concept 15 — *`Option` (no more null)* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -41,8 +41,8 @@ exercises. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 13 | [Structs](13-structs/use-it.md) | ✅ done |
-| 14 | Enums | ⬜ up next |
-| 15 | `Option` (no more null) | ⬜ planned |
+| 14 | [Enums](14-enums/use-it.md) | ✅ done |
+| 15 | `Option` (no more null) | ⬜ up next |
 | 16 | Pattern matching with `match` | ⬜ planned |
 
 ### Later — macro-phases (firmed up as we reach them)
