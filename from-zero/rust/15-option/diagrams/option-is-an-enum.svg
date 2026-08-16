@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">enum Option&lt;T&gt; { Some(T), None }</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">an ordinary <tspan font-weight="700" fill="#1f2328">enum</tspan> with two variants: a value is present (<tspan font-weight="700" fill="#1f2328">Some</tspan>) or missing (<tspan font-weight="700" fill="#1f2328">None</tspan>)</text>
+
+  <!-- Some row -->
+  <text x="32" y="132" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328">Some(5)</text>
+  <rect x="200" y="108" width="80" height="52" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="240" y="102" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">tag</text>
+  <text x="240" y="140" font-size="17" fill="#1a7f37" text-anchor="middle" font-weight="700">Some</text>
+  <rect x="288" y="108" width="120" height="52" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="348" y="139" font-size="18" fill="#0b3d91" text-anchor="middle" font-weight="700">5</text>
+  <text x="428" y="140" font-size="13" fill="#57606a">← the value is here</text>
+
+  <!-- None row -->
+  <text x="32" y="222" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328">None</text>
+  <rect x="200" y="198" width="80" height="52" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="2"/>
+  <text x="240" y="192" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">tag</text>
+  <text x="240" y="230" font-size="17" fill="#b02a37" text-anchor="middle" font-weight="700">None</text>
+  <rect x="288" y="198" width="120" height="52" rx="6" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="348" y="229" font-size="13" fill="#8a94a0" text-anchor="middle">empty</text>
+  <text x="428" y="230" font-size="13" fill="#57606a">← nothing to carry</text>
+
+  <line x1="32" y1="288" x2="608" y2="288" stroke="#e1e4e8"/>
+  <text x="32" y="318" font-size="13" fill="#57606a">There is <tspan font-weight="700" fill="#1f2328">no null</tspan> in Rust. "Maybe missing" is this enum instead — so the compiler can</text>
+  <text x="32" y="338" font-size="13" fill="#57606a">see the <tspan font-weight="700" fill="#b02a37">None</tspan> case exists and <tspan font-weight="700" fill="#1f2328">force you to handle it</tspan> before you touch the value.</text>
+</svg>

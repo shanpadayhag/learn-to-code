@@ -626,6 +626,10 @@ transforms the value *inside* a `Some`, leaving `None` untouched: `Some(25)` bec
 `Some(15)`, `None` stays `None`. It's the tidy way to say "if there is a deadline,
 convert it to a remaining duration; if there isn't, there still isn't."
 
+Taught from zero — why null is the problem, and how `Option` is just an enum — in
+[From-Zero Concept 15](../from-zero/rust/15-option/use-it.md); the concept behind it lives
+in [Null (and the billion-dollar mistake)](../glossary/null-and-the-billion-dollar-mistake.md).
+
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
 
 ## `?` — the question-mark operator {#question-mark}

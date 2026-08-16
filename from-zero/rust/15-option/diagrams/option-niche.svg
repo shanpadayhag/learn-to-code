@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="438" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">The niche trick: a free None</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">A pointer can never legally be <tspan font-weight="700" font-family="ui-monospace,monospace" fill="#1f2328">0</tspan>. So Rust reuses <tspan font-weight="700" font-family="ui-monospace,monospace" fill="#1f2328">0</tspan> to mean <tspan font-weight="700" fill="#b02a37">None</tspan> — no extra tag byte.</text>
+
+  <!-- plain Box -->
+  <text x="32" y="118" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328">Box&lt;i32&gt;</text>
+  <rect x="200" y="96" width="240" height="44" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="320" y="124" font-size="14" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">a heap address (never 0)</text>
+  <text x="452" y="123" font-size="13" fill="#57606a">8 bytes</text>
+
+  <!-- Option Some -->
+  <text x="32" y="196" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328">Some(box)</text>
+  <rect x="200" y="174" width="240" height="44" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="320" y="202" font-size="14" fill="#1a7f37" text-anchor="middle" font-family="ui-monospace,monospace">the same address (non-zero)</text>
+  <text x="452" y="201" font-size="13" fill="#57606a">8 bytes</text>
+
+  <!-- Option None -->
+  <text x="32" y="264" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328">None</text>
+  <rect x="200" y="242" width="240" height="44" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="2"/>
+  <text x="320" y="270" font-size="16" fill="#b02a37" text-anchor="middle" font-family="ui-monospace,monospace" font-weight="700">0 0 0 0 0 0 0 0</text>
+  <text x="452" y="269" font-size="13" fill="#57606a">8 bytes</text>
+
+  <line x1="32" y1="322" x2="608" y2="322" stroke="#e1e4e8"/>
+  <text x="32" y="352" font-size="13" fill="#57606a"><tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">size_of::&lt;Option&lt;Box&lt;i32&gt;&gt;&gt;()</tspan> = <tspan font-weight="700" fill="#1f2328">8</tspan> — exactly the same as a plain <tspan font-family="ui-monospace,monospace" fill="#1f2328">Box</tspan>.</text>
+  <text x="32" y="374" font-size="13" fill="#57606a">"Safe maybe-missing" costs <tspan font-weight="700" fill="#1f2328">nothing</tspan> here: no tag, no padding, not one extra byte.</text>
+  <text x="32" y="404" font-size="13" fill="#57606a">Plain <tspan font-family="ui-monospace,monospace" fill="#1f2328">Option&lt;i32&gt;</tspan> can't do this — every 32-bit number is a valid <tspan font-family="ui-monospace,monospace" fill="#1f2328">i32</tspan>, so it needs a</text>
+  <text x="32" y="424" font-size="13" fill="#57606a">real tag and grows to <tspan font-weight="700" fill="#1f2328">8 bytes</tspan> (4 for the i32 + 4 for tag &amp; padding).</text>
+</svg>

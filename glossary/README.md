@@ -12,5 +12,6 @@ only as deep as you need.
 | [Hash Map](hash-map.md) | A container that stores key → value pairs and can find any key almost instantly. |
 | [Lazy Expiration](lazy-expiration.md) | Record when something dies and check that deadline on read, instead of deleting it on a timer. |
 | [Linked List](linked-list.md) | A chain of nodes, each holding one value and a pointer to the next. |
+| [Null (and the Billion-Dollar Mistake)](null-and-the-billion-dollar-mistake.md) | A "nothing here" value that hides in plain sight and crashes programs — Rust replaces it with `Option`. |
 | [Sliding Window](sliding-window.md) | Keep a stretch of a list with two edges and slide it forward instead of re-scanning. |
 | [Sorted Map](sorted-map.md) | A key → value store that keeps keys in order, so it can answer range and prefix questions. |
