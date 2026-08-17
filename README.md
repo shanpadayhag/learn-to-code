@@ -25,6 +25,16 @@ From-scratch, learn-by-doing courses that build a language up one idea at a time
 | 2 | [Add Two Numbers](problems/0002-add-two-numbers/README.md) | Medium | Rust | [Linked List](glossary/linked-list.md) |
 | 3 | [Longest Substring Without Repeating Characters](problems/0003-longest-substring-without-repeating-characters/README.md) | Medium | Rust | [Sliding Window](glossary/sliding-window.md) |
 
+## Challenges
+
+Small, self-driven practice problems from outside sources (W3Schools and friends),
+one a day. Written up **bug-first** — the mistake I hit is the lesson — with reusable
+takeaways promoted into the syntax handbooks. See the [challenges index](challenges/README.md).
+
+| Date | Challenge | Language | Lesson |
+|------|-----------|----------|--------|
+| 2026-08-17 | [Celsius → Fahrenheit](challenges/celsius-to-fahrenheit/README.md) | Rust | [Integer division truncates](languages/rust.md#int-division), [`{:.1}` formatting](languages/rust.md#format-spec) |
+
 ## Patterns
 
 Not every worthwhile problem is a numbered LeetCode one. Common interview and

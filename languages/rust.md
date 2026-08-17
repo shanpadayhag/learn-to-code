@@ -26,6 +26,7 @@ how to program in *some* language — just not Rust yet.
 - [`String` — an owned string](#string)
 - [`.chars()` — iterate a string by character](#chars)
 - [`usize` and underflow](#usize)
+- [integer division — `/` truncates](#int-division)
 - [`.max()` / `.min()` — pick the larger or smaller](#ord-max)
 - [`struct` — defining your own type](#struct)
 - [`enum` — one of several shapes](#enum)
@@ -43,6 +44,7 @@ how to program in *some* language — just not Rust yet.
 - [`impl Trait` in argument position](#impl-trait-arg)
 - [lifetimes — `<'a>`](#lifetimes)
 - [`format!` — building strings](#format)
+- [`{:.1}` — format specifiers (decimals, width, …)](#format-spec)
 - [`.to_owned()` / `.clone()` — making an owned copy](#to-owned-clone)
 - [`Copy` types — values duplicated on assignment](#copy)
 - [`&T` — shared references (borrowing)](#borrow)
@@ -423,6 +425,34 @@ subtraction is always `≥ 0`. When you subtract `usize` values, always check th
 left side can't dip below the right.
 
 First seen in: [3. Longest Substring Without Repeating Characters](../problems/0003-longest-substring-without-repeating-characters/solution.rs.md)
+
+## integer division — `/` truncates {#int-division}
+
+**In one line:** when both sides of `/` are integers, Rust does *integer division*
+— it throws the fractional part away, so `9 / 5` is `1`, not `1.8`.
+
+Rust picks the kind of division from the **types**, not from what you meant. If both
+operands are integers (`i32`, `u64`, `usize`, …), the result is an integer, and any
+remainder is silently dropped — no rounding, no warning. So `9 / 5` is `1`, `7 / 2`
+is `3`, and `1 / 2` is `0`. This bites hardest when the division is buried in a
+formula: `celsius * (9 / 5) + 32` looks right, but `9 / 5` becomes `1` first, and the
+whole thing collapses to `celsius + 32`.
+
+To keep the decimal, make at least one side a **float** — either annotate the value
+(`let celsius: f32 = ...`) or write the literals with a dot (`9.0 / 5.0`, which is
+`1.8`):
+
+```rust
+let celsius: f32 = 100.0;
+let fahrenheit = celsius * (9.0 / 5.0) + 32.0; // 212.0, not 132
+```
+
+Because `celsius` is `f32`, the `9.0 / 5.0` literals are inferred as `f32` too, so
+the types line up with no cast needed. (Rust's *default* float, when nothing forces
+a choice, is `f64`.) The same trap exists in C, Java, and Go — any language where
+`int / int` stays an `int`.
+
+First seen in: [Celsius → Fahrenheit](../challenges/celsius-to-fahrenheit/README.md)
 
 ## `.max()` / `.min()` — pick the larger or smaller {#ord-max}
 
@@ -860,6 +890,37 @@ styles appear: `{field}` pulls the variable named `field` directly into the hole
 string instead of printing it.
 
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `{:.1}` — format specifiers (decimals, width, …) {#format-spec}
+
+**In one line:** the part after the `:` inside `{}` controls how a value is
+*displayed* — `{:.1}` means "one digit after the decimal point" — without changing
+the value itself.
+
+A `{}` hole can carry formatting instructions after a colon: `{:.1}`, `{:5}`,
+`{:08.2}`, and so on. The most common is **precision** for numbers, written
+`.N` — it fixes how many digits show after the decimal point, rounding (and padding
+with zeros) to fit:
+
+```rust
+let f = 77.0_f32;
+println!("{}", f);      // 77      <- plain Display drops the trailing .0
+println!("{:.1}", f);   // 77.0    <- forced to one decimal place
+println!("{:.2}", 3.14159); // 3.14    <- rounded to two places
+```
+
+This is why a Celsius→Fahrenheit result of `77.0` prints as `77` under plain `{}`
+but as `77.0` under `{:.1}`. Key distinction: this is about **display only**. The
+`f32` in memory is unchanged — `{:.1}` doesn't round the stored value, just the
+text. So in `println!("{} Celsius = {:.1} Fahrenheit", celsius, fahrenheit)` the
+Celsius side (plain `{}`) shows `25` while the Fahrenheit side shows `77.0`, even
+though both are `f32`. If you want *both* shown with a decimal, give both a spec
+(`{:.1}`).
+
+Precision is just one specifier — the same slot also does width (`{:5}` → pad to 5
+chars), zero-fill (`{:05}`), alignment, sign, and more.
+
+First seen in: [Celsius → Fahrenheit](../challenges/celsius-to-fahrenheit/README.md)
 
 ## `.to_owned()` / `.clone()` — making an owned copy {#to-owned-clone}
 
