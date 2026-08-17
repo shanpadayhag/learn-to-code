@@ -69,8 +69,9 @@ println!("{} Celsius = {:.1} Fahrenheit", celsius, fahrenheit);
 // 25 -> "25 Celsius = 77.0 Fahrenheit"
 ```
 
-Formatting is its own small topic, separate from the type fix — the reference lives
-in the handbook: [`{:.1}` format specifiers](../../languages/rust.md#format-spec).
+Formatting is its own topic, separate from the type fix, so it gets a full lesson:
+**From-Zero → [Interlude 01a — Printing and formatting](../../from-zero/rust/01a-printing-and-formatting/use-it.md)**.
+Quick reference in the handbook: [`{:.1}` format specifiers](../../languages/rust.md#format-spec).
 
 ## Takeaway
 

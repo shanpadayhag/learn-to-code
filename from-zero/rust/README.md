@@ -12,13 +12,16 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 **Current:** Concept 18 — *`HashMap<K, V>` (look up by key)* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
-exercises. This table is the source of truth for where you are.
+exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
+that teach an everyday basic where it first comes up — no separate memory page, since
+they aren't memory topics. This table is the source of truth for where you are.
 
 ### Phase 1 — The stack (values with a known size)
 
 | # | Concept | Status |
 |---|---------|--------|
 | 01 | [A number in a variable](01-a-number-in-a-variable/use-it.md) | ✅ done |
+| 01a | [Printing and formatting](01a-printing-and-formatting/use-it.md) *(interlude)* | ✅ done |
 | 02 | [Frozen by default, and `mut`](02-frozen-by-default-and-mut/use-it.md) | ✅ done |
 | 03 | [Types have sizes](03-types-have-sizes/use-it.md) | ✅ done |
 | 04 | [Functions and the call stack](04-functions-and-the-call-stack/use-it.md) | ✅ done |
