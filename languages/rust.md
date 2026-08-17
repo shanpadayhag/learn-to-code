@@ -552,6 +552,10 @@ compiler *forces* you to cover every variant of an [`Option`](#option) — leave
 Each arm is an expression, so the whole `match` evaluates to a value (here, the `bool`
 the function returns).
 
+Taught from zero — patterns (literals, ranges, `|`, bindings, `_`), exhaustiveness, and
+the move-vs-borrow catch when binding a variant's data — in
+[From-Zero Concept 16](../from-zero/rust/16-match/use-it.md).
+
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
 
 ## `BTreeMap<K, V>` — a sorted map {#btreemap}

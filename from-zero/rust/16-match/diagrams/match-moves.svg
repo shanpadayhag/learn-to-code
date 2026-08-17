@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 440" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="438" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">Binding in a pattern moves — unless you match a reference</text>
+
+  <!-- LEFT: match by value = move -->
+  <text x="30" y="78" font-size="13" font-weight="700" fill="#b02a37">match coin {  (by value)</text>
+  <text x="30" y="98" font-size="12" font-family="ui-monospace,monospace" fill="#57606a">Coin::Quarter(state) => ...</text>
+
+  <!-- stack box: coin (retired) -->
+  <rect x="30" y="118" width="130" height="70" rx="8" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="95" y="112" font-size="11" fill="#57606a" text-anchor="middle">coin (retired)</text>
+  <text x="95" y="150" font-size="12" fill="#8a94a0" text-anchor="middle" font-family="ui-monospace,monospace">Quarter · ptr</text>
+  <text x="95" y="172" font-size="11" fill="#b02a37" text-anchor="middle">✗ can't use</text>
+
+  <!-- state gets ownership -->
+  <rect x="30" y="210" width="130" height="50" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="95" y="204" font-size="11" fill="#57606a" text-anchor="middle">state (owns it now)</text>
+  <text x="95" y="240" font-size="12" fill="#1a7f37" text-anchor="middle" font-family="ui-monospace,monospace">ptr →</text>
+
+  <!-- heap -->
+  <rect x="30" y="290" width="130" height="46" rx="6" fill="#ffe9c9" stroke="#d98a3d" stroke-width="2"/>
+  <text x="95" y="318" font-size="13" fill="#8a4b00" text-anchor="middle" font-family="ui-monospace,monospace">"Texas"</text>
+  <line x1="95" y1="260" x2="95" y2="290" stroke="#3fa45b" stroke-width="2" marker-end="url(#g)"/>
+
+  <text x="30" y="366" font-size="12" fill="#57606a">The String moves OUT of coin into</text>
+  <text x="30" y="384" font-size="12" fill="#57606a">`state`. `coin` is retired — the</text>
+  <text x="30" y="402" font-size="12" fill="#57606a">heap buffer has one owner, no copy.</text>
+
+  <!-- divider -->
+  <line x1="330" y1="64" x2="330" y2="410" stroke="#e1e4e8"/>
+
+  <!-- RIGHT: match by reference = borrow -->
+  <text x="352" y="78" font-size="13" font-weight="700" fill="#1a7f37">match &amp;coin {  (by reference)</text>
+  <text x="352" y="98" font-size="12" font-family="ui-monospace,monospace" fill="#57606a">Coin::Quarter(state) => ...</text>
+
+  <!-- stack box: coin still valid -->
+  <rect x="352" y="118" width="130" height="70" rx="8" fill="#fff" stroke="#3fa45b" stroke-width="2"/>
+  <text x="417" y="112" font-size="11" fill="#57606a" text-anchor="middle">coin (still valid)</text>
+  <text x="417" y="150" font-size="12" fill="#1a7f37" text-anchor="middle" font-family="ui-monospace,monospace">Quarter · ptr →</text>
+  <text x="417" y="172" font-size="11" fill="#1a7f37" text-anchor="middle">✓ usable after</text>
+
+  <!-- state is a borrow -->
+  <rect x="352" y="210" width="130" height="50" rx="8" fill="#e7e0ff" stroke="#8a63d2" stroke-width="2"/>
+  <text x="417" y="204" font-size="11" fill="#57606a" text-anchor="middle">state: &amp;String (borrow)</text>
+  <text x="417" y="240" font-size="12" fill="#5a3ea8" text-anchor="middle" font-family="ui-monospace,monospace">ptr →</text>
+
+  <!-- shared heap -->
+  <rect x="500" y="150" width="110" height="46" rx="6" fill="#ffe9c9" stroke="#d98a3d" stroke-width="2"/>
+  <text x="555" y="178" font-size="13" fill="#8a4b00" text-anchor="middle" font-family="ui-monospace,monospace">"Texas"</text>
+  <line x1="482" y1="150" x2="500" y2="168" stroke="#3fa45b" stroke-width="2" marker-end="url(#g)"/>
+  <line x1="482" y1="232" x2="500" y2="188" stroke="#8a63d2" stroke-width="2" marker-end="url(#p)"/>
+
+  <text x="352" y="366" font-size="12" fill="#57606a">Nothing moves. `state` just points</text>
+  <text x="352" y="384" font-size="12" fill="#57606a">at the String inside `coin`, which</text>
+  <text x="352" y="402" font-size="12" fill="#57606a">stays the owner and stays usable.</text>
+
+  <defs>
+    <marker id="g" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#3fa45b"/></marker>
+    <marker id="p" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#8a63d2"/></marker>
+  </defs>
+</svg>
