@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 17 — *`Vec<T>` (a growable list)* (up next)
+**Current:** Concept 18 — *`HashMap<K, V>` (look up by key)* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. This table is the source of truth for where you are.
@@ -49,12 +49,12 @@ exercises. This table is the source of truth for where you are.
 
 | # | Concept | Status |
 |---|---------|--------|
-| 17 | `Vec<T>` (a growable list) | ⬜ up next |
+| 17 | [`Vec<T>` (a growable list)](17-vec/use-it.md) | ✅ done |
+| 18 | `HashMap<K, V>` (look up by key) | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 
-Collections &
-generics (`Vec` · `HashMap` · `<T>`) → traits → lifetimes → error handling
+More collections & generics (`<T>` proper) → traits → lifetimes → error handling
 (`Result` · `?`) → smart pointers (`Box` · `Rc` · `RefCell`) → closures & iterators →
 advanced (concurrency · `async` · `unsafe`).
 

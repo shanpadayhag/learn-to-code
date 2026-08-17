@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="418" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">…and when it's full, it moves to a bigger home</text>
+  <text x="32" y="64" font-size="14" fill="#57606a"><tspan font-family="ui-monospace,monospace" fill="#1f2328">.push(50)</tspan> when <tspan font-family="ui-monospace,monospace" fill="#1f2328">len == cap</tspan>: allocate a buffer twice as big, copy everything over, free the old.</text>
+
+  <!-- BEFORE: full buffer -->
+  <text x="32" y="106" font-size="13" font-weight="700" fill="#b02a37">Before — full (len 4, cap 4)</text>
+  <g font-family="ui-monospace,monospace" font-size="14" text-anchor="middle">
+    <rect x="32" y="118" width="46" height="40" rx="5" fill="#dbe9ff" stroke="#4a7fd6"/><text x="55" y="144" fill="#0b3d91">10</text>
+    <rect x="80" y="118" width="46" height="40" rx="5" fill="#dbe9ff" stroke="#4a7fd6"/><text x="103" y="144" fill="#0b3d91">20</text>
+    <rect x="128" y="118" width="46" height="40" rx="5" fill="#dbe9ff" stroke="#4a7fd6"/><text x="151" y="144" fill="#0b3d91">30</text>
+    <rect x="176" y="118" width="46" height="40" rx="5" fill="#dbe9ff" stroke="#4a7fd6"/><text x="199" y="144" fill="#0b3d91">40</text>
+  </g>
+  <text x="127" y="178" font-size="12" fill="#b02a37" text-anchor="middle">no room for 50 ✗</text>
+
+  <!-- arrow down -->
+  <line x1="127" y1="190" x2="127" y2="222" stroke="#57606a" stroke-width="2" marker-end="url(#d)"/>
+  <text x="150" y="212" font-size="12" fill="#57606a">grow</text>
+
+  <!-- AFTER: doubled buffer -->
+  <text x="32" y="250" font-size="13" font-weight="700" fill="#1a7f37">After — new buffer (len 5, cap 8)</text>
+  <g font-family="ui-monospace,monospace" font-size="14" text-anchor="middle">
+    <rect x="32" y="262" width="46" height="40" rx="5" fill="#d7f5dd" stroke="#3fa45b"/><text x="55" y="288" fill="#1a7f37">10</text>
+    <rect x="80" y="262" width="46" height="40" rx="5" fill="#d7f5dd" stroke="#3fa45b"/><text x="103" y="288" fill="#1a7f37">20</text>
+    <rect x="128" y="262" width="46" height="40" rx="5" fill="#d7f5dd" stroke="#3fa45b"/><text x="151" y="288" fill="#1a7f37">30</text>
+    <rect x="176" y="262" width="46" height="40" rx="5" fill="#d7f5dd" stroke="#3fa45b"/><text x="199" y="288" fill="#1a7f37">40</text>
+    <rect x="224" y="262" width="46" height="40" rx="5" fill="#fff5d6" stroke="#d4a72c" stroke-width="2"/><text x="247" y="288" fill="#7a5c00">50</text>
+    <rect x="272" y="262" width="46" height="40" rx="5" fill="#eef1f5" stroke="#a9b2bd" stroke-dasharray="4 3"/>
+    <rect x="320" y="262" width="46" height="40" rx="5" fill="#eef1f5" stroke="#a9b2bd" stroke-dasharray="4 3"/>
+    <rect x="368" y="262" width="46" height="40" rx="5" fill="#eef1f5" stroke="#a9b2bd" stroke-dasharray="4 3"/>
+  </g>
+  <text x="247" y="322" font-size="11" fill="#7a5c00" text-anchor="middle">new</text>
+  <text x="345" y="322" font-size="11" fill="#8a94a0" text-anchor="middle">3 spare — room to grow again</text>
+
+  <line x1="32" y1="348" x2="608" y2="348" stroke="#e1e4e8"/>
+  <text x="32" y="376" font-size="13" fill="#57606a">Copying costs work, but doubling means it happens rarely — most pushes are instant. Averaged</text>
+  <text x="32" y="396" font-size="13" fill="#57606a">out, one push is <tspan font-weight="700" fill="#1f2328">O(1)</tspan>. The catch: a regrow moves the buffer, so old <tspan font-family="ui-monospace,monospace" fill="#1f2328">&amp;</tspan> references into it break.</text>
+
+  <defs>
+    <marker id="d" markerWidth="9" markerHeight="9" refX="4.5" refY="8" orient="auto"><path d="M0 0 L9 0 L4.5 9 z" fill="#57606a"/></marker>
+  </defs>
+</svg>

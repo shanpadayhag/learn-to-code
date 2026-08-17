@@ -94,6 +94,9 @@ can grow", living on the heap. The `<i32>` is a *type parameter* — `Vec<String
 `Vec<bool>`, etc. all work the same way. You index with `v[0]` and read its length
 with `v.len()`.
 
+Taught from zero — the ptr/len/cap header, doubling growth (amortized O(1)), and why a
+regrow breaks old borrows — in [From-Zero Concept 17](../from-zero/rust/17-vec/use-it.md).
+
 First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
 
 ## `vec![]` — the vector macro {#vec-macro}
