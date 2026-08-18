@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">You write ONE generic — the compiler stamps out a copy per type</text>
+  <text x="32" y="64" font-size="13" fill="#57606a">"Monomorphize" = turn one many-shaped definition into several one-shape ones.</text>
+
+  <!-- source generic -->
+  <text x="150" y="108" font-size="12" fill="#57606a" text-anchor="middle">WHAT YOU WRITE</text>
+  <rect x="32" y="122" width="236" height="96" rx="10" fill="#e7e0ff" stroke="#8a63d2" stroke-width="2"/>
+  <text x="48" y="150" font-size="13" font-family="ui-monospace,monospace" fill="#5a3ea8">fn first&lt;T&gt;(</text>
+  <text x="48" y="170" font-size="13" font-family="ui-monospace,monospace" fill="#5a3ea8">   pair: (T, T)</text>
+  <text x="48" y="190" font-size="13" font-family="ui-monospace,monospace" fill="#5a3ea8">) -&gt; T { pair.0 }</text>
+  <text x="150" y="210" font-size="11" fill="#5a3ea8" text-anchor="middle">one template · any type</text>
+
+  <!-- compiler arrow -->
+  <line x1="268" y1="170" x2="352" y2="170" stroke="#57606a" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="310" y="160" font-size="11" fill="#57606a" text-anchor="middle">compiler</text>
+  <text x="310" y="186" font-size="10" fill="#8a94a0" text-anchor="middle">sees the calls</text>
+
+  <!-- concrete copies -->
+  <text x="512" y="108" font-size="12" fill="#57606a" text-anchor="middle">WHAT ACTUALLY COMPILES</text>
+
+  <rect x="356" y="122" width="300" height="72" rx="10" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="372" y="148" font-size="12.5" font-family="ui-monospace,monospace" fill="#0b3d91">fn first__i32(pair: (i32, i32))</text>
+  <text x="372" y="168" font-size="12.5" font-family="ui-monospace,monospace" fill="#0b3d91">     -&gt; i32 { pair.0 }</text>
+  <text x="372" y="186" font-size="11" fill="#0b3d91">used by first((10, 20))</text>
+
+  <rect x="356" y="204" width="300" height="72" rx="10" fill="#ffe9c9" stroke="#d98a3d" stroke-width="2"/>
+  <text x="372" y="230" font-size="12.5" font-family="ui-monospace,monospace" fill="#8a5a1d">fn first__str(pair: (&amp;str, &amp;str))</text>
+  <text x="372" y="250" font-size="12.5" font-family="ui-monospace,monospace" fill="#8a5a1d">     -&gt; &amp;str { pair.0 }</text>
+  <text x="372" y="268" font-size="11" fill="#8a5a1d">used by first("hi", "bye")</text>
+
+  <line x1="290" y1="150" x2="352" y2="150" stroke="#4a7fd6" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <line x1="290" y1="200" x2="352" y2="235" stroke="#d98a3d" stroke-width="1.5" marker-end="url(#arro)"/>
+
+  <text x="32" y="316" font-size="13" fill="#1f2328" font-weight="700">At runtime each call goes straight to its own concrete copy —</text>
+  <text x="32" y="336" font-size="13" fill="#1f2328">no "what type is this?" check, no extra pointer. Byte-for-byte as fast as hand-written.</text>
+  <text x="32" y="366" font-size="12" fill="#8a94a0">The cost moves to compile time + binary size (one copy per type), never to runtime.</text>
+
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#57606a"/></marker>
+    <marker id="arrb" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 z" fill="#4a7fd6"/></marker>
+    <marker id="arro" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 z" fill="#d98a3d"/></marker>
+  </defs>
+</svg>

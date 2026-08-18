@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 19 — *Generics `<T>` (one definition, any type)* (up next)
+**Current:** Concept 20 — *Traits (what a type can do)* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -54,11 +54,12 @@ they aren't memory topics. This table is the source of truth for where you are.
 |---|---------|--------|
 | 17 | [`Vec<T>` (a growable list)](17-vec/use-it.md) | ✅ done |
 | 18 | [`HashMap<K, V>` (look up by key)](18-hashmap/use-it.md) | ✅ done |
-| 19 | Generics `<T>` (one definition, any type) | ⬜ up next |
+| 19 | [Generics `<T>` (one definition, any type)](19-generics/use-it.md) | ✅ done |
+| 20 | Traits (what a type can do) | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 
-More collections & generics (`<T>` proper) → traits → lifetimes → error handling
+Traits → more collections → lifetimes → error handling
 (`Result` · `?`) → smart pointers (`Box` · `Rc` · `RefCell`) → closures & iterators →
 advanced (concurrency · `async` · `unsafe`).
 

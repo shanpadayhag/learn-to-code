@@ -49,6 +49,7 @@ how to program in *some* language — just not Rust yet.
 - [`Copy` types — values duplicated on assignment](#copy)
 - [`&T` — shared references (borrowing)](#borrow)
 - [slices — `&str` and `&[T]`](#slice)
+- [generics — `<T>`](#generics)
 
 ## `use` declarations {#use}
 
@@ -1035,3 +1036,38 @@ prevents the slice from being left dangling if the buffer reallocated.
 `&numbers[1..3]` is a slice of two elements. Identical shape: pointer + length, no copy.
 
 First seen in: [From-Zero Concept 12](../from-zero/rust/12-slices/use-it.md)
+
+## generics — `<T>` {#generics}
+
+**In one line:** `<T>` is a stand-in for "some type, decided later," so you write a function
+or type *once* and use it with every type instead of copy-pasting one version per type.
+
+**On a function.** A `<T>` after the name introduces a type parameter; use `T` where a
+concrete type would go. Rust infers what `T` is from how you call it:
+
+```rust
+fn first<T>(pair: (T, T)) -> T { pair.0 }
+
+first((10, 20));      // T = i32
+first(("hi", "bye")); // T = &str
+```
+
+**On a struct.** Types are generic too; multiple parameters (`<T, U>`) let fields differ:
+
+```rust
+struct Point<T> { x: T, y: T }        // both fields the same type
+struct Pair<T, U> { a: T, b: U }      // two independent types — like HashMap<K, V>
+```
+
+**The catch — a bare `T` can only be shuffled, not inspected.** Since the code must work for
+*every* type, Rust rejects any operation not guaranteed for all types: `if a > b` on two `T`
+won't compile. You can move/return/store a `T`, but to compare, print, or add it you must add
+a **trait bound** (`<T: PartialOrd>`) promising what `T` can do. See
+[Concept 19](../from-zero/rust/19-generics/use-it.md).
+
+**Zero-cost at runtime.** The compiler *monomorphizes*: it stamps out a separate concrete copy
+of the generic code for each type actually used, so a generic call is byte-for-byte as fast as
+a hand-written type-specific one. The cost is paid in compile time and binary size, never at
+runtime — see [Concept 19 · Under the hood](../from-zero/rust/19-generics/under-the-hood.md).
+
+First seen in: [From-Zero Concept 19](../from-zero/rust/19-generics/use-it.md)
