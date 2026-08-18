@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 18 — *`HashMap<K, V>` (look up by key)* (up next)
+**Current:** Concept 19 — *Generics `<T>` (one definition, any type)* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -53,7 +53,8 @@ they aren't memory topics. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 17 | [`Vec<T>` (a growable list)](17-vec/use-it.md) | ✅ done |
-| 18 | `HashMap<K, V>` (look up by key) | ⬜ up next |
+| 18 | [`HashMap<K, V>` (look up by key)](18-hashmap/use-it.md) | ✅ done |
+| 19 | Generics `<T>` (one definition, any type) | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 
