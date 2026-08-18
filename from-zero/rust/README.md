@@ -38,6 +38,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 10 | [Borrowing with `&` (the efficient answer)](10-borrowing-with-ref/use-it.md) | ✅ done |
 | 11 | [`&mut` and the borrow rules](11-mut-references-and-borrow-rules/use-it.md) | ✅ done |
 | 12 | [Slices](12-slices/use-it.md) | ✅ done |
+| 12a | [Why you can't index a string by position](12a-string-indexing/use-it.md) *(interlude)* | ✅ done |
 
 ### Phase 3 — Compound data (types you design)
 

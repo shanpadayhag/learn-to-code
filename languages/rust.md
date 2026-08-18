@@ -50,6 +50,7 @@ how to program in *some* language — just not Rust yet.
 - [`&T` — shared references (borrowing)](#borrow)
 - [slices — `&str` and `&[T]`](#slice)
 - [generics — `<T>`](#generics)
+- [string indexing — why `s[i]` is forbidden](#string-indexing)
 
 ## `use` declarations {#use}
 
@@ -1071,3 +1072,26 @@ a hand-written type-specific one. The cost is paid in compile time and binary si
 runtime — see [Concept 19 · Under the hood](../from-zero/rust/19-generics/under-the-hood.md).
 
 First seen in: [From-Zero Concept 19](../from-zero/rust/19-generics/use-it.md)
+
+## string indexing — why `s[i]` is forbidden {#string-indexing}
+
+**In one line:** Rust won't let you index a string by an integer position (`s[0]`), because
+a string is UTF-8 **bytes** and one character can span several of them — so "position `i`"
+is ambiguous.
+
+`"café"` is 4 characters but 5 bytes (`é` is 2). Byte 3 is only *half* of `é`, so `s[3]`
+can't return a sensible character. Rather than hand back a broken fragment, Rust rejects
+`str` indexing at compile time (`error[E0277]: the type str cannot be indexed by {integer}`).
+
+**What to reach for instead:**
+- **First / n-th character** — walk whole characters with [`.chars()`](#chars):
+  `s.chars().next().unwrap()` (first, as an [`Option`](#option)); `s.chars().nth(i)`.
+- **A raw byte, on purpose** — `s.as_bytes()[i]` gives a `u8`; you chose bytes explicitly.
+- **A span** — [range slicing](#slice) still works: `&s[0..1]`. But a range that splits a
+  character **panics** at runtime.
+- **Length** — `.len()` is **bytes**; `.chars().count()` is **characters**.
+
+See [Interlude 12a](../from-zero/rust/12a-string-indexing/use-it.md) for the full memory
+picture.
+
+First seen in: [Interlude 12a](../from-zero/rust/12a-string-indexing/use-it.md)

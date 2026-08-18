@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">A string is UTF-8 bytes — one character isn't always one byte</text>
+  <text x="32" y="64" font-size="14" fill="#57606a">let word = <tspan font-family="ui-monospace,monospace" fill="#0b3d91">"café"</tspan>;  <tspan fill="#8a94a0">// 4 characters … but 5 bytes</tspan></text>
+
+  <!-- the bytes row -->
+  <text x="40" y="120" font-size="12" fill="#57606a">THE BYTES ON THE HEAP</text>
+  <g font-family="ui-monospace,monospace" font-size="18" text-anchor="middle">
+    <rect x="40"  y="132" width="70" height="56" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/><text x="75"  y="168" fill="#0b3d91">c</text>
+    <rect x="118" y="132" width="70" height="56" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/><text x="153" y="168" fill="#0b3d91">a</text>
+    <rect x="196" y="132" width="70" height="56" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/><text x="231" y="168" fill="#0b3d91">f</text>
+    <!-- é spans two bytes -->
+    <rect x="274" y="132" width="148" height="56" rx="8" fill="#ffe9c9" stroke="#d98a3d" stroke-width="2"/>
+    <line x1="348" y1="132" x2="348" y2="188" stroke="#d98a3d" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="348" y="166" fill="#8a5a1d">é</text>
+    <text x="311" y="182" font-size="9" fill="#8a5a1d">½</text>
+    <text x="385" y="182" font-size="9" fill="#8a5a1d">½</text>
+  </g>
+
+  <!-- byte indices -->
+  <g font-size="12" text-anchor="middle" fill="#57606a" font-family="ui-monospace,monospace">
+    <text x="75"  y="206">byte 0</text>
+    <text x="153" y="206">byte 1</text>
+    <text x="231" y="206">byte 2</text>
+    <text x="311" y="206">byte 3</text>
+    <text x="385" y="206">byte 4</text>
+  </g>
+
+  <!-- character indices -->
+  <g font-size="12" text-anchor="middle" fill="#3a7d44" font-family="ui-monospace,monospace">
+    <text x="75"  y="234">char 0</text>
+    <text x="153" y="234">char 1</text>
+    <text x="231" y="234">char 2</text>
+    <text x="348" y="234">char 3</text>
+  </g>
+
+  <!-- the misalignment callout -->
+  <rect x="274" y="252" width="360" height="96" rx="10" fill="#ffe6e6" stroke="#d64545" stroke-width="1.5"/>
+  <text x="290" y="278" font-size="13" font-weight="700" fill="#a11" >word[3] — what should it return?</text>
+  <text x="290" y="300" font-size="12.5" fill="#8a1f1f">byte 3 is only the FIRST HALF of é —</text>
+  <text x="290" y="318" font-size="12.5" fill="#8a1f1f">a fragment, not a character. So Rust</text>
+  <text x="290" y="336" font-size="12.5" fill="#8a1f1f">refuses `word[i]` entirely.</text>
+
+  <text x="40" y="278" font-size="13" fill="#1f2328" font-weight="700">Byte index ≠</text>
+  <text x="40" y="298" font-size="13" fill="#1f2328" font-weight="700">character index</text>
+  <text x="40" y="326" font-size="12" fill="#57606a">once any character</text>
+  <text x="40" y="344" font-size="12" fill="#57606a">takes &gt; 1 byte.</text>
+</svg>
