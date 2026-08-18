@@ -37,6 +37,23 @@ Returning it would hand you a broken, meaningless value. So instead of guessing,
 offer the shortcut for `"Kai"` and forbid it for `"café"`; the rule has to be the same
 for every string.)
 
+## The deeper reason: it couldn't be *fast* anyway
+Ambiguity is only half the story — and the shallower half. Here's the part that really
+settles it. A [`Vec`](../17-vec/use-it.md) can do `v[i]` in a single step because every
+element is the **same size**: it just computes `start + i × size` and lands exactly there
+(that's [Concept 03](../03-types-have-sizes/use-it.md) — fixed sizes — doing real work).
+
+Characters in a UTF-8 string are **different** sizes, so there's no formula for "where does
+character `i` begin." The only way to find it is to **walk from the start**, decoding each
+character to learn how many bytes to skip, until you've counted `i` of them. That's an
+**O(n)** scan ([Big-O](../../../glossary/big-o-notation.md)) wearing an O(1) costume. So even
+if Rust *did* index by character, `s[i]` would quietly be a linear walk, not the instant jump
+the `[i]` notation promises. `s.chars().nth(i)` **is** exactly that walk — and Rust makes you
+write it out so the cost stays honest instead of hiding behind square brackets.
+
+So the refusal has two layers: `s[i]` would be **ambiguous** (byte or character?) *and*
+**not actually cheap** (a hidden scan). Rust declines to paper over either one.
+
 ## What to do instead
 ### The first character — walk the characters
 To get a real character, go through `.chars()`, which decodes the bytes into whole
