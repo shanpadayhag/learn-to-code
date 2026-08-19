@@ -34,6 +34,7 @@ takeaways promoted into the syntax handbooks. See the [challenges index](challen
 | Date | Challenge | Language | Lesson |
 |------|-----------|----------|--------|
 | 2026-08-17 | [Celsius → Fahrenheit](challenges/celsius-to-fahrenheit/README.md) | Rust | [Integer division truncates](languages/rust.md#int-division), [`{:.1}` formatting](languages/rust.md#format-spec) |
+| 2026-08-19 | [Palindrome Number](challenges/palindrome-number/README.md) | Rust | [`%` remainder](languages/rust.md#remainder), [`.rev()`](languages/rust.md#rev) |
 
 ## Patterns
 

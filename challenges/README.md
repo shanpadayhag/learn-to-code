@@ -13,3 +13,4 @@ syntax handbook (e.g. [Rust](../languages/rust.md)) and linked back here.
 | Date | Challenge | Language | Source | Lesson |
 |------|-----------|----------|--------|--------|
 | 2026-08-17 | [Celsius → Fahrenheit](celsius-to-fahrenheit/README.md) | Rust | [W3Schools VARIABLES01](https://www.w3schools.com/practice/practice.php?problem=VARIABLES01&lang=rust) | [Integer division truncates](../languages/rust.md#int-division) · [`{:.1}` format specifiers](../languages/rust.md#format-spec) |
+| 2026-08-19 | [Palindrome Number](palindrome-number/README.md) | Rust | [LeetCode 9](https://leetcode.com/problems/palindrome-number/) | [`%` remainder](../languages/rust.md#remainder) · [`.rev()`](../languages/rust.md#rev) |

@@ -25,8 +25,10 @@ how to program in *some* language — just not Rust yet.
 - [`.unwrap()`](#unwrap)
 - [`String` — an owned string](#string)
 - [`.chars()` — iterate a string by character](#chars)
+- [`.rev()` — reverse an iterator](#rev)
 - [`usize` and underflow](#usize)
 - [integer division — `/` truncates](#int-division)
+- [`%` — the remainder operator](#remainder)
 - [`.max()` / `.min()` — pick the larger or smaller](#ord-max)
 - [`struct` — defining your own type](#struct)
 - [`enum` — one of several shapes](#enum)
@@ -407,6 +409,37 @@ want for measuring a substring's length in characters.
 
 First seen in: [3. Longest Substring Without Repeating Characters](../problems/0003-longest-substring-without-repeating-characters/solution.rs.md)
 
+## `.rev()` — reverse an iterator {#rev}
+
+**In one line:** `.rev()` walks a sequence **backwards** — last item first — without
+building a second copy of it.
+
+Put `.rev()` in an iterator chain and everything after it sees the items in reverse
+order. Reversing a string's characters:
+
+```rust
+for character in text.chars().rev() {  // 'c', 'b', 'a' for "abc"
+    reversed.push(character);
+}
+```
+
+**What types are flowing.**
+- `text.chars()` yields `char`s front-to-back
+- `.rev()` yields those same `char`s back-to-front
+
+The type of each item is unchanged — `.rev()` only flips the *order*, so the loop
+body reads exactly as it would forwards.
+
+**Why not reverse it yourself?** You could collect the characters into a `Vec` and
+index it from the end, but that allocates a whole vector just to read it backwards.
+`.rev()` walks the original in place — no second buffer. (It works because
+`.chars()` is a *double-ended* iterator, one that can be pulled from either end;
+most standard iterators are.)
+
+First seen in: [Palindrome Number](../challenges/palindrome-number/initial.rs) — used
+in the first attempt; the final [arithmetic solution](../challenges/palindrome-number/README.md)
+drops strings entirely.
+
 ## `usize` and underflow {#usize}
 
 **In one line:** `usize` is Rust's *unsigned* integer for sizes and positions — it
@@ -455,6 +488,30 @@ a choice, is `f64`.) The same trap exists in C, Java, and Go — any language wh
 `int / int` stays an `int`.
 
 First seen in: [Celsius → Fahrenheit](../challenges/celsius-to-fahrenheit/README.md)
+
+## `%` — the remainder operator {#remainder}
+
+**In one line:** `a % b` is what's *left over* after dividing `a` by `b` — so
+`% 10` hands you the last digit of a number.
+
+`%` is the partner of [`/`](#int-division). Integer division tells you how many whole
+times `b` fits into `a`; `%` tells you the leftover. Together they split a number:
+
+```rust
+1234 / 10   // 123  — everything except the last digit
+1234 % 10   //   4  — the last digit on its own
+```
+
+That pairing is the whole trick for taking a number apart digit by digit, no text
+needed: `% 10` reads the last digit, `/ 10` drops it, repeat until the number is
+gone. It's also the everyday tool for "is this even?" (`n % 2 == 0`) and "wrap
+around" (a clock is `hour % 12`).
+
+**One gotcha:** `%` follows the sign of the *left* side, so `-7 % 3` is `-1`, not
+`2`. It's a remainder, not a mathematician's modulo. With unsigned types like `u64`
+that never comes up.
+
+First seen in: [Palindrome Number](../challenges/palindrome-number/README.md)
 
 ## `.max()` / `.min()` — pick the larger or smaller {#ord-max}
 
