@@ -19,6 +19,7 @@ how to program in *some* language — just not Rust yet.
 - [`Box<T>` — a pointer to the heap](#box)
 - [`&mut` — mutable references](#mut-ref)
 - [`while` loops](#while)
+- [`for` + ranges — counting loops (`..`, `..=`, `.rev()`)](#for-ranges)
 - [`Option::is_some`](#is-some)
 - [`Option::take`](#option-take)
 - [`Option::as_mut`](#option-as-mut)
@@ -280,6 +281,38 @@ while first_digit.is_some() || second_digit.is_some() || carry != 0 { ... }
 ```
 
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
+
+## `for` + ranges — counting loops (`..`, `..=`, `.rev()`) {#for-ranges}
+
+**In one line:** `for i in a..b { … }` runs the block once for each number in the range;
+`..` excludes the end, `..=` includes it.
+
+A **range** is a value standing for a run of numbers, and a `for` loop walks it:
+
+```rust
+for i in 1..=5 { print!("{i} "); }   // 1 2 3 4 5
+```
+
+**The `..` vs `..=` distinction** (the usual off-by-one bug):
+- `a..b` — **exclusive**: `0..3` is `0, 1, 2`. `0..n` yields exactly `n` values — ideal for
+  "n times" and for list positions.
+- `a..=b` — **inclusive**: `1..=3` is `1, 2, 3`. Use it when you want the end (`1..=10`).
+
+**The ends are just values** — variables and expressions work: `low..=high`,
+`0..items.len()`.
+
+**Counting down.** A range only counts up; `10..=1` is *empty*, not reversed. Reverse an
+upward range instead: `for i in (1..=10).rev()` → `10, 9, … 1` (parentheses required).
+
+**Ranges carry math.** A range can fold itself: `(1..=100).sum::<i32>()` is `5050`;
+`(1..=n).product()` is `n!`. (These are iterator methods; a range is iterable. Full
+iterator story comes later.)
+
+**`for` vs [`while`](#while).** Use `for` when you know the sequence/count; use `while`
+when you only have a stopping condition ("keep going until…"). The same `..` also appears
+in [slicing](#slice) (`&s[0..2]`) — one "start to end" idea across loops, slices, and sums.
+
+First seen in: [From-Zero Interlude 05a](../from-zero/rust/05a-loops-and-ranges/use-it.md)
 
 ## `Option::is_some` {#is-some}
 

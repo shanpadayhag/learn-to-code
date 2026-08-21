@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">A range is a sequence of numbers — the dots the loop visits</text>
+  <text x="32" y="64" font-size="13" fill="#57606a"><tspan font-family="ui-monospace,monospace">..</tspan> stops just BEFORE the end · <tspan font-family="ui-monospace,monospace">..=</tspan> INCLUDES the end. That <tspan font-family="ui-monospace,monospace">=</tspan> is the whole difference.</text>
+
+  <!-- Row A: 1..5 exclusive -->
+  <text x="32" y="118" font-size="15" font-family="ui-monospace,monospace" font-weight="700" fill="#0b3d91">1..5</text>
+  <text x="96" y="118" font-size="12.5" fill="#57606a">visits 1, 2, 3, 4 — stops before 5</text>
+  <line x1="150" y1="150" x2="520" y2="150" stroke="#c4ccd4" stroke-width="2"/>
+  <!-- filled dots 1..4 -->
+  <circle cx="150" cy="150" r="9" fill="#4a7fd6"/><text x="150" y="182" font-size="13" fill="#0b3d91" text-anchor="middle">1</text>
+  <circle cx="242" cy="150" r="9" fill="#4a7fd6"/><text x="242" y="182" font-size="13" fill="#0b3d91" text-anchor="middle">2</text>
+  <circle cx="334" cy="150" r="9" fill="#4a7fd6"/><text x="334" y="182" font-size="13" fill="#0b3d91" text-anchor="middle">3</text>
+  <circle cx="426" cy="150" r="9" fill="#4a7fd6"/><text x="426" y="182" font-size="13" fill="#0b3d91" text-anchor="middle">4</text>
+  <!-- open dot at 5 (excluded) -->
+  <circle cx="518" cy="150" r="9" fill="#f6f8fa" stroke="#b0b8c0" stroke-width="2" stroke-dasharray="3 2"/>
+  <text x="518" y="182" font-size="13" fill="#b0b8c0" text-anchor="middle">5</text>
+  <text x="540" y="154" font-size="11.5" fill="#b0b8c0">excluded</text>
+
+  <!-- Row B: 1..=5 inclusive -->
+  <text x="32" y="248" font-size="15" font-family="ui-monospace,monospace" font-weight="700" fill="#8a5a1d">1..=5</text>
+  <text x="110" y="248" font-size="12.5" fill="#57606a">visits 1, 2, 3, 4, 5 — includes 5</text>
+  <line x1="150" y1="280" x2="520" y2="280" stroke="#c4ccd4" stroke-width="2"/>
+  <circle cx="150" cy="280" r="9" fill="#d98a3d"/><text x="150" y="312" font-size="13" fill="#8a5a1d" text-anchor="middle">1</text>
+  <circle cx="242" cy="280" r="9" fill="#d98a3d"/><text x="242" y="312" font-size="13" fill="#8a5a1d" text-anchor="middle">2</text>
+  <circle cx="334" cy="280" r="9" fill="#d98a3d"/><text x="334" y="312" font-size="13" fill="#8a5a1d" text-anchor="middle">3</text>
+  <circle cx="426" cy="280" r="9" fill="#d98a3d"/><text x="426" y="312" font-size="13" fill="#8a5a1d" text-anchor="middle">4</text>
+  <circle cx="518" cy="280" r="9" fill="#d98a3d"/><text x="518" y="312" font-size="13" fill="#8a5a1d" text-anchor="middle">5</text>
+  <text x="540" y="284" font-size="11.5" fill="#8a5a1d">included</text>
+
+  <text x="32" y="356" font-size="12.5" fill="#8a94a0">Rule of thumb: <tspan font-family="ui-monospace,monospace" fill="#57606a">0..n</tspan> gives exactly n numbers (great for "n times"); <tspan font-family="ui-monospace,monospace" fill="#57606a">1..=n</tspan> gives "1 through n".</text>
+</svg>
