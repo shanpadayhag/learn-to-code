@@ -35,6 +35,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 06 | [`Copy` types](06-copy-types/use-it.md) | ✅ done |
 | 07 | [The heap, and `String`](07-the-heap-and-string/use-it.md) | ✅ done |
 | 08 | [Ownership and moves](08-ownership-and-moves/use-it.md) | ✅ done |
+| 08a | [Copy and move happen everywhere](08a-copy-and-move-everywhere/use-it.md) *(interlude)* | ✅ done |
 | 09 | [`.clone()` (the inefficient fix)](09-clone-the-inefficient-fix/use-it.md) | ✅ done |
 | 10 | [Borrowing with `&` (the efficient answer)](10-borrowing-with-ref/use-it.md) | ✅ done |
 | 11 | [`&mut` and the borrow rules](11-mut-references-and-borrow-rules/use-it.md) | ✅ done |
