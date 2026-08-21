@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 420" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="418" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">A trait bound is still monomorphized — the call is a direct jump</text>
+  <text x="32" y="64" font-size="13" fill="#57606a">"Static dispatch" = the exact function is chosen at COMPILE time, not looked up at run time.</text>
+
+  <!-- source -->
+  <text x="150" y="104" font-size="12" fill="#57606a" text-anchor="middle">WHAT YOU WRITE</text>
+  <rect x="32" y="118" width="248" height="86" rx="10" fill="#e7e0ff" stroke="#8a63d2" stroke-width="2"/>
+  <text x="48" y="146" font-size="12.5" font-family="ui-monospace,monospace" fill="#5a3ea8">fn greet_all&lt;T: Greet&gt;(x: &amp;T) {</text>
+  <text x="48" y="166" font-size="12.5" font-family="ui-monospace,monospace" fill="#5a3ea8">   println!("{}", x.hello());</text>
+  <text x="48" y="186" font-size="12.5" font-family="ui-monospace,monospace" fill="#5a3ea8">}</text>
+  <text x="156" y="200" font-size="11" fill="#5a3ea8" text-anchor="middle">called with a Dog and a Cat</text>
+
+  <line x1="280" y1="160" x2="356" y2="160" stroke="#57606a" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="318" y="150" font-size="10.5" fill="#57606a" text-anchor="middle">compiler</text>
+
+  <!-- concrete copies -->
+  <text x="512" y="104" font-size="12" fill="#57606a" text-anchor="middle">WHAT ACTUALLY COMPILES</text>
+
+  <rect x="360" y="118" width="292" height="66" rx="10" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="376" y="143" font-size="12" font-family="ui-monospace,monospace" fill="#0b3d91">greet_all__Dog(x: &amp;Dog) {</text>
+  <text x="376" y="163" font-size="12" font-family="ui-monospace,monospace" fill="#0b3d91">  call Dog::hello   // direct</text>
+  <text x="376" y="180" font-size="10.5" font-family="ui-monospace,monospace" fill="#0b3d91">}</text>
+
+  <rect x="360" y="196" width="292" height="66" rx="10" fill="#ffe9c9" stroke="#d98a3d" stroke-width="2"/>
+  <text x="376" y="221" font-size="12" font-family="ui-monospace,monospace" fill="#8a5a1d">greet_all__Cat(x: &amp;Cat) {</text>
+  <text x="376" y="241" font-size="12" font-family="ui-monospace,monospace" fill="#8a5a1d">  call Cat::hello   // direct</text>
+  <text x="376" y="258" font-size="10.5" font-family="ui-monospace,monospace" fill="#8a5a1d">}</text>
+
+  <line x1="300" y1="150" x2="356" y2="150" stroke="#4a7fd6" stroke-width="1.5" marker-end="url(#arrb)"/>
+  <line x1="300" y1="215" x2="356" y2="228" stroke="#d98a3d" stroke-width="1.5" marker-end="url(#arro)"/>
+
+  <text x="32" y="300" font-size="13" fill="#1f2328" font-weight="700">In each stamped-out copy, <tspan font-family="ui-monospace,monospace">x.hello()</tspan> is already known to be Dog::hello or Cat::hello.</text>
+  <text x="32" y="320" font-size="13" fill="#1f2328">The machine code holds the address of the exact function — one direct jump, nothing to look up.</text>
+
+  <rect x="32" y="342" width="616" height="58" rx="10" fill="#eef6ec" stroke="#8fbf88"/>
+  <text x="48" y="366" font-size="12.5" fill="#2e5b28" font-weight="700">Cost model: same as plain generics — zero runtime overhead, paid in compile time + binary size.</text>
+  <text x="48" y="386" font-size="12" fill="#2e5b28">The bound only adds a promise the compiler checks; the call it produces is as fast as a hand-written one.</text>
+
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#57606a"/></marker>
+    <marker id="arrb" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 z" fill="#4a7fd6"/></marker>
+    <marker id="arro" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 z" fill="#d98a3d"/></marker>
+  </defs>
+</svg>

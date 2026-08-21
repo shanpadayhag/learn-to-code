@@ -53,6 +53,7 @@ how to program in *some* language — just not Rust yet.
 - [slices — `&str` and `&[T]`](#slice)
 - [generics — `<T>`](#generics)
 - [string indexing — why `s[i]` is forbidden](#string-indexing)
+- [`trait` — defining and implementing shared behaviour](#trait)
 
 ## `use` declarations {#use}
 
@@ -1152,3 +1153,58 @@ See [Interlude 12a](../from-zero/rust/12a-string-indexing/use-it.md) for the ful
 picture.
 
 First seen in: [Interlude 12a](../from-zero/rust/12a-string-indexing/use-it.md)
+
+## `trait` — defining and implementing shared behaviour {#trait}
+
+**In one line:** a `trait` is a named set of abilities (a contract); a type gains those abilities
+with `impl Trait for Type`, and generics can then demand them with a bound (`<T: Trait>`).
+
+**Define the contract.** List the method signatures a type must provide — signatures only, no body:
+
+```rust
+trait Greet {
+    fn hello(&self) -> String;          // required: every implementer must write this
+
+    fn greet_twice(&self) -> String {   // default: implementers get this free
+        format!("{} {}", self.hello(), self.hello())
+    }
+}
+```
+
+`&self` means the method is called on a value (`x.hello()`), borrowing it — same `&self` as
+[struct methods](#impl). A required method has no body; a **default** method has one and can be
+overridden.
+
+**Sign the contract.** `impl Trait for Type` fills in the required methods:
+
+```rust
+struct Dog;
+impl Greet for Dog {
+    fn hello(&self) -> String { String::from("Woof!") }
+}
+```
+
+Now `Dog` can be used anywhere a `Greet` is asked for, and gets `greet_twice()` for free.
+
+**Use it as a bound.** A trait bound on a generic unlocks the abilities *inside* the function and
+restricts *which* types may be passed in:
+
+```rust
+fn larger<T: PartialOrd>(a: T, b: T) -> T {   // T can be ordered → `>` is allowed
+    if a > b { a } else { b }
+}
+fn show<T: PartialOrd + Debug>(x: T) { }      // `+` requires several traits at once
+```
+
+Without the bound, a bare `T` can only be shuffled around (see [generics](#generics)); the bound is
+what lets the body actually operate on it.
+
+**You already used traits.** `>` / `<` are the `PartialOrd` trait; `{:?}` is the `Debug` trait;
+`#[derive(Debug, Clone, PartialEq)]` auto-writes the routine `impl`s of those common traits for you.
+
+**Cost.** A trait *bound* is [monomorphized](#generics) like any generic — the method call compiles
+to a **direct jump** chosen at compile time (*static dispatch*), zero runtime overhead. Runtime method
+lookup only happens with a `dyn` **trait object**, a separate tool. See
+[Concept 20](../from-zero/rust/20-traits/use-it.md).
+
+First seen in: [From-Zero Concept 20](../from-zero/rust/20-traits/use-it.md)
