@@ -145,6 +145,33 @@ This is Rust's spelling of the [hash map](../glossary/hash-map.md) concept.
 
 First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
 
+## `HashSet<T>` — a set of unique values {#hashset}
+
+**In one line:** a collection that answers "is X in here?" in ~O(1) and never keeps duplicates —
+a [`HashMap`](#hashmap) storing only keys (`HashSet<T>` is `HashMap<T, ()>`).
+
+Needs `use std::collections::HashSet;`. Build with `HashSet::new()` or `HashSet::from([a, b, c])`.
+Key methods:
+
+- `.insert(x)` — adds `x`; **returns a `bool`**: `true` if it was new, `false` if already present.
+  That bool is a ready-made "have I seen this?" check.
+- `.contains(&x)` — takes a *reference*, returns `bool` (only looks, doesn't take ownership).
+- `.len()` — how many *distinct* values are in the set (duplicates were never stored).
+
+```rust
+let mut seen = HashSet::new();
+seen.insert(7);
+let repeat = !seen.insert(7);       // true — 7 was already there
+let unique_count = seen.len();      // 1
+```
+
+A set is **unordered** (values live wherever their hash sends them) and holds **no duplicates**. Pick
+it over a [`Vec`](#slice)'s `.contains()` when you need fast membership or automatic dedup — the Vec
+scans (O(n)), the set hashes to one slot (~O(1)). Need sorted values instead? Use `BTreeSet` (built on
+[`BTreeMap`](#btreemap)).
+
+First seen in: [From-Zero Concept 22](../from-zero/rust/22-hashset/use-it.md)
+
 ## `for` + `.iter()` + `.enumerate()` {#for-iter-enumerate}
 
 **In one line:** loop over a collection, getting both each item and its position.
