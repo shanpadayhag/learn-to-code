@@ -60,6 +60,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 19 | [Generics `<T>` (one definition, any type)](19-generics/use-it.md) | ✅ done |
 | 20 | [Traits (what a type can do)](20-traits/use-it.md) | ✅ done |
 | 21 | [Trait objects (`dyn Trait`)](21-trait-objects/use-it.md) | ✅ done |
+| 21a | [Building with trait objects (the Area Calculator)](21a-building-with-trait-objects/use-it.md) *(interlude)* | ✅ done |
 | 22 | [`HashSet<T>` (membership, no duplicates)](22-hashset/use-it.md) | ✅ done |
 | 23 | Error handling — `Result` and `?` | ⬜ up next |
 
