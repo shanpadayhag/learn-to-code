@@ -1241,3 +1241,30 @@ lookup only happens with a `dyn` **trait object**, a separate tool. See
 [Concept 20](../from-zero/rust/20-traits/use-it.md).
 
 First seen in: [From-Zero Concept 20](../from-zero/rust/20-traits/use-it.md)
+
+## `dyn Trait` — trait objects {#dyn}
+
+**In one line:** `dyn Greet` means "some type implementing `Greet`, chosen at run time"; it lets a
+single collection hold **different** types behind one trait — at the cost of a small per-call lookup.
+
+**Why it exists.** A trait *bound* (`<T: Greet>`) is [monomorphized](#trait) — one stamped copy per
+type — so it can never hold a **mix** of types in one `Vec`. A trait *object* can:
+
+```rust
+let animals: Vec<Box<dyn Greet>> = vec![Box::new(Dog), Box::new(Cat)];
+for a in &animals {
+    println!("{}", a.hello());   // Dog::hello on dogs, Cat::hello on cats — one loop
+}
+```
+
+**Always behind a pointer.** A bare `dyn Greet` has no known size (the real type could be anything),
+so it must sit behind [`Box<dyn Greet>`](#box) (owned, heap) or `&dyn Greet` (borrowed). `Vec<dyn
+Greet>` won't compile; `Vec<Box<dyn Greet>>` will — every slot is one uniform pointer.
+
+**How the call works — dynamic dispatch.** A trait object is a **fat pointer**: two pointers, one to
+the data and one to a **vtable** (a per-`(type, trait)` table of method addresses). `a.hello()`
+follows the vtable to the right function *at run time* — one pointer hop, no inlining. Contrast
+[static dispatch](#trait) (a bound), which bakes the address in at compile time for free. Reach for a
+bound by default; reach for `dyn` when you need a heterogeneous collection.
+
+First seen in: [From-Zero Concept 21](../from-zero/rust/21-trait-objects/use-it.md)

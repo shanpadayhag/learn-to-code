@@ -59,7 +59,8 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 18 | [`HashMap<K, V>` (look up by key)](18-hashmap/use-it.md) | ✅ done |
 | 19 | [Generics `<T>` (one definition, any type)](19-generics/use-it.md) | ✅ done |
 | 20 | [Traits (what a type can do)](20-traits/use-it.md) | ✅ done |
-| 21 | Trait objects (`dyn Trait`) | ⬜ up next |
+| 21 | [Trait objects (`dyn Trait`)](21-trait-objects/use-it.md) | ✅ done |
+| 22 | [`HashSet<T>` (membership, no duplicates)](22-hashset/use-it.md) | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 

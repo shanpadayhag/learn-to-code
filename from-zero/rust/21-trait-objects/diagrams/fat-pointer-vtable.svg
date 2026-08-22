@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 440" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="678" height="438" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="20" font-weight="700" fill="#1f2328">A trait object is a FAT pointer — two pointers, not one</text>
+  <text x="32" y="64" font-size="13" fill="#57606a">Box&lt;dyn Greet&gt; carries a data pointer AND a vtable pointer. Calling a method reads the vtable at run time.</text>
+
+  <!-- fat pointer -->
+  <text x="140" y="108" font-size="12" fill="#57606a" text-anchor="middle">THE FAT POINTER (on the stack)</text>
+  <rect x="40" y="124" width="200" height="52" rx="8" fill="#e7e0ff" stroke="#8a63d2" stroke-width="2"/>
+  <line x1="140" y1="124" x2="140" y2="176" stroke="#8a63d2" stroke-width="1.5"/>
+  <text x="90" y="147" font-size="11" fill="#5a3ea8" text-anchor="middle">data ptr</text>
+  <text x="90" y="164" font-size="10" fill="#5a3ea8" text-anchor="middle">→ value</text>
+  <text x="190" y="147" font-size="11" fill="#5a3ea8" text-anchor="middle">vtable ptr</text>
+  <text x="190" y="164" font-size="10" fill="#5a3ea8" text-anchor="middle">→ table</text>
+
+  <!-- data on heap -->
+  <text x="470" y="108" font-size="12" fill="#57606a" text-anchor="middle">THE VALUE (on the heap)</text>
+  <rect x="380" y="122" width="180" height="48" rx="8" fill="#ffe9c9" stroke="#d98a3d" stroke-width="2"/>
+  <text x="470" y="151" font-size="12.5" fill="#8a5a1d" text-anchor="middle">Dog  (just a plain Dog)</text>
+  <line x1="90" y1="176" x2="378" y2="150" stroke="#57606a" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="230" y="176" font-size="10.5" fill="#57606a">data pointer</text>
+
+  <!-- vtable -->
+  <text x="470" y="222" font-size="12" fill="#57606a" text-anchor="middle">Dog's Greet VTABLE (one per type+trait, static)</text>
+  <rect x="360" y="236" width="220" height="86" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="376" y="262" font-size="12" font-family="ui-monospace,monospace" fill="#0b3d91">hello  → addr of Dog::hello</text>
+  <text x="376" y="284" font-size="12" font-family="ui-monospace,monospace" fill="#0b3d91">drop   → addr of Dog::drop</text>
+  <text x="376" y="306" font-size="12" font-family="ui-monospace,monospace" fill="#0b3d91">size / align → 0 / 1</text>
+  <line x1="190" y1="176" x2="358" y2="270" stroke="#57606a" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="236" y="238" font-size="10.5" fill="#57606a">vtable pointer</text>
+
+  <!-- call steps -->
+  <text x="32" y="360" font-size="13" fill="#1f2328" font-weight="600">animal.hello() at run time:</text>
+  <text x="48" y="384" font-size="12.5" fill="#57606a">1. follow the vtable pointer to Dog's Greet table   →   2. read the "hello" slot (address of Dog::hello)</text>
+  <text x="48" y="406" font-size="12.5" fill="#57606a">3. jump there, passing the data pointer as &amp;self.  That one extra hop is what static dispatch avoided.</text>
+</svg>
