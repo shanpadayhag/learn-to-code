@@ -15,6 +15,7 @@ how to program in *some* language — just not Rust yet.
 - [`HashMap<K, V>`](#hashmap)
 - [`for` + `.iter()` + `.enumerate()`](#for-iter-enumerate)
 - [`&` in patterns — destructuring a reference](#ref-pattern)
+- [`*` — dereference (follow a reference)](#deref)
 - [`if let` with `Option` / `Some`](#if-let)
 - [`as` — numeric casts](#as-cast)
 - [`Box<T>` — a pointer to the heap](#box)
@@ -200,9 +201,43 @@ value by copy instead of a pointer to it.
 bind the value underneath." Since `i32` is cheaply copyable, this just copies the
 number out. The same move appears in `if let Some(&earlier_index) = ...`, peeling
 the reference that `.get()` hands back. Without the `&`, you'd be holding a `&i32`
-and would have to dereference with `*` everywhere you used it.
+and would have to [dereference with `*`](#deref) everywhere you used it.
 
 First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
+
+## `*` — dereference (follow a reference) {#deref}
+
+**In one line:** `*r` follows a reference to the value it points at — the exact inverse
+of `&`, which makes a reference.
+
+**The pair.** `&` and `*` are opposites: `&x` *borrows* `x` and yields a **reference**
+(`i32` → `&i32`); `*r` *dereferences* and yields the **value** back (`&i32` → `i32`).
+Under the hood a reference is just an address, and `*` is "go to that address and read
+it" (see [From-Zero 10a — Under the hood](../from-zero/rust/10a-dereferencing-with-star/under-the-hood.md)).
+
+**When you need it.** Whenever you hold a `&T` but the surrounding code wants an owned
+`T`. Classic case — putting values fetched from a map into a `Vec`:
+
+```rust
+if let Some(difference_index) = number_bank.get(&needed) {  // &usize
+    return vec![*difference_index as i32, index as i32];    // * → usize
+}
+```
+
+Without the `*`, the types mismatch: `vec![]` wants numbers, not references.
+
+**When you don't.** Rust auto-dereferences in two everyday spots, which is why references
+sometimes "just work" with no `*`:
+- **method calls**: `r.to_string()` works on a `&i32` — Rust derefs to find the method.
+- **formatting**: `println!("{}", r)` prints the value, not an address.
+
+Rule of thumb: if the compiler says it *expected `T`, found `&T`*, add a `*`.
+
+**The pattern alternative.** [`&` in a pattern](#ref-pattern) does the same peel at the
+binding site instead — `if let Some(&x) = ...` gives you the value directly, no later
+`*`.
+
+First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md) · taught in [From-Zero 10a](../from-zero/rust/10a-dereferencing-with-star/use-it.md)
 
 ## `if let` with `Option` / `Some` {#if-let}
 

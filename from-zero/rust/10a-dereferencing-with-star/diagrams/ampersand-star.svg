@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="718" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">&amp; wraps a value into a reference · * unwraps it back</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">They are <tspan font-weight="700" fill="#1f2328">exact opposites</tspan>. `r` doesn't hold 5 — it holds <tspan font-weight="700" fill="#1f2328">where 5 is</tspan>.</text>
+
+  <!-- x: the owner -->
+  <text x="560" y="128" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace" text-anchor="middle">x: i32</text>
+  <rect x="500" y="136" width="120" height="64" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="560" y="178" font-size="26" font-weight="700" fill="#1f2328" text-anchor="middle" font-family="ui-monospace,monospace">5</text>
+
+  <!-- r: the reference -->
+  <text x="175" y="128" font-size="13" fill="#0b6b3a" font-family="ui-monospace, monospace" text-anchor="middle">r: &amp;i32</text>
+  <rect x="90" y="136" width="170" height="64" rx="8" fill="#eafbea" stroke="#3f9d63" stroke-width="2"/>
+  <text x="175" y="176" font-size="18" font-weight="700" fill="#0b6b3a" text-anchor="middle" font-family="ui-monospace,monospace">ptr•</text>
+
+  <!-- & arrow: r -> x -->
+  <line x1="262" y1="168" x2="496" y2="168" stroke="#3f9d63" stroke-width="2.5"/>
+  <polygon points="496,168 484,162 484,174" fill="#3f9d63"/>
+  <text x="379" y="156" font-size="13" fill="#0b6b3a" text-anchor="middle" font-family="ui-monospace,monospace">let r = &amp;x;  builds this arrow</text>
+
+  <!-- * : follow it back -->
+  <path d="M540 200 C 430 300, 300 300, 210 300" fill="none" stroke="#a35a05" stroke-width="2.5" stroke-dasharray="7 5"/>
+  <polygon points="210,300 222,294 222,306" fill="#a35a05"/>
+  <rect x="90" y="278" width="120" height="44" rx="8" fill="#fff3e2" stroke="#d98a2b" stroke-width="2"/>
+  <text x="150" y="307" font-size="20" font-weight="700" fill="#a35a05" text-anchor="middle" font-family="ui-monospace,monospace">*r → 5</text>
+  <text x="400" y="330" font-size="13" fill="#a35a05" font-family="ui-monospace,monospace">*r follows the arrow back to the value</text>
+
+  <line x1="32" y1="352" x2="688" y2="352" stroke="#e1e4e8"/>
+  <text x="32" y="372" font-size="12.5" fill="#57606a"><tspan font-weight="700" fill="#1f2328">&amp;</tspan> = make a reference (borrow).  <tspan font-weight="700" fill="#1f2328">*</tspan> = go where it points and use the value.</text>
+</svg>

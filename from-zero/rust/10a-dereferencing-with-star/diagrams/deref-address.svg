@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="718" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">Under the hood: a reference is an address</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">`r` literally stores <tspan font-weight="700" fill="#1f2328">the number of x's slot</tspan>. `*r` means "go to that slot and read it."</text>
+
+  <!-- memory column header -->
+  <text x="250" y="104" font-size="12" fill="#8a929c" font-family="ui-monospace,monospace">address</text>
+  <text x="470" y="104" font-size="12" fill="#8a929c" font-family="ui-monospace,monospace">what lives there</text>
+
+  <!-- x slot -->
+  <text x="250" y="150" font-size="15" fill="#1f2328" font-family="ui-monospace,monospace">0x100</text>
+  <rect x="360" y="124" width="300" height="40" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="376" y="150" font-size="15" fill="#1f2328" font-family="ui-monospace,monospace">x  =  5</text>
+
+  <!-- r slot -->
+  <text x="250" y="230" font-size="15" fill="#0b6b3a" font-family="ui-monospace,monospace">0x108</text>
+  <rect x="360" y="204" width="300" height="40" rx="6" fill="#eafbea" stroke="#3f9d63" stroke-width="2"/>
+  <text x="376" y="230" font-size="15" fill="#0b6b3a" font-family="ui-monospace,monospace">r  =  0x100</text>
+  <text x="470" y="266" font-size="12" fill="#0b6b3a" font-family="ui-monospace,monospace">(the address of x — not the 5)</text>
+
+  <!-- arrow from r's stored address up to x slot -->
+  <path d="M356 224 C 300 224, 300 144, 356 144" fill="none" stroke="#3f9d63" stroke-width="2.5"/>
+  <polygon points="356,144 344,138 344,150" fill="#3f9d63"/>
+
+  <!-- operations -->
+  <text x="32" y="316" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328"><tspan font-weight="700" fill="#0b6b3a">&amp;x</tspan>  is the address 0x100  — "where x lives"</text>
+  <text x="32" y="342" font-size="14" font-family="ui-monospace,monospace" fill="#1f2328"><tspan font-weight="700" fill="#a35a05">*r</tspan>  =  go to the address in r (0x100), read what's there  →  5</text>
+
+  <line x1="32" y1="366" x2="688" y2="366" stroke="#e1e4e8"/>
+  <text x="32" y="388" font-size="12.5" fill="#57606a">A reference is <tspan font-weight="700" fill="#1f2328">one address (8 bytes)</tspan> — same size whatever it points to. That's Concept 03 again.</text>
+</svg>

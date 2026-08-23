@@ -38,6 +38,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 08a | [Copy and move happen everywhere](08a-copy-and-move-everywhere/use-it.md) *(interlude)* | ✅ done |
 | 09 | [`.clone()` (the inefficient fix)](09-clone-the-inefficient-fix/use-it.md) | ✅ done |
 | 10 | [Borrowing with `&` (the efficient answer)](10-borrowing-with-ref/use-it.md) | ✅ done |
+| 10a | [Dereferencing with `*` (following a reference back)](10a-dereferencing-with-star/use-it.md) *(interlude)* | ✅ done |
 | 11 | [`&mut` and the borrow rules](11-mut-references-and-borrow-rules/use-it.md) | ✅ done |
 | 12 | [Slices](12-slices/use-it.md) | ✅ done |
 | 12a | [Why you can't index a string by position](12a-string-indexing/use-it.md) *(interlude)* | ✅ done |
