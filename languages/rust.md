@@ -11,6 +11,7 @@ how to program in *some* language — just not Rust yet.
 - [`Vec<T>` — growable arrays](#vec-type)
 - [`vec![]` — the vector macro](#vec-macro)
 - [`let` and `let mut`](#let-mut)
+- [shadowing — reusing a name](#shadowing)
 - [`HashMap<K, V>`](#hashmap)
 - [`for` + `.iter()` + `.enumerate()`](#for-iter-enumerate)
 - [`&` in patterns — destructuring a reference](#ref-pattern)
@@ -54,6 +55,7 @@ how to program in *some* language — just not Rust yet.
 - [slices — `&str` and `&[T]`](#slice)
 - [generics — `<T>`](#generics)
 - [string indexing — why `s[i]` is forbidden](#string-indexing)
+- [`.trim()` — a borrowed slice without the outer whitespace](#trim)
 - [`trait` — defining and implementing shared behaviour](#trait)
 
 ## `use` declarations {#use}
@@ -1295,3 +1297,65 @@ follows the vtable to the right function *at run time* — one pointer hop, no i
 bound by default; reach for `dyn` when you need a heterogeneous collection.
 
 First seen in: [From-Zero Concept 21](../from-zero/rust/21-trait-objects/use-it.md)
+
+## shadowing — reusing a name {#shadowing}
+
+**In one line:** writing `let` with a name that already exists makes a **brand-new
+variable** that reuses the name — it does not change the old one.
+
+**Not the same as `mut`.** These look alike but are different events in memory:
+
+```rust
+let mut a = 5;
+a = 6;          // mutation: same box, overwrite 5 with 6. Type is fixed.
+
+let b = 5;
+let b = "five"; // shadowing: a NEW box that hides the old one. Type can change.
+```
+
+`mut` reaches into one box and overwrites it, so the type can never change. Shadowing
+leaves the old box untouched and builds a second box beside it; the name simply points
+at the newer one from that line on. Because it's a fresh box, the new variable may have a
+**different type** — that's why `let b = 5;` (an `i32`) can be followed by
+`let b = "five";` (a `&str`).
+
+**What happens to the old value.** It is *not* dropped at the shadow — it stays in
+memory, just unreachable by that name, and is dropped at the end of its scope like any
+other value. This matters when the new variable **borrows** the old one:
+
+```rust
+let s = String::from("  hi  ");
+let s = s.trim();   // new `s` is a &str borrowing INTO the old String's buffer
+```
+
+The old `String` must stay alive for the `&str` to point into — and it does, precisely
+because shadowing doesn't drop it. (You still can't `return` that `&str` past the old
+`String`'s scope: the owner would die and the slice would dangle.)
+
+**Why reach for it.** Idiomatic for *"same thing, refined"* — clean up or convert a value
+and keep one honest name, so later code can't grab the raw version by accident. The
+canonical shape is trim/parse pipelines: `let n = input.trim(); let n: i32 = n.parse()?;`
+
+First seen in: [From-Zero Interlude 12b](../from-zero/rust/12b-trim-returns-str/use-it.md)
+
+## `.trim()` — a borrowed slice without the outer whitespace {#trim}
+
+**In one line:** `trim` returns a [`&str`](#slice) window over the same text with leading
+and trailing whitespace skipped — it **borrows**, it doesn't move or copy.
+
+Its signature is `pub fn trim(&self) -> &str`. The `&self` means it takes the string
+*by reference*, so calling it never consumes the `String` (or `&str`) — the original is
+left intact. The returned `&str` is a [slice](#slice) pointing into the original buffer;
+no new text is allocated. Common with input:
+
+```rust
+let mut line = String::new();
+std::io::stdin().read_line(&mut line).unwrap();
+let line = line.trim();   // &str, no trailing '\n'; `line` the String still owns the buffer
+```
+
+Because the result borrows the source, the source has to outlive it (see
+[shadowing](#shadowing) for how the common `let line = line.trim();` keeps that owner
+alive). Relatives: `.trim_start()` / `.trim_end()` for one side only.
+
+First seen in: [From-Zero Interlude 12b](../from-zero/rust/12b-trim-returns-str/use-it.md)

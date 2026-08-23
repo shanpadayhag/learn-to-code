@@ -49,7 +49,8 @@ let x = 6;   // a brand-new box, also called x
 ```
 
 Writing `let` again makes a *new* variable that happens to reuse the name (this is
-called *shadowing*, and it gets its own lesson later). `mut` is different: it lets you
+called *shadowing*, and it's covered in
+[Interlude 12b](../12b-trim-returns-str/use-it.md)). `mut` is different: it lets you
 change the value *inside the existing box*. The [Under the hood](under-the-hood.md)
 lesson shows why that distinction is physical, not cosmetic.
 

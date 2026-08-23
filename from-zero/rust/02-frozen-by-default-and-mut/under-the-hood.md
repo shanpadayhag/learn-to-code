@@ -36,7 +36,8 @@ from `x = 6;` (mutation). Now it's physical:
 - `let x = 6;` — a **new box** (its own address); the old one still sits there until
   the scope ends, just unreachable by that name.
 
-That's why shadowing gets its own concept later: it's a different thing happening in
+That's why shadowing is worth its own treatment, in
+[Interlude 12b](../12b-trim-returns-str/use-it.md): it's a different thing happening in
 memory, not just a different way to write the same thing.
 
 ## Predict the memory

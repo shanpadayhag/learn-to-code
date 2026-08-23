@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 21 — *Trait objects (`dyn Trait`)* (up next)
+**Current:** Concept 23 — *Error handling (`Result` and `?`)* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -41,6 +41,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 11 | [`&mut` and the borrow rules](11-mut-references-and-borrow-rules/use-it.md) | ✅ done |
 | 12 | [Slices](12-slices/use-it.md) | ✅ done |
 | 12a | [Why you can't index a string by position](12a-string-indexing/use-it.md) *(interlude)* | ✅ done |
+| 12b | [Why `.trim()` returns `&str` — a borrow, so nothing moves (and shadowing)](12b-trim-returns-str/use-it.md) *(interlude)* | ✅ done |
 
 ### Phase 3 — Compound data (types you design)
 

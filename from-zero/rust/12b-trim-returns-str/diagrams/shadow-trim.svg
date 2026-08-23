@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="718" height="438" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">let message = message.trim();  — a new name, borrowing the old one</text>
+  <text x="32" y="66" font-size="14" fill="#57606a"><tspan font-weight="700" fill="#1f2328">Two</tspan> variables now, both alive. The name resolves to the new one; the old <tspan font-weight="700" fill="#1f2328">String still owns the buffer</tspan>.</text>
+
+  <!-- heap buffer -->
+  <text x="380" y="112" font-size="11" fill="#a35a05" font-family="ui-monospace,monospace">heap buffer (owned by the String)</text>
+  <g font-family="ui-monospace, monospace" font-weight="700" font-size="18" text-anchor="middle">
+    <!-- leading spaces -->
+    <g fill="#8a929c">
+      <rect x="380" y="120" width="30" height="40" rx="4" fill="#eceff2" stroke="#c4ccd4"/><text x="395" y="146">·</text>
+      <rect x="410" y="120" width="30" height="40" rx="4" fill="#eceff2" stroke="#c4ccd4"/><text x="425" y="146">·</text>
+    </g>
+    <!-- hi (trimmed span, bytes 2..4) -->
+    <g fill="#0b6b3a">
+      <rect x="440" y="120" width="30" height="40" rx="4" fill="#c9f0d4" stroke="#3f9d63" stroke-width="2"/><text x="455" y="146">h</text>
+      <rect x="470" y="120" width="30" height="40" rx="4" fill="#c9f0d4" stroke="#3f9d63" stroke-width="2"/><text x="485" y="146">i</text>
+    </g>
+    <!-- trailing spaces + newline -->
+    <g fill="#8a929c">
+      <rect x="500" y="120" width="30" height="40" rx="4" fill="#eceff2" stroke="#c4ccd4"/><text x="515" y="146">·</text>
+      <rect x="530" y="120" width="42" height="40" rx="4" fill="#eceff2" stroke="#c4ccd4"/><text x="551" y="146" font-size="13">\n</text>
+    </g>
+  </g>
+  <g font-family="ui-monospace,monospace" font-size="10" fill="#8a929c" text-anchor="middle">
+    <text x="395" y="176">0</text><text x="455" y="176">2</text><text x="485" y="176">3</text><text x="515" y="176">4</text>
+  </g>
+  <text x="590" y="134" font-size="11.5" fill="#0b6b3a" font-weight="700">the trimmed</text>
+  <text x="590" y="150" font-size="11.5" fill="#0b6b3a">span "hi" =</text>
+  <text x="590" y="166" font-size="11.5" fill="#0b6b3a">bytes 2..4</text>
+
+  <!-- slot A: the original String, still alive -->
+  <text x="60" y="150" font-size="13" fill="#1f2328" font-family="ui-monospace, monospace">message  (String — the owner)</text>
+  <rect x="60" y="158" width="185" height="34" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="74" y="180" font-size="11" fill="#57606a" font-family="ui-monospace,monospace">ptr•  len6  cap6</text>
+  <line x1="245" y1="172" x2="378" y2="140" stroke="#4a7fd6" stroke-width="2"/>
+  <polygon points="378,140 366,140 371,150" fill="#4a7fd6"/>
+  <text x="60" y="212" font-size="11.5" fill="#4a7fd6">still alive — just hidden by the name.</text>
+  <text x="60" y="228" font-size="11.5" fill="#4a7fd6">It's what keeps the buffer from being dropped.</text>
+
+  <!-- slot B: the shadow, a &str -->
+  <text x="60" y="286" font-size="13" fill="#0b6b3a" font-family="ui-monospace, monospace">message  (&amp;str — the shadow)</text>
+  <rect x="60" y="294" width="185" height="34" rx="6" fill="#eafbea" stroke="#3f9d63" stroke-width="2"/>
+  <text x="74" y="316" font-size="11" fill="#0b6b3a" font-family="ui-monospace,monospace">ptr•  len2</text>
+  <path d="M245 311 C 350 311, 400 220, 455 164" fill="none" stroke="#3f9d63" stroke-width="2"/>
+  <polygon points="455,164 455,176 464,169" fill="#3f9d63"/>
+  <text x="60" y="350" font-size="11.5" fill="#0b6b3a">the name `message` points here now: a window into the same buffer, no text copied.</text>
+
+  <line x1="32" y1="380" x2="688" y2="380" stroke="#e1e4e8"/>
+  <text x="32" y="408" font-size="13" fill="#57606a"><tspan font-weight="700" fill="#1f2328">No move:</tspan> trim takes <tspan font-family="ui-monospace,monospace">&amp;self</tspan> (borrows), so the String is never consumed — it just gets read.</text>
+  <text x="32" y="430" font-size="13" fill="#57606a"><tspan font-weight="700" fill="#1f2328">Shadowing:</tspan> the second <tspan font-family="ui-monospace,monospace">let</tspan> is a new box, not a change to the old one — which stays put, holding the text.</text>
+</svg>
