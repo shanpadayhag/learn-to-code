@@ -3,133 +3,131 @@
 | | |
 |---|---|
 | Date       | 2026-08-19 |
-| Language   | Rust |
-| Source     | [LeetCode 9 — Palindrome Number](https://leetcode.com/problems/palindrome-number/) (practice variant: read a number from input, print `Yes` / `No`) |
-| Lessons    | [`%` — the remainder operator](../../languages/rust.md#remainder) · [`.rev()` — reverse an iterator](../../languages/rust.md#rev) |
+| Difficulty | Easy |
+| Languages  | Rust |
+| Pattern    | [Palindrome](../../glossary/palindrome.md) (reverse half the digits, with math) |
+| Time/Space | O(log₁₀ n) / O(1) |
+| Source     | [LeetCode 9 — Palindrome Number](https://leetcode.com/problems/palindrome-number/) (practice variant: read a number, print `Yes` / `No`) |
 
-## The Task
-Read one non-negative whole number from input. Print `Yes` if it reads the same
-forwards and backwards, `No` if it doesn't. `121` → `Yes`; `123` → `No`; `0` → `Yes`.
+## The Problem
+Read one non-negative whole number. Print `Yes` if it reads the same forwards and backwards,
+`No` otherwise.
 
-The catch: **solve it with arithmetic, not by turning the number into text.** That
-rule is the whole point of the challenge — it forces you to work with the digits as
-numbers.
+What matters:
+- The catch: **solve it with arithmetic, not by turning the number into text.** That rule is the
+  whole point — it forces you to handle the digits *as numbers*.
+- Edge cases hide here: `0` is a palindrome; any other number ending in `0` (like `10`) can't be.
 
-## My First Attempt — the obvious way
+Tiny example:
+```
+121 -> Yes        123 -> No        0 -> Yes
+```
 
-Turn the number into a string, reverse the string, compare ([initial.rs](initial.rs)):
+## Understand It
+
+### In plain words
+A [palindrome](../../glossary/palindrome.md) reads the same both directions — like the word
+*"level"* or the number *121*. Hold `121` up to a mirror and it's still `121`; hold up `123`
+and you see `321`, a different number. So the question is just: *does this number equal its own
+reflection?* The twist is we're told to answer it **without** writing the number out as text
+and flipping the string — only with arithmetic on the digits.
+
+### The slow, obvious way
+The tempting shortcut is to turn the number into text, reverse the text, and compare:
 
 ```rust
 let number = input.trim().to_string();
-
 let mut reversed = String::new();
-for character in number.chars().rev() {   // .rev() walks the characters backwards
+for character in number.chars().rev() {   // walk the characters backwards
     reversed.push(character);
 }
-
-number == reversed        // "121" == "121"  ->  Yes
+number == reversed                         // "121" == "121" -> Yes
 ```
 
-This **works** — every test passes. The new piece for me was
-[`.rev()`](../../languages/rust.md#rev): it takes the sequence of characters and
-hands them back in reverse order, so I just push them into a fresh string.
+It **works** — every test passes. But it's the wrong answer for two reasons, one of them fatal
+here:
 
-### Why it's not the answer
+1. **It breaks the rule.** The task said *no string conversion* — the whole lesson is digit
+   arithmetic, and this sidesteps it.
+2. **It allocates.** `to_string()` and `reversed` both build growable text buffers on the heap —
+   `O(n)` extra memory to check a shape we could read straight off the digits.
 
-Two problems, one of them fatal for this challenge:
+So it passes, yet misses the point. The real challenge is to never leave numbers at all.
 
-1. **It breaks the rule.** The task said *no string conversion* — the lesson is
-   digit arithmetic, and this sidesteps it entirely.
-2. **It allocates.** `to_string()` and the `reversed` string both live on the
-   [heap](../../from-zero/rust/README.md). For a number, that's a whole growable
-   text buffer built just to check a shape we could read straight off the digits.
-   It's `O(n)` extra memory for something that needs none.
+### The trick
+You can take a number apart with two operations, no text involved:
+- `number % 10` — the [remainder](../../languages/rust.md#remainder) after dividing by 10 — is
+  the **last digit**. `1234 % 10` is `4`.
+- `number / 10` — [integer division](../../languages/rust.md#int-division) — **drops** the last
+  digit. `1234 / 10` is `123`.
 
-So it passes, but it's the wrong tool. The real challenge is to never leave
-numbers at all.
-
-## The Trick — reverse the number with math, and only do half
-
-You can peel digits off a number with two operations, no text involved:
-
-- `number % 10` — the **remainder** after dividing by 10 — is the **last digit**.
-  `1234 % 10` is `4`. ([what `%` does](../../languages/rust.md#remainder))
-- `number / 10` — integer division — **drops** that last digit. `1234 / 10` is
-  `123`, because [`/` throws the fraction away](../../languages/rust.md#int-division).
-
-With those two, you can build a number's reverse digit by digit. But there's a
-sharper idea: **you don't have to reverse the whole thing.** A number is a
-palindrome when its front half mirrors its back half — so reverse *only the back
-half*, and stop when the shrinking front and the growing reversed-back meet in the
-middle. That's half the work, and the reversed half can never overflow, because
-it's only ever half the size of the original.
-
-The loop:
+With those you can rebuild a number reversed, digit by digit. But the sharp idea is: **you don't
+need the whole reverse — only half.** A number is a palindrome when its front half mirrors its
+back half, so reverse *only the back half* and stop when the shrinking front meets the growing
+reversed-back in the middle. Half the work — and the half-size reversed value can't overflow,
+because it's never bigger than half the original.
 
 ```rust
 while remaining_number > reversed_half {
-    reversed_half = reversed_half * 10 + remaining_number % 10;  // push last digit onto reversed
+    reversed_half = reversed_half * 10 + remaining_number % 10;  // push last digit onto the reversed half
     remaining_number /= 10;                                      // drop it from the front
 }
 ```
 
-Each turn: take the last digit of `remaining_number` and stick it onto the end of
-`reversed_half` (multiply by 10 to make room, then add). Meanwhile `remaining_number`
-gets shorter. When `reversed_half` catches up to `remaining_number`, we've crossed
-the middle.
+Each turn: peel the last digit off `remaining_number` and stick it onto `reversed_half`
+(multiply by 10 to make room, then add). `remaining_number` shrinks; `reversed_half` grows. When
+`reversed_half` catches up, we've crossed the middle. This works — instead of just looking
+right — because `% 10` and `/ 10` are *exact* on integers: no rounding, no lost digits, so the
+reversed half is a faithful mirror of the back half.
 
-### Watch it run — `1221`
+### Watch it run
+`1221` (even length):
 
-`remaining_number` shrinks from the front; `reversed_half` grows the back, reversed:
-
-| step | `remaining_number` | `reversed_half` | still `remaining > reversed`? |
+| step | `remaining_number` | `reversed_half` | `remaining > reversed`? |
 |---|---|---|---|
-| start | 1221 | 0    | 1221 > 0 → go |
-| 1     | 122  | 1    | 122 > 1 → go |
-| 2     | 12   | 12   | 12 > 12 → **stop** |
+| start | 1221 | 0  | 1221 > 0 → go |
+| 1 | 122 | 1  | 122 > 1 → go |
+| 2 | 12  | 12 | 12 > 12 → **stop** |
 
-Now `remaining_number == reversed_half` (both `12`) → palindrome. **Yes.**
+`remaining_number == reversed_half` (both `12`) → palindrome. And `12321` (odd length), where a
+middle digit is left over:
 
-And an odd-length one, `12321`, where the middle digit is left over:
-
-| step | `remaining_number` | `reversed_half` | still `remaining > reversed`? |
+| step | `remaining_number` | `reversed_half` | `remaining > reversed`? |
 |---|---|---|---|
-| start | 12321 | 0   | go |
-| 1     | 1232  | 1   | go |
-| 2     | 123   | 12  | go |
-| 3     | 12    | 123 | 12 > 123? no → **stop** |
+| start | 12321 | 0 | go |
+| 1 | 1232 | 1 | go |
+| 2 | 123 | 12 | go |
+| 3 | 12 | 123 | 12 > 123? no → **stop** |
 
-Here they never land equal, because the middle `3` sits in `reversed_half`. Drop it
-with `reversed_half / 10` (`123 / 10 = 12`) and compare: `12 == 12` → **Yes**. That's
-why the final check has two halves:
+They never land equal, because the middle `3` sits in `reversed_half`. Drop it with
+`reversed_half / 10` (`123 / 10 = 12`) and compare: `12 == 12` → palindrome.
+
+### The answer
+Compare the two halves, allowing for that leftover middle digit:
 
 ```rust
 remaining_number == reversed_half || remaining_number == reversed_half / 10
-//        even-length case         ||        odd-length case (ignore middle digit)
+//        even-length case         ||        odd-length case (ignore the middle)
 ```
 
-### The one edge case — trailing zeros
+It's correct because a palindrome is *exactly* the case where the back half, reversed, equals
+the front half — which is what these two comparisons test (the second one shrugging off a lone
+middle digit).
 
-Any number ending in `0` (except `0` itself) can't be a palindrome: the first digit
-would have to be `0` too, but numbers don't keep leading zeros. `10` reversed is
-`01` = `1`. So we rule those out up front:
+## The Code
 
+### Rust
 ```rust
-if number % 10 == 0 && number != 0 {
-    return false;
+use std::io;
+
+fn main() {
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).unwrap();
+    let number: u64 = input.trim().parse().unwrap();
+
+    println!("{}", if is_palindrome(number) { "Yes" } else { "No" });
 }
-```
 
-Without this guard, `10` would sneak through: the loop stops immediately
-(`10 > 0` is true once → `remaining=1, reversed=0`, then `1 > 0`... actually it
-keeps going), and you'd get a wrong `Yes`. The guard makes the intent explicit and
-correct.
-
-## The Answer
-
-[solution.rs](solution.rs) — no strings, no heap, only ever touches half the digits:
-
-```rust
 fn is_palindrome(number: u64) -> bool {
     if number % 10 == 0 && number != 0 {
         return false;
@@ -146,25 +144,23 @@ fn is_palindrome(number: u64) -> bool {
 }
 ```
 
-**Time:** `O(log₁₀ n)` — the number of digits, and we only walk *half* of them.
-There is no faster class: you must look at the digits to know if they mirror.
-**Space:** `O(1)` — two `u64`s, no allocation, whatever the size of the number.
+**Time:** O(log₁₀ n) — the number of digits, and we walk only *half* of them. No class is
+faster: you must look at the digits to know if they mirror. **Space:** O(1) — two `u64`s, no
+allocation, whatever the size of the number.
+**Syntax notes:** [solution.rs.md](solution.rs.md).
 
-That's the full "fastest, then most memory-efficient" target: the string version was
-already optimal *time*, but this matches it while dropping the `O(n)` heap string to
-`O(1)`. You can't do better on either axis.
+## Remember This
+- **Digits are just arithmetic.** `% 10` reads the last digit, `/ 10` removes it — the whole
+  toolkit for taking a number apart, with no string and no allocation.
+- **Reverse only half.** To test a mirror you don't need the whole reflection; build the back
+  half and stop when it meets the front. Half the work, and the half-size value can't overflow.
+- **Mind the trailing-zero edge case.** Any number ending in `0` except `0` itself can't be a
+  palindrome (its first digit would have to be `0`, but numbers don't keep leading zeros), so
+  `if number % 10 == 0 && number != 0 { return false; }` rules them out up front.
+- **"It passes" ≠ "it's the answer."** The string version passed every test but broke the rule
+  *and* allocated. Read what the problem is actually teaching — here, the arithmetic was the
+  point, and the tests just didn't check for it.
 
-## Takeaway
-
-- **Digits are just arithmetic.** `% 10` reads the last digit, `/ 10` removes it.
-  Those two are the whole toolkit for taking a number apart — no string needed, and
-  no allocation.
-- **Reverse only half.** To test a mirror you don't need the whole reflection —
-  build the back half and stop when it meets the front. Half the work, and the
-  half-size reversed value can't overflow.
-- **"It passes" ≠ "it's the answer."** My string version passed every test but
-  broke the rule *and* allocated. The graded thing was the arithmetic; the tests
-  just didn't check for it. Read what the problem is really teaching.
-
-Reusable write-ups: [`%` remainder](../../languages/rust.md#remainder) ·
-[`.rev()`](../../languages/rust.md#rev) · [`/` truncates](../../languages/rust.md#int-division).
+Reusable write-ups: [Palindrome](../../glossary/palindrome.md) ·
+[`%` remainder](../../languages/rust.md#remainder) ·
+[`/` truncates](../../languages/rust.md#int-division) · [`.rev()`](../../languages/rust.md#rev).
