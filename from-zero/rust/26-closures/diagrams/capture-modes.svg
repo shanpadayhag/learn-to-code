@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="38" font-size="19" font-weight="700" fill="#1f2328">How a closure captures depends on what it does</text>
+  <text x="32" y="61" font-size="13.5" fill="#57606a">Rust picks the gentlest capture that works — borrow if it can, own only if it must</text>
+
+  <!-- col 1: read -> borrow -->
+  <rect x="28" y="86" width="200" height="220" rx="10" fill="#fff" stroke="#3fa45b" stroke-width="1.5"/>
+  <text x="128" y="112" font-size="13.5" font-weight="700" fill="#1a7f37" text-anchor="middle">only READS it</text>
+  <text x="128" y="134" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">|x| x * factor</text>
+  <text x="128" y="168" font-size="12.5" fill="#1f2328" text-anchor="middle">captures a</text>
+  <rect x="58" y="180" width="140" height="40" rx="6" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="128" y="205" font-size="13" fill="#1a7f37" text-anchor="middle" font-family="ui-monospace,monospace">&amp;factor</text>
+  <text x="128" y="248" font-size="12" fill="#57606a" text-anchor="middle">shared borrow —</text>
+  <text x="128" y="266" font-size="12" fill="#57606a" text-anchor="middle">factor stays usable</text>
+  <text x="128" y="292" font-size="12" fill="#1a7f37" text-anchor="middle" font-weight="700">trait: Fn</text>
+
+  <!-- col 2: mutate -> &mut -->
+  <rect x="240" y="86" width="200" height="220" rx="10" fill="#fff" stroke="#d98f3f" stroke-width="1.5"/>
+  <text x="340" y="112" font-size="13.5" font-weight="700" fill="#9a5a00" text-anchor="middle">CHANGES it</text>
+  <text x="340" y="134" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">|| count += 1</text>
+  <text x="340" y="168" font-size="12.5" fill="#1f2328" text-anchor="middle">captures a</text>
+  <rect x="270" y="180" width="140" height="40" rx="6" fill="#ffe9d6" stroke="#d98f3f" stroke-width="2"/>
+  <text x="340" y="205" font-size="13" fill="#9a5a00" text-anchor="middle" font-family="ui-monospace,monospace">&amp;mut count</text>
+  <text x="340" y="248" font-size="12" fill="#57606a" text-anchor="middle">mutable borrow —</text>
+  <text x="340" y="266" font-size="12" fill="#57606a" text-anchor="middle">can write back</text>
+  <text x="340" y="292" font-size="12" fill="#9a5a00" text-anchor="middle" font-weight="700">trait: FnMut</text>
+
+  <!-- col 3: move -> owns -->
+  <rect x="452" y="86" width="200" height="220" rx="10" fill="#fff" stroke="#4a7fd6" stroke-width="1.5"/>
+  <text x="552" y="112" font-size="13.5" font-weight="700" fill="#0b3d91" text-anchor="middle">OWNS it (move)</text>
+  <text x="552" y="134" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">move |x| x + n</text>
+  <text x="552" y="168" font-size="12.5" fill="#1f2328" text-anchor="middle">captures the</text>
+  <rect x="482" y="180" width="140" height="40" rx="6" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="552" y="205" font-size="13" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">n itself</text>
+  <text x="552" y="248" font-size="12" fill="#57606a" text-anchor="middle">takes ownership —</text>
+  <text x="552" y="266" font-size="12" fill="#57606a" text-anchor="middle">can outlive the scope</text>
+  <text x="552" y="292" font-size="12" fill="#0b3d91" text-anchor="middle" font-weight="700">Fn / FnMut / FnOnce</text>
+
+  <text x="32" y="340" font-size="12.5" fill="#57606a">All three are still just "captured data + code." The mode only changes <tspan font-weight="700" fill="#1f2328">what sits in the data box</tspan>: a borrow, or the value itself.</text>
+  <text x="32" y="362" font-size="12.5" fill="#57606a"><tspan font-family="ui-monospace,monospace" fill="#1f2328">move</tspan> forces ownership — needed when the closure must live longer than the variable (returned from a fn, sent to a thread).</text>
+</svg>

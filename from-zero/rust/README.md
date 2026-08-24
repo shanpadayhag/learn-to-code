@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 26 — *Closures* (up next)
+**Current:** Concept 27 — *Iterator adapters* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -84,7 +84,8 @@ they aren't memory topics. This table is the source of truth for where you are.
 
 | # | Concept | Status |
 |---|---------|--------|
-| 26 | Closures (`\|x\| ...`) | ⬜ up next |
+| 26 | [Closures (`\|x\| ...`)](26-closures/use-it.md) | ✅ done |
+| 27 | Iterator adapters (`.map` · `.filter` · `.collect`) | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 

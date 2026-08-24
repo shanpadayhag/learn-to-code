@@ -995,6 +995,10 @@ one `(key, value)` item, binds `field` to the first part, and `_` throws away th
 second. They feed the [iterator adapters](#iterator-adapters) below and methods like
 [`Option::map`](#option).
 
+Taught from zero — capturing the environment (vs a `fn` that can't), a closure as a
+struct of "captured data + code", the `Fn`/`FnMut`/`FnOnce` capture modes, `move`, and
+why it's zero-cost — in [From-Zero Concept 26](../from-zero/rust/26-closures/use-it.md).
+
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
 
 ## iterator adapters — `.filter()`, `.map()`, `.collect()`, … {#iterator-adapters}
