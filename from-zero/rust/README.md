@@ -27,6 +27,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 04 | [Functions and the call stack](04-functions-and-the-call-stack/use-it.md) | ✅ done |
 | 05 | [Expressions, statements, and return](05-expressions-statements-and-return/use-it.md) | ✅ done |
 | 05a | [Loops and ranges](05a-loops-and-ranges/use-it.md) *(interlude)* | ✅ done |
+| 05b | [`break`, `continue`, and labeled loops](05b-break-continue-and-labels/use-it.md) *(interlude)* | ✅ done |
 
 ### Phase 2 — The heap, and where ownership becomes obvious
 

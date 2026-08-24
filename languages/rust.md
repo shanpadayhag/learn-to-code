@@ -346,6 +346,31 @@ while first_digit.is_some() || second_digit.is_some() || carry != 0 { ... }
 
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
 
+## `break` · `continue` · labeled loops {#loop-control}
+
+**In one line:** `break` stops a loop, `continue` skips to its next turn — and both act on
+the **nearest** loop only, so a *label* (`'name:`) is how you target an outer one.
+
+```rust
+'search: for row in grid {
+    for cell in row {
+        if cell == target { break 'search; }   // leaves BOTH loops
+    }
+}
+```
+- `break` / `continue` with no label affect the innermost enclosing loop. Nesting two loops
+  and expecting an inner `break` to stop the outer one is a classic bug — the outer loop
+  keeps running.
+- Prefix a loop with `'name:` to label it, then `break 'name` / `continue 'name` act on
+  *that* loop from any depth inside. The leading `'` is the same tick used for
+  [lifetimes](#lifetimes); here it just names a loop.
+- `loop { … }` (infinite until `break`) can also `break value` to return a value.
+
+Taught from zero — the nearest-loop trap (from a real nested-loop bug) and labels as the fix
+— in [From-Zero Interlude 05b](../from-zero/rust/05b-break-continue-and-labels/use-it.md).
+
+First seen in: taught from zero in [From-Zero Interlude 05b](../from-zero/rust/05b-break-continue-and-labels/use-it.md)
+
 ## `for` + ranges — counting loops (`..`, `..=`, `.rev()`) {#for-ranges}
 
 **In one line:** `for i in a..b { … }` runs the block once for each number in the range;

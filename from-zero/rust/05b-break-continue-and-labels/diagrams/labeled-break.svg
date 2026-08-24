@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="38" font-size="19" font-weight="700" fill="#1f2328">Where does <tspan font-family="ui-monospace,monospace">break</tspan> land?</text>
+  <text x="32" y="61" font-size="13.5" fill="#57606a">a plain break leaves only the <tspan font-weight="700" fill="#1f2328">nearest</tspan> loop; a labeled break leaves the one you name</text>
+
+  <!-- LEFT: plain break -->
+  <text x="40" y="96" font-size="13.5" font-weight="700" fill="#b02a37">break; (the trap)</text>
+  <rect x="30" y="108" width="290" height="210" rx="10" fill="#fff" stroke="#d1666b" stroke-width="1.5"/>
+  <text x="46" y="132" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">for pos in ... {</text>
+  <rect x="60" y="146" width="248" height="120" rx="8" fill="#fdeef0" stroke="#d1666b" stroke-dasharray="5 4"/>
+  <text x="74" y="170" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">for pair in ... {</text>
+  <text x="90" y="196" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">if differ {</text>
+  <text x="106" y="220" font-size="12.5" font-family="ui-monospace,monospace" fill="#b02a37" font-weight="700">break;</text>
+  <text x="90" y="244" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">}</text>
+  <text x="74" y="262" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">}</text>
+  <text x="46" y="292" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">} &lt;-- outer keeps going!</text>
+  <!-- arrow: break exits inner only, back to outer top -->
+  <path d="M 150 214 C 250 214 300 190 300 156 C 300 130 200 128 200 128" fill="none" stroke="#b02a37" stroke-width="2" marker-end="url(#redarrow)"/>
+  <text x="243" y="300" font-size="11.5" fill="#b02a37">lands back in the outer loop</text>
+
+  <!-- RIGHT: labeled break -->
+  <text x="372" y="96" font-size="13.5" font-weight="700" fill="#1a7f37">break 'search; (the fix)</text>
+  <rect x="360" y="108" width="290" height="210" rx="10" fill="#fff" stroke="#3fa45b" stroke-width="1.5"/>
+  <text x="376" y="132" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328"><tspan fill="#8250df" font-weight="700">'search:</tspan> for pos in ... {</text>
+  <rect x="390" y="146" width="248" height="120" rx="8" fill="#eef7f0" stroke="#3fa45b" stroke-dasharray="5 4"/>
+  <text x="404" y="170" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">for pair in ... {</text>
+  <text x="420" y="196" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">if differ {</text>
+  <text x="436" y="220" font-size="12.5" font-family="ui-monospace,monospace" fill="#1a7f37" font-weight="700">break 'search;</text>
+  <text x="420" y="244" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">}</text>
+  <text x="404" y="262" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328">}</text>
+  <text x="376" y="292" font-size="12.5" font-family="ui-monospace,monospace" fill="#1a7f37" font-weight="700">} &lt;-- lands HERE, both gone</text>
+  <!-- arrow: break exits both, to after outer -->
+  <path d="M 505 214 C 610 214 640 240 560 286" fill="none" stroke="#1a7f37" stroke-width="2" marker-end="url(#grnarrow)"/>
+
+  <text x="32" y="348" font-size="12.5" fill="#57606a">The <tspan font-family="ui-monospace,monospace" fill="#8250df">'search:</tspan> is a name on the outer loop; <tspan font-family="ui-monospace,monospace" fill="#1a7f37">break 'search</tspan> / <tspan font-family="ui-monospace,monospace" fill="#1a7f37">continue 'search</tspan> target THAT loop by name.</text>
+
+  <defs>
+    <marker id="redarrow" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#b02a37"/></marker>
+    <marker id="grnarrow" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1a7f37"/></marker>
+  </defs>
+</svg>
