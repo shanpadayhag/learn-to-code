@@ -64,8 +64,11 @@ around them — none needed here, but that's the superpower a plain `fn` doesn't
 > `&u8 == &u8` compares fine. You don't have to think about it — but that's why no `*` appears.
 
 ## Already in the handbook
-- [`let … else`](../../languages/rust.md#let-else) — `let Some(first) = words.first() else { return ""; }`:
-  bind `first` or bail out early, keeping the happy path flat.
+- `if words.is_empty() { return ""; }` then `let first = words[0];` — a plain guard-then-bind.
+  A tidier spelling is [`let … else`](../../languages/rust.md#let-else)
+  (`let Some(first) = words.first() else { return ""; };`), but that was only **stabilized in Rust
+  1.65**, so it fails with `error[E0658]: let...else is unstable` on older compilers (some practice
+  sites run an old Rust). The `is_empty` guard works on any version.
 - [iterator adapters](../../languages/rust.md#iterator-adapters) — `.zip()`, `.take()`,
   `.take_while()`, `.count()` build the prefix scan in one forward pass; `.lines()`, `.map()`,
   and `.collect()` read and prepare the input.

@@ -12,9 +12,10 @@ fn main() {
 }
 
 fn longest_common_prefix<'a>(words: &[&'a str]) -> &'a str {
-    let Some(first) = words.first() else {
+    if words.is_empty() {
         return "";
-    };
+    }
+    let first = words[0];
 
     let mut length = first.len();
     for word in &words[1..] {
