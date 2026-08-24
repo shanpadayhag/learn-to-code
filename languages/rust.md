@@ -1096,6 +1096,10 @@ inference is called *elision*.)
 **Runtime cost:** none. Lifetimes are erased after checking; they exist only to prove the
 code is memory-safe at compile time.
 
+Taught from zero — the dangling-reference danger, elision, why `longest` needs a named
+lifetime, and the zero-runtime-cost erasure — in
+[From-Zero Concept 25](../from-zero/rust/25-lifetimes/use-it.md).
+
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
 
 ## `format!` — building strings {#format}

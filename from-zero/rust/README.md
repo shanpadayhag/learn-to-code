@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 25 — *Lifetimes* (up next)
+**Current:** Concept 26 — *Closures* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -74,9 +74,21 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 23 | [`Result` (when things can fail)](23-result/use-it.md) | ✅ done |
 | 24 | [The `?` operator (propagate errors)](24-question-mark/use-it.md) | ✅ done |
 
+### Phase 6 — Borrows that can't dangle
+
+| # | Concept | Status |
+|---|---------|--------|
+| 25 | [Lifetimes (`&'a`)](25-lifetimes/use-it.md) | ✅ done |
+
+### Phase 7 — Closures and iterators
+
+| # | Concept | Status |
+|---|---------|--------|
+| 26 | Closures (`\|x\| ...`) | ⬜ up next |
+
 ### Later — macro-phases (firmed up as we reach them)
 
-More collections → lifetimes → smart pointers (`Box` · `Rc` · `RefCell`) →
+More collections → smart pointers (`Box` · `Rc` · `RefCell`) →
 closures & iterators → advanced (concurrency · `async` · `unsafe`).
 
 ## How this relates to the rest of the repo
