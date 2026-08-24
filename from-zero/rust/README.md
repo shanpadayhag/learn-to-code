@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 23 — *Error handling (`Result` and `?`)* (up next)
+**Current:** Concept 24 — *The `?` operator* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -64,13 +64,18 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 21 | [Trait objects (`dyn Trait`)](21-trait-objects/use-it.md) | ✅ done |
 | 21a | [Building with trait objects (the Area Calculator)](21a-building-with-trait-objects/use-it.md) *(interlude)* | ✅ done |
 | 22 | [`HashSet<T>` (membership, no duplicates)](22-hashset/use-it.md) | ✅ done |
-| 23 | Error handling — `Result` and `?` | ⬜ up next |
+
+### Phase 5 — When things can fail (error handling)
+
+| # | Concept | Status |
+|---|---------|--------|
+| 23 | [`Result` (when things can fail)](23-result/use-it.md) | ✅ done |
+| 24 | The `?` operator (propagate errors) | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 
-Trait objects → more collections → lifetimes → error handling
-(`Result` · `?`) → smart pointers (`Box` · `Rc` · `RefCell`) → closures & iterators →
-advanced (concurrency · `async` · `unsafe`).
+More collections → lifetimes → smart pointers (`Box` · `Rc` · `RefCell`) →
+closures & iterators → advanced (concurrency · `async` · `unsafe`).
 
 ## How this relates to the rest of the repo
 

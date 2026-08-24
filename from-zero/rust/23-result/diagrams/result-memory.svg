@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">Result&lt;i32, i32&gt; in memory = tag + one shared slot</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">both variants carry data, so the slot is sized for the <tspan font-weight="700" fill="#1f2328">larger</tspan> of Ok's T and Err's E</text>
+
+  <!-- the slot, shared -->
+  <text x="32" y="120" font-size="13" fill="#57606a">one 8-byte Result:</text>
+
+  <rect x="150" y="98" width="72" height="56" rx="8" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2"/>
+  <text x="186" y="92" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">tag</text>
+  <text x="186" y="131" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="700">Ok/Err?</text>
+
+  <rect x="230" y="98" width="150" height="56" rx="8" fill="#fff" stroke="#a9b2bd" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="305" y="90" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">shared slot (4 bytes)</text>
+  <text x="305" y="131" font-size="13" fill="#57606a" text-anchor="middle">holds one i32</text>
+
+  <text x="400" y="122" font-size="13" fill="#57606a">4 (tag, padded) + 4 (slot)</text>
+  <text x="400" y="141" font-size="13" fill="#1f2328" font-weight="700">= 8 bytes</text>
+
+  <!-- what the slot holds, depending on tag -->
+  <text x="32" y="205" font-size="13" fill="#57606a">the SAME slot, two moments in time — never both at once:</text>
+
+  <rect x="150" y="222" width="72" height="52" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="186" y="253" font-size="15" fill="#1a7f37" text-anchor="middle" font-weight="700">Ok</text>
+  <rect x="230" y="222" width="150" height="52" rx="8" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="305" y="253" font-size="16" fill="#0b3d91" text-anchor="middle" font-weight="700">42</text>
+  <text x="398" y="253" font-size="13" fill="#57606a">tag says Ok → slot is the value</text>
+
+  <rect x="150" y="288" width="72" height="52" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="2"/>
+  <text x="186" y="319" font-size="15" fill="#b02a37" text-anchor="middle" font-weight="700">Err</text>
+  <rect x="230" y="288" width="150" height="52" rx="8" fill="#ffe9d6" stroke="#d98f3f" stroke-width="2"/>
+  <text x="305" y="319" font-size="16" fill="#9a5a00" text-anchor="middle" font-weight="700">-1</text>
+  <text x="398" y="319" font-size="13" fill="#57606a">tag says Err → slot is the error</text>
+
+  <line x1="32" y1="364" x2="608" y2="364" stroke="#e1e4e8"/>
+  <text x="32" y="388" font-size="12.5" fill="#57606a">Niche trick returns: if one side is empty and the other has a spare pattern (e.g. <tspan font-family="ui-monospace,monospace" fill="#1f2328">Result&lt;Box, ()&gt;</tspan>), the tag hides for free.</text>
+</svg>

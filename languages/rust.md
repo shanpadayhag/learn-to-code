@@ -826,6 +826,35 @@ in [Null (and the billion-dollar mistake)](../glossary/null-and-the-billion-doll
 
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
 
+## `Result<T, E>` — success or a reason for failure {#result}
+
+**In one line:** the sibling of [`Option`](#option) for operations that can *fail* — a
+value is either `Ok(the value)` or `Err(the error)`, and the compiler makes you handle
+both.
+
+Where `Option`'s `None` is empty ("nothing here"), `Result`'s `Err` **carries a reason**
+("here's what went wrong"). It's a plain [enum](#enum) from the standard library with two
+type parameters — `T` for the success value, `E` for the error:
+```rust
+enum Result<T, E> { Ok(T), Err(E) }
+
+let parsed: Result<i32, _> = "42".parse::<i32>();   // Ok(42)
+let broken: Result<i32, _> = "abc".parse::<i32>();  // Err(ParseIntError)
+```
+A function that can fail says so in its return type (`fn half(n: i32) -> Result<i32,
+String>`), so failure can't sneak past a caller the way an exception can. Open it the same
+ways you open any enum — [`match`](#match), [`if let`](#if-let), the [`?`](#question-mark)
+operator, or the crash-on-`Err` escape hatch [`.unwrap()`](#unwrap).
+
+**In memory** it's the enum "tag + one shared slot" — but since *both* variants carry data,
+the slot is sized for the larger of `T` and `E`. The [niche trick](#option) still applies
+when one side is empty and the other has a spare pattern (`Result<Box<T>, ()>` is free).
+
+Taught from zero — why exceptions hide, and how `Result` is just an enum whose `Err` side
+carries the story — in [From-Zero Concept 23](../from-zero/rust/23-result/use-it.md).
+
+First seen in: taught from zero in [From-Zero Concept 23](../from-zero/rust/23-result/use-it.md)
+
 ## `?` — the question-mark operator {#question-mark}
 
 **In one line:** unwraps a `Some`/`Ok` and, on `None`/`Err`, *returns early* from the
