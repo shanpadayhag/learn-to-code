@@ -6,9 +6,14 @@ learned. Unlike the [From-Zero](../from-zero/README.md) course's built-in
 sources and mix ideas the way real problems do — so the interesting part is usually
 the *bug I hit*, not the solution.
 
-Each challenge is a folder with a short write-up (the task, the bug, the fix, the
-takeaway) and runnable code. Reusable language lessons get promoted to the relevant
-syntax handbook (e.g. [Rust](../languages/rust.md)) and linked back here.
+Each challenge gets the **same full write-up as a [LeetCode problem](../problems/)**: a
+paraphrased task, a five-beat "Understand It" walkthrough (*in plain words → the slow,
+obvious way → the trick → watch it run → the answer*), the code with its complexity, and a
+`solution.rs.md` explaining the syntax line by line. The real **bug I hit** lives inside the
+"slow, obvious way" beat — that's the part these are for. Like the problems folder, a
+challenge is `README.md` + `solution.rs` + `solution.rs.md` (no separate first-attempt file).
+Reusable ideas get promoted to the [glossary](../glossary/README.md) and the
+[Rust handbook](../languages/rust.md) and linked back here.
 
 | Date | Challenge | Language | Source | Lesson |
 |------|-----------|----------|--------|--------|
