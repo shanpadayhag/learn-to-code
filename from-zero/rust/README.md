@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 24 — *The `?` operator* (up next)
+**Current:** Concept 25 — *Lifetimes* (up next)
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -70,7 +70,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 23 | [`Result` (when things can fail)](23-result/use-it.md) | ✅ done |
-| 24 | The `?` operator (propagate errors) | ⬜ up next |
+| 24 | [The `?` operator (propagate errors)](24-question-mark/use-it.md) | ✅ done |
 
 ### Later — macro-phases (firmed up as we reach them)
 

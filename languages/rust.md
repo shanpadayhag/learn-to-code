@@ -887,6 +887,10 @@ let stored = match record.get(field) {
 Six lines of ceremony for what `?` says in two characters. That "bail out on absence,
 otherwise unwrap and continue" is the pattern `?` exists for.
 
+Taught from zero — the desugaring to a `match`, why the function must return a `Result`,
+and the `From::from` error conversion — in
+[From-Zero Concept 24](../from-zero/rust/24-question-mark/use-it.md).
+
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
 
 ## `let ... else` — bind or bail {#let-else}

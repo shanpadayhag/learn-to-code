@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="658" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328">What <tspan font-family="ui-monospace,monospace">?</tspan> compiles into</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">not magic — the compiler rewrites it as a <tspan font-weight="700" fill="#1f2328">match</tspan> that returns early</text>
+
+  <!-- the source line -->
+  <rect x="180" y="86" width="300" height="46" rx="8" fill="#fff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="330" y="115" font-size="15" font-family="ui-monospace,monospace" text-anchor="middle" fill="#1f2328">let x = a.parse()<tspan font-weight="700" fill="#0b3d91">?</tspan>;</text>
+
+  <!-- arrow down -->
+  <text x="330" y="162" font-size="26" fill="#57606a" text-anchor="middle">↓</text>
+  <text x="345" y="158" font-size="12.5" fill="#57606a">expands to</text>
+
+  <!-- the match -->
+  <rect x="70" y="178" width="520" height="150" rx="10" fill="#fff" stroke="#d0d7de" stroke-width="1.5"/>
+  <g font-family="ui-monospace,monospace" font-size="14" fill="#1f2328">
+    <text x="90" y="210">let x = match a.parse() {</text>
+    <text x="118" y="238"><tspan fill="#1a7f37" font-weight="700">Ok</tspan>(value)  =&gt; value,</text>
+    <text x="118" y="266"><tspan fill="#b02a37" font-weight="700">Err</tspan>(error) =&gt; <tspan fill="#8250df" font-weight="700">return</tspan> Err(From::from(error)),</text>
+    <text x="90" y="294">};</text>
+  </g>
+
+  <text x="470" y="238" font-size="11.5" fill="#1a7f37">unwrap, bind to x, carry on</text>
+  <text x="386" y="316" font-size="11.5" fill="#b02a37">leave the whole function — and From::from converts the error type</text>
+
+  <line x1="32" y1="344" x2="628" y2="344" stroke="#e1e4e8"/>
+  <text x="32" y="368" font-size="12.5" fill="#57606a">The <tspan font-weight="700" fill="#8250df">return</tspan> is why the function must return a Result; the <tspan font-family="ui-monospace,monospace" fill="#1f2328">From::from</tspan> is why different error types compose.</text>
+</svg>

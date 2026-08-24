@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328">Same job, two spellings</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">each <tspan font-weight="700" fill="#1f2328">match</tspan> just says "unwrap on Ok, return the error on Err" — which is exactly what <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1f2328">?</tspan> means</text>
+
+  <!-- Left: staircase -->
+  <rect x="24" y="86" width="336" height="286" rx="10" fill="#fff" stroke="#d1666b" stroke-width="1.5"/>
+  <text x="40" y="110" font-size="13" font-weight="700" fill="#b02a37">the staircase (by hand)</text>
+  <g font-family="ui-monospace,monospace" font-size="12.5" fill="#1f2328">
+    <text x="40" y="140">let x = match a.parse() {</text>
+    <text x="60" y="160"><tspan fill="#1a7f37">Ok</tspan>(v) =&gt; v,</text>
+    <text x="60" y="180"><tspan fill="#b02a37">Err</tspan>(e) =&gt; <tspan fill="#8250df">return</tspan> Err(e),</text>
+    <text x="40" y="200">};</text>
+    <text x="40" y="228">let y = match b.parse() {</text>
+    <text x="60" y="248"><tspan fill="#1a7f37">Ok</tspan>(v) =&gt; v,</text>
+    <text x="60" y="268"><tspan fill="#b02a37">Err</tspan>(e) =&gt; <tspan fill="#8250df">return</tspan> Err(e),</text>
+    <text x="40" y="288">};</text>
+    <text x="40" y="316">Ok(x + y)</text>
+  </g>
+  <text x="40" y="352" font-size="12" fill="#57606a">9 lines, and the real work</text>
+  <text x="40" y="368" font-size="12" fill="#57606a">is buried in the middle</text>
+
+  <!-- arrow -->
+  <text x="382" y="230" font-size="30" fill="#57606a">→</text>
+
+  <!-- Right: ? version -->
+  <rect x="420" y="86" width="236" height="286" rx="10" fill="#fff" stroke="#3fa45b" stroke-width="1.5"/>
+  <text x="436" y="110" font-size="13" font-weight="700" fill="#1a7f37">with <tspan font-family="ui-monospace,monospace">?</tspan></text>
+  <g font-family="ui-monospace,monospace" font-size="12.5" fill="#1f2328">
+    <text x="436" y="150">let x = a.parse()<tspan font-weight="700" fill="#1a7f37">?</tspan>;</text>
+    <text x="436" y="178">let y = b.parse()<tspan font-weight="700" fill="#1a7f37">?</tspan>;</text>
+    <text x="436" y="206">Ok(x + y)</text>
+  </g>
+  <text x="436" y="250" font-size="12" fill="#57606a">3 lines, reading straight</text>
+  <text x="436" y="266" font-size="12" fill="#57606a">down the happy path —</text>
+  <text x="436" y="282" font-size="12" fill="#57606a">the failure handling is</text>
+  <text x="436" y="298" font-size="12" fill="#57606a">tucked inside each <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1a7f37">?</tspan></text>
+</svg>
