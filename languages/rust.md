@@ -472,6 +472,10 @@ just set `result_tail.next = Some(...)`, so the value is provably present; we us
 `.unwrap()` to say "I know this is `Some`." When you *can't* prove that, reach for
 [`if let`](#if-let) or a `match`, which handle the `None` case instead of exploding.
 
+Taught from zero — `.unwrap()` as a crash-on-`None` bet, plus opening two Options at once
+with a tuple-match or [`Option::zip`](#option) — in
+[From-Zero Interlude 15a](../from-zero/rust/15a-opening-options-safely/use-it.md).
+
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
 
 ## `String` — an owned string {#string}

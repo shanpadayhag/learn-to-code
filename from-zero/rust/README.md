@@ -52,6 +52,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 13 | [Structs](13-structs/use-it.md) | ✅ done |
 | 14 | [Enums](14-enums/use-it.md) | ✅ done |
 | 15 | [`Option` (no more null)](15-option/use-it.md) | ✅ done |
+| 15a | [Opening an Option safely (`.unwrap()`, tuple-match, `.zip()`)](15a-opening-options-safely/use-it.md) *(interlude)* | ✅ done |
 | 16 | [Pattern matching with `match`](16-match/use-it.md) | ✅ done |
 
 ### Phase 4 — Collections and generics (many values, any type)

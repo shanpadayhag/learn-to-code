@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="358" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328"><tspan font-family="ui-monospace,monospace">a.zip(b)</tspan> — two maybe-values into one maybe-pair</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">the result is <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#1a7f37">Some</tspan> only when <tspan font-weight="700" fill="#1f2328">both</tspan> inputs are Some — any None makes the whole thing None</text>
+
+  <!-- column headers -->
+  <text x="90"  y="104" font-size="13" font-weight="700" fill="#57606a" text-anchor="middle">a</text>
+  <text x="250" y="104" font-size="13" font-weight="700" fill="#57606a" text-anchor="middle">b</text>
+  <text x="470" y="104" font-size="13" font-weight="700" fill="#57606a" text-anchor="middle">a.zip(b)</text>
+  <text x="360" y="104" font-size="16" fill="#8a94a0" text-anchor="middle">→</text>
+
+  <!-- row 1: Some, Some -> Some((x,y)) -->
+  <rect x="40"  y="120" width="100" height="40" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="90"  y="146" font-size="14" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">Some('f')</text>
+  <rect x="200" y="120" width="100" height="40" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="250" y="146" font-size="14" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">Some('l')</text>
+  <text x="360" y="146" font-size="18" fill="#3fa45b" text-anchor="middle">→</text>
+  <rect x="390" y="120" width="160" height="40" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="470" y="146" font-size="14" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">Some(('f','l'))</text>
+
+  <!-- row 2: Some, None -> None -->
+  <rect x="40"  y="176" width="100" height="40" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="90"  y="202" font-size="14" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">Some('f')</text>
+  <rect x="200" y="176" width="100" height="40" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="2"/>
+  <text x="250" y="202" font-size="14" font-family="ui-monospace,monospace" fill="#b02a37" text-anchor="middle">None</text>
+  <text x="360" y="202" font-size="18" fill="#d1666b" text-anchor="middle">→</text>
+  <rect x="390" y="176" width="160" height="40" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="2"/>
+  <text x="470" y="202" font-size="14" font-family="ui-monospace,monospace" fill="#b02a37" text-anchor="middle">None</text>
+
+  <!-- row 3: None, Some -> None -->
+  <rect x="40"  y="232" width="100" height="40" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="2"/>
+  <text x="90"  y="258" font-size="14" font-family="ui-monospace,monospace" fill="#b02a37" text-anchor="middle">None</text>
+  <rect x="200" y="232" width="100" height="40" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="250" y="258" font-size="14" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">Some('l')</text>
+  <text x="360" y="258" font-size="18" fill="#d1666b" text-anchor="middle">→</text>
+  <rect x="390" y="232" width="160" height="40" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="2"/>
+  <text x="470" y="258" font-size="14" font-family="ui-monospace,monospace" fill="#b02a37" text-anchor="middle">None</text>
+
+  <line x1="32" y1="300" x2="608" y2="300" stroke="#e1e4e8"/>
+  <text x="32" y="326" font-size="12.5" fill="#57606a">Then open the single result once: <tspan font-family="ui-monospace,monospace" fill="#1f2328">if let Some((x, y)) = a.zip(b) { … }</tspan> — flat, no nested if-let.</text>
+  <text x="32" y="346" font-size="12.5" fill="#57606a">Same "both or nothing" as matching the tuple <tspan font-family="ui-monospace,monospace" fill="#1f2328">(Some(x), Some(y))</tspan> directly.</text>
+</svg>
