@@ -3,123 +3,138 @@
 | | |
 |---|---|
 | Date       | 2026-08-24 |
-| Language   | Rust |
-| Source     | [LeetCode 14 — Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix/) (practice variant: read `N`, then `N` lowercase words from input) |
-| Lessons    | [`break` only leaves the nearest loop + labels](../../languages/rust.md#loop-control) · [`.unwrap()` is a crash-on-`None` bet](../../languages/rust.md#unwrap) · [`.zip()` / `.take_while()` / `.count()`](../../languages/rust.md#iterator-adapters) · [`let … else`](../../languages/rust.md#let-else) |
+| Difficulty | Easy |
+| Languages  | Rust |
+| Pattern    | [Horizontal scanning](#the-trick) (compare every word to the first) |
+| Time/Space | O(N · L) / O(1) |
+| Source     | [LeetCode 14 — Longest Common Prefix](https://leetcode.com/problems/longest-common-prefix/) (practice variant: read `N`, then `N` lowercase words) |
 
-## The Task
-The first line of input is a number `N`. The next `N` lines are each one word (lowercase
-letters). Print the **longest prefix shared by all `N` words** — the letters they all start
-with. If they share no starting letter, print an empty line.
+## The Problem
+You're given `N` words (lowercase letters). Find the **longest run of letters they all
+start with** — their longest shared *prefix*. If they don't even share a first letter, the
+answer is empty.
 
+What matters:
+- The answer is always a prefix of **every** word, so it can't be longer than the shortest word.
+- "Share no prefix" is a real case — print an empty line, don't crash.
+- Words can be up to a few thousand letters, so re-scanning them repeatedly is what we must avoid.
+
+Tiny example:
 ```
-3
-flower
-flow
-flight        ->  fl        ("fl" is the longest start common to all three)
+words = [flower, flow, flight]
+answer = fl                     because all three start "fl", and flight breaks the streak at the 3rd letter
 ```
 
-## My First Attempt — the way I already knew
+## Understand It
 
-Walk letter positions in an outer loop; for each position, compare every neighbouring pair of
-words in an inner loop; if a pair's letters match all the way to the last pair, record that
-letter ([initial.rs](initial.rs)):
+### In plain words
+Picture three books lined up on a shelf, all titled something like *"flower…", "flow…",
+"flight…"*. You run your finger along the spines letter by letter, all at once: `f` — yes,
+all three. `l` — yes, all three. `o` — wait, the third one says `i`. Stop. The letters
+everyone agreed on so far — `fl` — is the answer. The moment **one** book disagrees, the
+shared beginning is over.
+
+### The slow, obvious way
+My first instinct was to compare **neighbouring pairs** of words, column by column: is
+`words[0]`'s letter here the same as `words[1]`'s? And `words[1]` vs `words[2]`? Walk every
+letter position in an outer loop, every pair in an inner loop, and record a letter when the
+whole column agrees.
+
+It *looked* fine and even printed `fl` for the sample — but it had a real **bug**. When a
+column disagreed I called `break` to "stop searching," like this:
 
 ```rust
-for character_index in 0..=9999 {          // outer: each letter position
-    for index in 0..=(n - 1) {             // inner: each word paired with the next
-        if index == n - 1 { break; }
-        let character1 = words[index].chars().nth(character_index);
-        let character2 = words[index + 1].chars().nth(character_index);
-        if let Some(character1) = character1 {
-            if let Some(character2) = character2 {
-                if character1 == character2 {
-                    if index == n - 2 { common_letters.push(character1); }
-                } else {
-                    break;                  // ← meant to "stop searching"
-                }
-            }
+for character_index in 0..=9999 {        // outer: each letter position
+    for index in 0..words.len() - 1 {    // inner: each neighbouring pair
+        if letters_differ {
+            break;                        // ← meant "stop everything"
         }
+        // ...else record the matching letter...
     }
 }
 ```
 
-It printed `fl` for the sample. It looks like it works. It doesn't.
-
-### Why it's not the answer
-
-**1. It's wrong — a real bug (the one that taught the most).** That `break` was meant to say
-"a mismatch means the common prefix is over — stop everything." But
-[`break` only leaves the **nearest** loop](../../languages/rust.md#loop-control) — here, the
+But [`break` only leaves the **nearest** loop](../../languages/rust.md#loop-control) — the
 inner one. The outer loop marched on to the next letter position and kept recording matches it
-should never have examined. On `ba / ca / ba`:
+should never have looked at. On `ba / ca / ba`:
 
-| position | inner loop | should have… |
+| position | inner loop does | should have… |
 |---|---|---|
 | 0 | `b` vs `c` differ → `break` inner | stopped **everything** — answer is `""` |
 | 1 | outer ran anyway; `a`==`a`==`a` → records `a` ❌ | never run |
 
-So it prints `a` when the correct answer is empty. The sample words happened to hide it — the
-most dangerous kind of bug. The direct fix is a **labeled loop** (`break 'search`), written up
-in [From-Zero Interlude 05b](../../from-zero/rust/05b-break-continue-and-labels/use-it.md).
+So it printed `a` when the answer is empty. The sample words hid it — the most dangerous kind
+of bug. And it was **slow**: reading letter `k` of a word with `word.chars().nth(k)` re-walks
+the word from the start every call (`O(k)`), so nested in two loops the whole thing is roughly
+`O(N · L²)`.
 
-**2. It's slow.** `word.chars().nth(k)` doesn't jump to letter `k` — a string is walked one
-character at a time, so `.nth(k)` re-walks from the start every call, costing `O(k)`. Buried in
-two nested loops, the whole thing is roughly **`O(N · L²)`** for `L`-length words.
+### The trick
+Two shifts fix the bug *and* the speed at once.
 
-**3. The plumbing fought me.** Reading two `Option<char>`s forced a nested `if let` staircase,
-and my instinct — one `if let A && let B` — didn't compile
-([let-chains need the 2024 edition](../../from-zero/rust/15a-opening-options-safely/use-it.md)).
+**Compare every word to the first word, not neighbour-to-neighbour.** A prefix shared by *all*
+words is exactly a prefix of `words[0]` that every other word also starts with. So keep a
+single number — "how many letters still agree" — start it at the full length of the first
+word, and shrink it against each other word. There's no grid, so the nested-loop `break` trap
+simply can't happen.
 
-## The Trick — compare against the first word, and let iterators do the walking
-
-Two shifts turn all three problems into non-problems.
-
-**Compare every word to the first one, not neighbour-to-neighbour.** A prefix common to *all*
-words is exactly a prefix of `words[0]` that every other word also starts with. So carry a
-"how many letters still agree" length, start it at the full first word, and shrink it against
-each other word. No grid, so no nested-loop `break` trap at all — the better fix here isn't the
-label, it's *not nesting*.
-
-**Let one iterator chain do the character walk**, reading each letter exactly once:
+**Let one iterator do the letter-walk, reading each letter once.** Rust's iterators
+([the tools that will get their own phase later](../../from-zero/rust/README.md)) chain
+together to say exactly what we mean:
 
 ```rust
-length = first.bytes()                    // the first word's letters, one pass
-    .zip(word.bytes())                    // pair them with this word's; stops at the shorter
-    .take(length)                         // don't look past the prefix we still believe in
-    .take_while(|(a, b)| a == b)          // keep going while letters match; stop at the first that doesn't
-    .count();                             // how many matched = the new agreed length
+length = first.bytes()                 // the first word's letters, one forward pass
+    .zip(word.bytes())                 // pair each with this word's letters; ends at the shorter word
+    .take(length)                      // never look past the prefix we still believe in
+    .take_while(|(a, b)| a == b)       // keep going while letters match; stop at the first that differs
+    .count();                          // how many matched = the new agreed length
 ```
 
-- [`.zip()`](../../languages/rust.md#iterator-adapters) walks two sequences together and ends
-  the moment either runs out — so a shorter word caps the prefix for free (no `Option`
-  juggling, no bounds check).
+- [`.zip()`](../../languages/rust.md#iterator-adapters) walks two sequences together and stops
+  the instant either runs out — so a short word caps the prefix for free.
 - [`.take_while()`](../../languages/rust.md#iterator-adapters) stops at the first mismatch —
-  the "stop everything" my broken `break` was reaching for, expressed directly.
+  that's the honest version of the "stop everything" my broken `break` was reaching for.
 - `.count()` is the surviving length.
 
-Comparing `bytes()` is safe here because the input is lowercase letters (one byte each). It's
-also faster than `chars()`, which decodes UTF-8 as it goes.
+Why this is genuinely fast, not just tidy: each word is scanned **once**, and only across the
+letters that still agree. The `.chars().nth(k)` version re-walked from the start every single
+letter — that repeated re-walk is exactly the `O(L²)` we're deleting. Reading each letter once
+is what turns `O(N · L²)` into `O(N · L)`.
 
-## Watch it run — `flower / flow / flight`
-
+### Watch it run — `flower / flow / flight`
 `length` starts at `6` (all of `flower`) and only ever shrinks:
 
-| against | zipped letters compared | matched run | `length` |
+| against | letters compared | matched run | `length` |
 |---|---|---|---|
 | start (`flower`) | — | — | 6 |
 | `flow`   | `f=f, l=l, o=o, w=w`, then `flow` ends | 4 | 4 |
 | `flight` | `f=f, l=l`, then `o≠i` → stop | 2 | 2 |
 
-Final `length` is `2`, so the answer is the first two letters of `flower` →
-[`&first[..2]`](../../languages/rust.md#slice) → **`fl`**. And on `ba / ca / ba`: against `ca`,
-`b≠c` immediately → `length` becomes `0`, we `break`, and `&first[..0]` is `""` — correct.
+Final `length` is `2`, so the answer is the first two letters of `flower`. On `ba / ca / ba`:
+against `ca`, `b≠c` immediately → `length` becomes `0`, and we're done.
 
-## The Answer
+### The answer
+Take that many letters off the front of the first word:
+[`&first[..length]`](../../languages/rust.md#slice) → **`fl`**. It's correct because `length`
+is, by construction, the largest count that *every* word agreed on — shrunk down the moment any
+word disagreed, never grown back.
 
-[solution.rs](solution.rs) — no nested loops, each letter read once, zero new allocations:
+## The Code
 
+### Rust
 ```rust
+use std::io::{self, Read};
+
+fn main() {
+    let mut input = String::new();
+    io::stdin().read_to_string(&mut input).unwrap();
+
+    let mut lines = input.lines();
+    let n: usize = lines.next().unwrap().trim().parse().unwrap();
+    let words: Vec<&str> = lines.take(n).map(str::trim).collect();
+
+    println!("{}", longest_common_prefix(&words));
+}
+
 fn longest_common_prefix<'a>(words: &[&'a str]) -> &'a str {
     let Some(first) = words.first() else {
         return "";
@@ -127,7 +142,8 @@ fn longest_common_prefix<'a>(words: &[&'a str]) -> &'a str {
 
     let mut length = first.len();
     for word in &words[1..] {
-        length = first.bytes()
+        length = first
+            .bytes()
             .zip(word.bytes())
             .take(length)
             .take_while(|(a, b)| a == b)
@@ -141,42 +157,34 @@ fn longest_common_prefix<'a>(words: &[&'a str]) -> &'a str {
 }
 ```
 
-[`let … else`](../../languages/rust.md#let-else) handles the "no words at all" case up front and
-returns, so the rest reads as one flat happy path. The return type `&'a str` means the answer is
-a **slice borrowed out of the first word** — we build no new `String`, so there's nothing to
-allocate or copy.
+**Time:** O(N · L) — `N` words, each scanned once across the `L` letters that still agree. This
+is optimal: you can't confirm a shared prefix without reading its letters in every word.
+**Space:** O(1) extra — one `length` counter; the answer is a slice **borrowed out of the first
+word**, so nothing is allocated or copied.
+**Syntax notes:** [solution.rs.md](solution.rs.md) — including the two constructs new to this
+repo: the `&[&'a str]` parameter type and the `|(a, b)| a == b` closure.
 
-**Time:** `O(N · L)` where `L` is the shortest word — each word is scanned once, only across the
-letters that still agree. That's optimal: you can't know the common prefix without looking at
-its letters in every word. **Space:** `O(1)` extra — a single `length` counter; the result
-borrows the first word rather than copying it. The first attempt was `O(N · L²)` time and built
-a `String`; this is faster *and* lighter.
-
-## Takeaway
-
-- **`break` leaves only the nearest loop.** My whole bug. When you truly need to bail out of an
-  outer loop, [label it and `break 'label`](../../languages/rust.md#loop-control) — or, better,
-  restructure so you aren't nesting in the first place.
-- **`.chars().nth(k)` is `O(k)`, not `O(1)`.** A string isn't an array of characters you can
-  index into; walking positions with `.nth()` inside a loop is quietly quadratic. Reach for an
-  iterator that makes a single pass.
-- **`.zip()` + `.take_while()` + `.count()` is the "compare two sequences until they diverge"
-  combo.** It replaced a hand-written double loop, an `Option` staircase, *and* the buggy
-  `break` in one readable line.
+## Remember This
+- **`break` leaves only the nearest loop.** My whole bug. To bail out of an outer loop, [label
+  it and `break 'label`](../../languages/rust.md#loop-control) — or, better, restructure so
+  you're not nesting at all (which is what "compare to the first word" achieved here).
+- **`.chars().nth(k)` is `O(k)`, not `O(1)`.** A string isn't an array you can jump into;
+  walking positions with `.nth()` inside a loop is quietly quadratic. Reach for one forward pass.
+- **`.zip()` + `.take_while()` + `.count()`** is the "compare two sequences until they diverge"
+  combo — it replaced a double loop, an `Option` staircase, and the buggy `break` in one line.
 - **Compare-to-the-first beats compare-each-neighbour** for "common to all," and returning a
-  **borrowed slice** (`&str`) keeps it allocation-free.
+  **borrowed `&str`** keeps it allocation-free.
+- **Comparing `bytes()` is a deliberate bet on the input.** It's the fast, correct call *here*
+  because the task guarantees lowercase letters (one byte per character), so `length` always
+  lands on a real character boundary. On **arbitrary Unicode** (accents, emoji — one character,
+  several bytes) that byte-slice could cut a character in half and **panic**, and a shared
+  *byte* prefix wouldn't even mean a shared *character* prefix. The general version compares
+  [`.chars()`](../../languages/rust.md#string-indexing) and tracks the boundary with
+  `char::len_utf8()`, trading a little speed for correctness on any text.
 - **"It passes" ≠ "it's correct."** `flower/flow/flight` passed while `ba/ca/ba` was silently
   wrong. Test the case that *should* fail, not just the one you were given.
-- **Comparing `bytes()` is a deliberate bet on the input, not a free lunch.** It's the right,
-  fast call *here* because the task guarantees lowercase letters — one byte per character — so
-  `length` always lands on a real character boundary and [`&first[..length]`](../../languages/rust.md#slice)
-  can never split one. On **arbitrary Unicode** (accents, emoji — where one character is several
-  bytes) that same slice could cut a character in half and **panic**, and matching a shared byte
-  prefix wouldn't even mean a shared *character* prefix. The general-purpose version compares
-  [`.chars()`](../../languages/rust.md#string-indexing) instead and tracks the boundary in bytes
-  (e.g. sum each matched `char::len_utf8()`), trading a little speed — UTF-8 has to be decoded —
-  for correctness on any text. Match the tool to the guarantees you actually have.
 
 Related From-Zero lessons this surfaced:
 [05b — break/continue/labels](../../from-zero/rust/05b-break-continue-and-labels/use-it.md) ·
-[15a — opening an Option safely](../../from-zero/rust/15a-opening-options-safely/use-it.md).
+[15a — opening an Option safely](../../from-zero/rust/15a-opening-options-safely/use-it.md) ·
+lifetimes (`&'a`) and closures are taught next in the [roadmap](../../from-zero/rust/README.md).
