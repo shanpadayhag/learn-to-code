@@ -67,8 +67,8 @@ around them — none needed here, but that's the superpower a plain `fn` doesn't
 - [`let … else`](../../languages/rust.md#let-else) — `let Some(first) = words.first() else { return ""; }`:
   bind `first` or bail out early, keeping the happy path flat.
 - [iterator adapters](../../languages/rust.md#iterator-adapters) — `.zip()`, `.take()`,
-  `.take_while()`, `.count()`, `.map()`, `.collect()`, `.lines()`, `.take(n)` chained into one
-  forward pass.
+  `.take_while()`, `.count()` build the prefix scan in one forward pass; `.lines()`, `.map()`,
+  and `.collect()` read and prepare the input.
 - [slices `&s[..n]`](../../languages/rust.md#slice) — `&first[..length]` and `&words[1..]`: a
   borrowed sub-view, no copy.
 - [`.bytes()`](../../languages/rust.md#string) vs `.chars()` — `.bytes()` yields raw `u8`s
@@ -76,13 +76,17 @@ around them — none needed here, but that's the superpower a plain `fn` doesn't
   is lowercase letters. See the Unicode caveat in the [README](README.md#remember-this).
 
 ## Line by line (the interesting bits)
-- `io::stdin().read_to_string(&mut input)` — slurp *all* input at once into one `String`, then
-  `input.lines()` gives an iterator of `&str` views into it. Reading everything up front is why
-  the words can be borrowed slices (`Vec<&str>`) instead of owned `String`s — they all point
-  into `input`, which outlives them.
-- `lines.take(n).map(str::trim).collect()` — take the next `n` lines, trim each, gather into a
-  `Vec<&str>`. `str::trim` is passed as a **function value** (a function's name used as data),
-  the tidy alternative to `|line| line.trim()`.
+- `stdin.lock().lines()` — read input **one line at a time**, so the program answers as soon as
+  the last word is typed. (An earlier version used `read_to_string`, which blocks until stdin
+  *closes* — fine when input is piped, but in a real terminal it just waits for `Ctrl-D` and
+  looks like it hangs. Reading a fixed `n + 1` lines avoids that.)
+- `(0..n).map(|_| lines.next().unwrap().unwrap()).collect()` — pull exactly `n` lines into a
+  `Vec<String>` (`owned_words`). Each `.lines()` item is a `Result<String, _>`, hence the two
+  `.unwrap()`s: one for "was there a line", one for "did the read succeed".
+- `owned_words.iter().map(|word| word.trim()).collect()` — build a `Vec<&str>` of trimmed views
+  **borrowing from** `owned_words`. That owned `Vec<String>` stays alive to the end of `main`, so
+  those `&str` slices (and the `&'a str` the function returns) remain valid — this is the borrow
+  the `'a` in the signature is tracking.
 - `for word in &words[1..]` — iterate every word *after* the first; `&words[1..]` is a slice
   skipping index 0, since the first word is our yardstick, not something to compare against
   itself.

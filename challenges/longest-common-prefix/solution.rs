@@ -1,12 +1,12 @@
-use std::io::{self, Read};
+use std::io::{self, BufRead};
 
 fn main() {
-    let mut input = String::new();
-    io::stdin().read_to_string(&mut input).unwrap();
+    let stdin = io::stdin();
+    let mut lines = stdin.lock().lines();
 
-    let mut lines = input.lines();
-    let n: usize = lines.next().unwrap().trim().parse().unwrap();
-    let words: Vec<&str> = lines.take(n).map(str::trim).collect();
+    let n: usize = lines.next().unwrap().unwrap().trim().parse().unwrap();
+    let owned_words: Vec<String> = (0..n).map(|_| lines.next().unwrap().unwrap()).collect();
+    let words: Vec<&str> = owned_words.iter().map(|word| word.trim()).collect();
 
     println!("{}", longest_common_prefix(&words));
 }
