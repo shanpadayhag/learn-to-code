@@ -167,6 +167,15 @@ a `String`; this is faster *and* lighter.
   **borrowed slice** (`&str`) keeps it allocation-free.
 - **"It passes" ≠ "it's correct."** `flower/flow/flight` passed while `ba/ca/ba` was silently
   wrong. Test the case that *should* fail, not just the one you were given.
+- **Comparing `bytes()` is a deliberate bet on the input, not a free lunch.** It's the right,
+  fast call *here* because the task guarantees lowercase letters — one byte per character — so
+  `length` always lands on a real character boundary and [`&first[..length]`](../../languages/rust.md#slice)
+  can never split one. On **arbitrary Unicode** (accents, emoji — where one character is several
+  bytes) that same slice could cut a character in half and **panic**, and matching a shared byte
+  prefix wouldn't even mean a shared *character* prefix. The general-purpose version compares
+  [`.chars()`](../../languages/rust.md#string-indexing) instead and tracks the boundary in bytes
+  (e.g. sum each matched `char::len_utf8()`), trading a little speed — UTF-8 has to be decoded —
+  for correctness on any text. Match the tool to the guarantees you actually have.
 
 Related From-Zero lessons this surfaced:
 [05b — break/continue/labels](../../from-zero/rust/05b-break-continue-and-labels/use-it.md) ·
