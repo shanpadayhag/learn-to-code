@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="718" height="438" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="38" font-size="19" font-weight="700" fill="#1f2328">Walk two cursors together, stop at the first mismatch</text>
+  <text x="32" y="61" font-size="13.5" fill="#57606a">.zip pairs them up · .take_while keeps matching pairs · .count returns how many survived</text>
+
+  <!-- ===== main: flower vs flight ===== -->
+  <g font-family="ui-monospace,monospace">
+    <!-- first word -->
+    <text x="30" y="112" font-size="12.5" fill="#8250df" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">"flower"</text>
+    <g>
+      <rect x="120" y="92" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="170" y="92" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="220" y="92" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="270" y="92" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="320" y="92" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="370" y="92" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <text x="143" y="118" font-size="16" fill="#1f2328" text-anchor="middle">f</text>
+      <text x="193" y="118" font-size="16" fill="#1f2328" text-anchor="middle">l</text>
+      <text x="243" y="118" font-size="16" fill="#1f2328" text-anchor="middle">o</text>
+      <text x="293" y="118" font-size="16" fill="#8c959f" text-anchor="middle">w</text>
+      <text x="343" y="118" font-size="16" fill="#8c959f" text-anchor="middle">e</text>
+      <text x="393" y="118" font-size="16" fill="#8c959f" text-anchor="middle">r</text>
+    </g>
+    <!-- second word -->
+    <text x="30" y="182" font-size="12.5" fill="#1a7f37" font-family="ui-sans-serif, system-ui, sans-serif" font-weight="700">"flight"</text>
+    <g>
+      <rect x="120" y="162" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="170" y="162" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="220" y="162" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="270" y="162" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="320" y="162" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <rect x="370" y="162" width="46" height="40" rx="6" fill="#eef2f6" stroke="#8c959f"/>
+      <text x="143" y="188" font-size="16" fill="#1f2328" text-anchor="middle">f</text>
+      <text x="193" y="188" font-size="16" fill="#1f2328" text-anchor="middle">l</text>
+      <text x="243" y="188" font-size="16" fill="#1f2328" text-anchor="middle">i</text>
+      <text x="293" y="188" font-size="16" fill="#8c959f" text-anchor="middle">g</text>
+      <text x="343" y="188" font-size="16" fill="#8c959f" text-anchor="middle">h</text>
+      <text x="393" y="188" font-size="16" fill="#8c959f" text-anchor="middle">t</text>
+    </g>
+
+    <!-- pairing connectors -->
+    <line x1="143" y1="132" x2="143" y2="162" stroke="#3fa45b" stroke-width="2"/>
+    <line x1="193" y1="132" x2="193" y2="162" stroke="#3fa45b" stroke-width="2"/>
+    <line x1="243" y1="132" x2="243" y2="162" stroke="#a40e26" stroke-width="2" stroke-dasharray="4 3"/>
+
+    <!-- pair verdicts -->
+    <text x="143" y="228" font-size="15" fill="#1a7f37" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif">✓</text>
+    <text x="193" y="228" font-size="15" fill="#1a7f37" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif">✓</text>
+    <text x="243" y="228" font-size="15" fill="#a40e26" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif">✗ STOP</text>
+  </g>
+
+  <!-- pairs list on the right -->
+  <g font-family="ui-monospace,monospace" font-size="13">
+    <text x="470" y="100" fill="#57606a">.zip → pairs</text>
+    <text x="470" y="124" fill="#1a7f37">(f, f)  keep ✓</text>
+    <text x="470" y="146" fill="#1a7f37">(l, l)  keep ✓</text>
+    <text x="470" y="168" fill="#a40e26">(o, i)  stop ✗</text>
+    <text x="470" y="196" fill="#8c959f">(w, g)  never reached</text>
+    <text x="470" y="216" fill="#8c959f">(e, h)  never reached</text>
+    <text x="470" y="236" fill="#8c959f">(r, t)  never reached</text>
+    <text x="470" y="268" fill="#1f2328" font-weight="700" font-family="ui-sans-serif, system-ui, sans-serif">.count() → 2</text>
+  </g>
+
+  <line x1="32" y1="292" x2="688" y2="292" stroke="#d0d7de"/>
+
+  <!-- ===== zip stops when the SHORTER runs out ===== -->
+  <text x="32" y="320" font-size="13.5" font-weight="700" fill="#1f2328">And .zip stops when EITHER cursor runs out — "flower" vs "flow":</text>
+  <g font-family="ui-monospace,monospace" font-size="13">
+    <text x="52" y="352" fill="#8250df">flower:  f  l  o  w  e  r</text>
+    <text x="52" y="374" fill="#1a7f37">flow:    f  l  o  w</text>
+    <text x="52" y="404" fill="#57606a">zip:    (f,f) (l,l) (o,o) (w,w)  <tspan fill="#a40e26">— then "flow" has no 'e' to pair, so zip ends.</tspan></text>
+  </g>
+
+  <text x="470" y="358" font-size="12.5" fill="#57606a" font-family="ui-sans-serif, system-ui, sans-serif">take_while <tspan font-weight="700" fill="#1f2328">stops</tspan> at a mismatch;</text>
+  <text x="470" y="378" font-size="12.5" fill="#57606a" font-family="ui-sans-serif, system-ui, sans-serif">it never <tspan font-weight="700" fill="#1f2328">skips</tspan> ahead like filter.</text>
+</svg>
