@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="718" height="338" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="38" font-size="19" font-weight="700" fill="#1f2328">A chain is a pipeline: lazy pipes, one pump at the end</text>
+  <text x="32" y="61" font-size="13.5" fill="#57606a">vec![1,2,3,4,5,6].iter().filter(even).map(×10).collect()</text>
+
+  <!-- source -->
+  <rect x="28" y="96" width="112" height="150" rx="10" fill="#fff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="84" y="120" font-size="12.5" font-weight="700" fill="#6639ba" text-anchor="middle">source</text>
+  <text x="84" y="138" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">.iter()</text>
+  <text x="84" y="170" font-size="12.5" fill="#1f2328" text-anchor="middle" font-family="ui-monospace,monospace">1 2 3</text>
+  <text x="84" y="190" font-size="12.5" fill="#1f2328" text-anchor="middle" font-family="ui-monospace,monospace">4 5 6</text>
+  <text x="84" y="228" font-size="11" fill="#8250df" text-anchor="middle">the stream</text>
+
+  <!-- arrow -->
+  <line x1="146" y1="171" x2="176" y2="171" stroke="#8c959f" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- filter adapter -->
+  <rect x="182" y="96" width="128" height="150" rx="10" fill="#fff" stroke="#3fa45b" stroke-width="1.5"/>
+  <text x="246" y="120" font-size="12.5" font-weight="700" fill="#1a7f37" text-anchor="middle">.filter(even)</text>
+  <text x="246" y="140" font-size="11" fill="#57606a" text-anchor="middle">adapter — lazy</text>
+  <text x="246" y="176" font-size="12" fill="#1f2328" text-anchor="middle">keep 2, 4, 6</text>
+  <text x="246" y="196" font-size="12" fill="#8c959f" text-anchor="middle">drop 1, 3, 5</text>
+  <text x="246" y="230" font-size="11" fill="#1a7f37" text-anchor="middle">→ still a stream</text>
+
+  <line x1="316" y1="171" x2="346" y2="171" stroke="#8c959f" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- map adapter -->
+  <rect x="352" y="96" width="128" height="150" rx="10" fill="#fff" stroke="#d98f3f" stroke-width="1.5"/>
+  <text x="416" y="120" font-size="12.5" font-weight="700" fill="#9a5a00" text-anchor="middle">.map(×10)</text>
+  <text x="416" y="140" font-size="11" fill="#57606a" text-anchor="middle">adapter — lazy</text>
+  <text x="416" y="176" font-size="12" fill="#1f2328" text-anchor="middle">20, 40, 60</text>
+  <text x="416" y="230" font-size="11" fill="#9a5a00" text-anchor="middle">→ still a stream</text>
+
+  <line x1="486" y1="171" x2="516" y2="171" stroke="#8c959f" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- collect consumer -->
+  <rect x="522" y="96" width="170" height="150" rx="10" fill="#fff" stroke="#cf222e" stroke-width="2"/>
+  <text x="607" y="120" font-size="12.5" font-weight="700" fill="#a40e26" text-anchor="middle">.collect()</text>
+  <text x="607" y="140" font-size="11" fill="#57606a" text-anchor="middle">consumer — the pump</text>
+  <rect x="546" y="158" width="122" height="42" rx="6" fill="#ffe3e6" stroke="#cf222e" stroke-width="2"/>
+  <text x="607" y="184" font-size="12.5" fill="#a40e26" text-anchor="middle" font-family="ui-monospace,monospace">[20, 40, 60]</text>
+  <text x="607" y="228" font-size="11" fill="#a40e26" text-anchor="middle">pulls the chain, builds Vec</text>
+
+  <text x="32" y="290" font-size="12.5" fill="#57606a">Adapters just <tspan font-weight="700" fill="#1f2328">describe</tspan> steps and hand back another stream — no work, no allocation yet.</text>
+  <text x="32" y="312" font-size="12.5" fill="#57606a">Only the consumer <tspan font-family="ui-monospace,monospace" fill="#a40e26">.collect()</tspan> <tspan font-weight="700" fill="#1f2328">runs</tspan> the whole pipeline and builds the one final Vec.</text>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#8c959f"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="718" height="358" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="38" font-size="19" font-weight="700" fill="#1f2328">One item all the way through, then the next</text>
+  <text x="32" y="61" font-size="13.5" fill="#57606a">The consumer pulls a single value; it travels filter → map before the next is pulled</text>
+
+  <!-- column headers -->
+  <text x="150" y="96" font-size="12.5" font-weight="700" fill="#8250df" text-anchor="middle">source pulls</text>
+  <text x="335" y="96" font-size="12.5" font-weight="700" fill="#1a7f37" text-anchor="middle">filter (even?)</text>
+  <text x="510" y="96" font-size="12.5" font-weight="700" fill="#9a5a00" text-anchor="middle">map (×10)</text>
+  <text x="650" y="96" font-size="12.5" font-weight="700" fill="#a40e26" text-anchor="middle">result</text>
+
+  <!-- row 1: 1 dropped -->
+  <rect x="110" y="110" width="80" height="34" rx="6" fill="#f3eefc" stroke="#8250df"/>
+  <text x="150" y="132" font-size="13" fill="#6639ba" text-anchor="middle" font-family="ui-monospace,monospace">1</text>
+  <line x1="192" y1="127" x2="292" y2="127" stroke="#8c959f" stroke-width="1.5" marker-end="url(#ah2)"/>
+  <text x="335" y="132" font-size="12.5" fill="#8c959f" text-anchor="middle">drop ✗</text>
+  <text x="650" y="132" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">[ ]</text>
+
+  <!-- row 2: 2 -> 20 -->
+  <rect x="110" y="152" width="80" height="34" rx="6" fill="#f3eefc" stroke="#8250df"/>
+  <text x="150" y="174" font-size="13" fill="#6639ba" text-anchor="middle" font-family="ui-monospace,monospace">2</text>
+  <line x1="192" y1="169" x2="292" y2="169" stroke="#3fa45b" stroke-width="2" marker-end="url(#ah3)"/>
+  <text x="335" y="174" font-size="12.5" fill="#1a7f37" text-anchor="middle">keep ✓</text>
+  <line x1="380" y1="169" x2="468" y2="169" stroke="#d98f3f" stroke-width="2" marker-end="url(#ah4)"/>
+  <text x="510" y="174" font-size="13" fill="#9a5a00" text-anchor="middle" font-family="ui-monospace,monospace">20</text>
+  <text x="650" y="174" font-size="12" fill="#a40e26" text-anchor="middle" font-family="ui-monospace,monospace">[20]</text>
+
+  <!-- row 3: 3 dropped -->
+  <rect x="110" y="194" width="80" height="34" rx="6" fill="#f3eefc" stroke="#8250df"/>
+  <text x="150" y="216" font-size="13" fill="#6639ba" text-anchor="middle" font-family="ui-monospace,monospace">3</text>
+  <line x1="192" y1="211" x2="292" y2="211" stroke="#8c959f" stroke-width="1.5" marker-end="url(#ah2)"/>
+  <text x="335" y="216" font-size="12.5" fill="#8c959f" text-anchor="middle">drop ✗</text>
+  <text x="650" y="216" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">[20]</text>
+
+  <!-- row 4: 4 -> 40 -->
+  <rect x="110" y="236" width="80" height="34" rx="6" fill="#f3eefc" stroke="#8250df"/>
+  <text x="150" y="258" font-size="13" fill="#6639ba" text-anchor="middle" font-family="ui-monospace,monospace">4</text>
+  <line x1="192" y1="253" x2="292" y2="253" stroke="#3fa45b" stroke-width="2" marker-end="url(#ah3)"/>
+  <text x="335" y="258" font-size="12.5" fill="#1a7f37" text-anchor="middle">keep ✓</text>
+  <line x1="380" y1="253" x2="468" y2="253" stroke="#d98f3f" stroke-width="2" marker-end="url(#ah4)"/>
+  <text x="510" y="258" font-size="13" fill="#9a5a00" text-anchor="middle" font-family="ui-monospace,monospace">40</text>
+  <text x="650" y="258" font-size="12" fill="#a40e26" text-anchor="middle" font-family="ui-monospace,monospace">[20, 40]</text>
+
+  <text x="32" y="304" font-size="12.5" fill="#57606a">At any instant <tspan font-weight="700" fill="#1f2328">only one number is in flight</tspan> — there is no temporary Vec of "all the evens" sitting between the steps.</text>
+  <text x="32" y="326" font-size="12.5" fill="#57606a">The pipeline allocates <tspan font-weight="700" fill="#1f2328">just the final Vec</tspan>, grown one push at a time — same as a hand-written loop.</text>
+
+  <defs>
+    <marker id="ah2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#8c959f"/></marker>
+    <marker id="ah3" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#3fa45b"/></marker>
+    <marker id="ah4" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#d98f3f"/></marker>
+  </defs>
+</svg>
