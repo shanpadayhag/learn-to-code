@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 28 — *`iter` vs `into_iter` vs `iter_mut`* (up next)
+**Current:** Concept 29 — *(up next)*
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -86,7 +86,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 |---|---------|--------|
 | 26 | [Closures (`\|x\| ...`)](26-closures/use-it.md) | ✅ done |
 | 27 | [Iterator adapters (`.map` · `.filter` · `.collect`)](27-iterator-adapters/use-it.md) | ✅ done |
-| 28 | `iter` vs `into_iter` vs `iter_mut` (borrow · consume · mutate) | ⬜ up next |
+| 28 | [`iter` vs `into_iter` vs `iter_mut` (borrow · consume · mutate)](28-iter-into-iter-iter-mut/use-it.md) | ✅ done |
 
 ### Later — macro-phases (firmed up as we reach them)
 

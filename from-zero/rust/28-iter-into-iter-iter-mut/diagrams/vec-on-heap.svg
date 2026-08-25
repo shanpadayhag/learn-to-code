@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="718" height="318" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="38" font-size="19" font-weight="700" fill="#1f2328">What a Vec of Strings actually is</text>
+  <text x="32" y="61" font-size="13.5" fill="#57606a">vec![String::from("hi"), String::from("there")] — an item is itself a heap-owning handle</text>
+
+  <!-- stack -->
+  <text x="120" y="96" font-size="12.5" font-weight="700" fill="#57606a" text-anchor="middle">STACK</text>
+  <rect x="40" y="108" width="160" height="90" rx="8" fill="#fff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="120" y="130" font-size="12.5" fill="#6639ba" text-anchor="middle" font-family="ui-monospace,monospace">words: Vec</text>
+  <text x="120" y="152" font-size="11" fill="#57606a" text-anchor="middle">ptr · len 2 · cap 2</text>
+  <line x1="120" y1="160" x2="120" y2="188" stroke="#8250df" stroke-width="1.5"/>
+  <text x="120" y="184" font-size="10.5" fill="#8250df" text-anchor="middle">points to →</text>
+
+  <line x1="200" y1="150" x2="280" y2="150" stroke="#8250df" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- heap: the Vec buffer of 2 String handles -->
+  <text x="430" y="96" font-size="12.5" font-weight="700" fill="#57606a" text-anchor="middle">HEAP — the Vec's buffer</text>
+  <rect x="290" y="108" width="130" height="90" rx="8" fill="#fff" stroke="#3fa45b" stroke-width="1.5"/>
+  <text x="355" y="130" font-size="11.5" fill="#1a7f37" text-anchor="middle" font-family="ui-monospace,monospace">String #0</text>
+  <text x="355" y="150" font-size="10.5" fill="#57606a" text-anchor="middle">ptr·len·cap</text>
+  <line x1="355" y1="158" x2="355" y2="186" stroke="#3fa45b" stroke-width="1.5" marker-end="url(#ah2)"/>
+
+  <rect x="430" y="108" width="130" height="90" rx="8" fill="#fff" stroke="#3fa45b" stroke-width="1.5"/>
+  <text x="495" y="130" font-size="11.5" fill="#1a7f37" text-anchor="middle" font-family="ui-monospace,monospace">String #1</text>
+  <text x="495" y="150" font-size="10.5" fill="#57606a" text-anchor="middle">ptr·len·cap</text>
+  <line x1="495" y1="158" x2="495" y2="186" stroke="#3fa45b" stroke-width="1.5" marker-end="url(#ah2)"/>
+
+  <!-- text buffers further out -->
+  <rect x="300" y="214" width="110" height="34" rx="6" fill="#eafbef" stroke="#3fa45b"/>
+  <text x="355" y="236" font-size="12" fill="#1a7f37" text-anchor="middle" font-family="ui-monospace,monospace">"hi"</text>
+  <rect x="440" y="214" width="110" height="34" rx="6" fill="#eafbef" stroke="#3fa45b"/>
+  <text x="495" y="236" font-size="12" fill="#1a7f37" text-anchor="middle" font-family="ui-monospace,monospace">"there"</text>
+  <text x="620" y="236" font-size="11.5" fill="#57606a" text-anchor="middle">the text bytes,</text>
+  <text x="620" y="252" font-size="11.5" fill="#57606a" text-anchor="middle">further out on heap</text>
+
+  <text x="32" y="288" font-size="12.5" fill="#57606a">"Moving an item" means moving a <tspan font-weight="700" fill="#1f2328">String handle</tspan> — its text buffer transfers with it, never copied.</text>
+  <text x="32" y="308" font-size="12.5" fill="#57606a"><tspan font-family="ui-monospace,monospace" fill="#1a7f37">.iter()</tspan> hands you a pointer to a handle; <tspan font-family="ui-monospace,monospace" fill="#a40e26">.into_iter()</tspan> moves the handle out and frees the buffer above.</text>
+
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#8250df"/></marker>
+    <marker id="ah2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#3fa45b"/></marker>
+  </defs>
+</svg>
