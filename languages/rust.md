@@ -46,6 +46,12 @@ how to program in *some* language — just not Rust yet.
 - [`.entry(...).or_default()`](#entry-or-default)
 - [closures — `|x| ...`](#closures)
 - [iterator adapters — `.filter()`, `.map()`, `.collect()`, …](#iterator-adapters)
+- [the `Iterator` trait — `.next()` and building your own](#iterator-trait)
+- [`.bytes()` — iterate a string's raw bytes](#bytes)
+- [`.zip()` — pair two iterators](#zip)
+- [`.take()` — at most `n` items](#take)
+- [`.copied()` — turn `&T` items into owned `T`](#copied)
+- [`.count()` — consume and count](#count)
 - [`impl Trait` in argument position](#impl-trait-arg)
 - [lifetimes — `<'a>`](#lifetimes)
 - [`format!` — building strings](#format)
@@ -1464,3 +1470,146 @@ Because the result borrows the source, the source has to outlive it (see
 alive). Relatives: `.trim_start()` / `.trim_end()` for one side only.
 
 First seen in: [From-Zero Interlude 12b](../from-zero/rust/12b-trim-returns-str/use-it.md)
+
+## the `Iterator` trait — `.next()` and building your own {#iterator-trait}
+
+**In one line:** every iterator is a small value with one required method, `.next()`, that
+hands back the next item as [`Some(item)`](#option) or `None` when it's exhausted; a `for`
+loop is just that method called until `None`.
+
+**What an iterator *is*.** Not a copy of your data — a **cursor**. It holds a reference to the
+data plus a **position**, and each `.next()` reads the item at the position, advances the
+position by one, and returns what it read. So `"hi".bytes()` doesn't build `[104, 105]`; it
+remembers "here's the string, I'm at byte 0."
+
+```rust
+let mut bytes = "hi".bytes();
+bytes.next();   // Some(104)  ('h'), position 0 → 1
+bytes.next();   // Some(105)  ('i'), position 1 → 2
+bytes.next();   // None       (ran off the end)
+```
+
+**A `for` loop desugars to `.next()`.** `for x in it { body }` is roughly
+`loop { match it.next() { Some(x) => { body } None => break } }`. That's the whole contract:
+anything with a `.next()` can be looped, mapped, filtered, zipped.
+
+**Build your own** by implementing the trait — one associated `Item` type and one `next`:
+
+```rust
+struct CountUp { current: u32, limit: u32 }
+
+impl Iterator for CountUp {
+    type Item = u32;
+    fn next(&mut self) -> Option<u32> {
+        if self.current == self.limit { return None; }
+        let value = self.current;
+        self.current += 1;          // advance the position
+        Some(value)                 // hand back what we read
+    }
+}
+```
+
+`&mut self` because moving the position mutates the cursor. Write just this, and `CountUp`
+gains every adapter (`.map`, `.take`, …) and works in `for` — they're all built on `.next()`.
+This is also *why* adapters are [lazy](#iterator-adapters): each adapter is a cursor wrapping a
+cursor, and no `.next()` runs until a consumer pulls.
+
+First seen in: [From-Zero Interlude 28a](../from-zero/rust/28a-how-next-works/use-it.md)
+
+## `.bytes()` — iterate a string's raw bytes {#bytes}
+
+**In one line:** walks a string one **raw byte** (`u8`) at a time — the byte-level sibling of
+[`.chars()`](#chars).
+
+Rust text is UTF-8, and Rust makes you choose *how* to walk it. [`.chars()`](#chars) gives
+whole Unicode characters (`char`); `.bytes()` gives the underlying bytes as numbers:
+
+```rust
+for b in "hi".bytes() {   // 104, then 105
+    println!("{b}");
+}
+```
+
+**Why reach for it over `.chars()`?** When you're comparing plain ASCII/English text
+position-by-position, bytes are simpler and cheaper — a `u8` compare is one machine
+instruction, and each byte *is* one character in ASCII. The catch: for non-ASCII text a single
+character spans several bytes, so counting or slicing by byte can split a character. Use
+`.bytes()` for ASCII-only work (like a common-prefix scan on English words); reach for
+`.chars()` the moment Unicode is in play.
+
+First seen in: [From-Zero Interlude 28a](../from-zero/rust/28a-how-next-works/use-it.md)
+
+## `.zip()` — pair two iterators {#zip}
+
+**In one line:** `a.zip(b)` walks two iterators in lockstep, yielding pairs `(a_item, b_item)`,
+and **stops as soon as either one runs out**.
+
+```rust
+let names  = ["ann", "bo"];
+let scores = [10, 20, 30];
+for (name, score) in names.iter().zip(scores.iter()) {
+    println!("{name}: {score}");   // ann: 10 / bo: 20  — the extra 30 is never paired
+}
+```
+
+The stopping rule is the whole personality of `.zip`: it can only make a pair when **both**
+cursors can hand it a next item, so the result is as long as the *shorter* input. That's what
+lets a common-prefix scan compare `"flower"` against `"flow"` safely — the pairs simply end
+when `"flow"` does. The items are [tuples](#for-iter-enumerate), so the next adapter usually
+destructures them with a `|(a, b)|` [closure](#closures).
+
+First seen in: [From-Zero Interlude 28b](../from-zero/rust/28b-zip-take-takewhile-count/use-it.md)
+
+## `.take()` — at most `n` items {#take}
+
+**In one line:** `.take(n)` passes along **up to** `n` items and then reports the stream empty
+— *up to*, not *exactly*: a shorter stream just ends early.
+
+```rust
+let first_three: Vec<u8> = "flower".bytes().take(3).collect();   // [102, 108, 111]
+let all_two:     Vec<u8> = "hi".bytes().take(5).collect();       // [104, 105] — only 2 exist
+```
+
+It's a cheap cap on how far a lazy chain will walk. Its cousin [`.take_while(pred)`](#iterator-adapters)
+caps by a *condition* instead of a count — it stops at the first item that fails the test.
+Don't confuse `.take_while` with [`.filter`](#iterator-adapters): `take_while` **stops** at a
+failure, `filter` **skips** it and keeps going.
+
+First seen in: [From-Zero Interlude 28b](../from-zero/rust/28b-zip-take-takewhile-count/use-it.md)
+
+## `.copied()` — turn `&T` items into owned `T` {#copied}
+
+**In one line:** an adapter that dereferences each item, turning a stream of references
+(`&i32`) into a stream of owned values (`i32`) — only for [`Copy`](#copy) types.
+
+[`.iter()`](#for-iter-enumerate) borrows a collection, so it yields *references*. When the rest
+of your chain (or a `Vec<i32>` you're collecting into) wants plain values, `.copied()` bridges
+the gap without a manual `*`:
+
+```rust
+let numbers = vec![1, 2, 3];
+let doubled: Vec<i32> = numbers.iter().copied().map(|n| n * 2).collect();   // [2, 4, 6]
+```
+
+Without it the closure would see `&i32` and you'd sprinkle `*` around, or `.collect()` would
+refuse to build a `Vec<i32>` from `&i32`. It only works for `Copy` types (copying is cheap and
+leaves the original intact); for non-`Copy` data you'd use `.cloned()` and pay for the clone.
+
+First seen in: [From-Zero Interlude 28b](../from-zero/rust/28b-zip-take-takewhile-count/use-it.md)
+
+## `.count()` — consume and count {#count}
+
+**In one line:** a **consumer** that runs the iterator to the end and returns how many items
+came through (a `usize`).
+
+```rust
+let vowels = "flower".bytes().filter(|b| b"aeiou".contains(b)).count();   // 2
+```
+
+Because it's a consumer, `.count()` is the thing that finally *pulls* a lazy chain — nothing
+above it runs until `.count()` starts asking for items. Pair it with
+[`.take_while`](#iterator-adapters) to answer "how many items at the front satisfy this?" — the
+common-prefix length `first.bytes().zip(word.bytes()).take_while(|(a, b)| a == b).count()` is
+exactly that shape.
+
+First seen in: [From-Zero Interlude 28b](../from-zero/rust/28b-zip-take-takewhile-count/use-it.md)

@@ -87,6 +87,8 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 26 | [Closures (`\|x\| ...`)](26-closures/use-it.md) | ✅ done |
 | 27 | [Iterator adapters (`.map` · `.filter` · `.collect`)](27-iterator-adapters/use-it.md) | ✅ done |
 | 28 | [`iter` vs `into_iter` vs `iter_mut` (borrow · consume · mutate)](28-iter-into-iter-iter-mut/use-it.md) | ✅ done |
+| 28a | [How an iterator works — `.next()` and a cursor](28a-how-next-works/use-it.md) *(interlude)* | ✅ done |
+| 28b | [Scanning two streams — `.zip` · `.take` · `.take_while` · `.count`](28b-zip-take-takewhile-count/use-it.md) *(interlude)* | ✅ done |
 
 ### Later — macro-phases (firmed up as we reach them)
 
