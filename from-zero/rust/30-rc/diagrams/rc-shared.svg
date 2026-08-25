@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">Rc&lt;T&gt; = many owners, one heap value + a shared count</text>
+  <text x="32" y="66" font-size="14" fill="#57606a">three <tspan font-family="ui-monospace,monospace" fill="#1f2328">Rc</tspan> handles, all the same address → one value, counted</text>
+
+  <defs>
+    <marker id="rcarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8250df"/>
+    </marker>
+  </defs>
+
+  <!-- Stack: three owners -->
+  <text x="120" y="106" font-size="13" font-weight="700" fill="#57606a" text-anchor="middle">STACK — three owners</text>
+
+  <rect x="60" y="122" width="120" height="34" rx="6" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2"/>
+  <text x="120" y="144" font-size="13" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">first  →•</text>
+
+  <rect x="60" y="180" width="120" height="34" rx="6" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2"/>
+  <text x="120" y="202" font-size="13" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">second →•</text>
+
+  <rect x="60" y="238" width="120" height="34" rx="6" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2"/>
+  <text x="120" y="260" font-size="13" fill="#0b3d91" text-anchor="middle" font-family="ui-monospace,monospace">third  →•</text>
+
+  <!-- Heap block -->
+  <text x="470" y="106" font-size="13" font-weight="700" fill="#57606a" text-anchor="middle">HEAP — one shared block</text>
+  <rect x="360" y="150" width="220" height="94" rx="10" fill="#fff" stroke="#8250df" stroke-width="2"/>
+
+  <rect x="380" y="166" width="180" height="30" rx="5" fill="#efe6ff" stroke="#8250df" stroke-width="2"/>
+  <text x="470" y="186" font-size="13" fill="#5a2ca0" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">strong count: 3</text>
+
+  <rect x="380" y="202" width="180" height="30" rx="5" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="470" y="222" font-size="13" fill="#1a7f37" text-anchor="middle" font-weight="700">"shared text"</text>
+
+  <!-- arrows all to the block left edge -->
+  <line x1="182" y1="139" x2="358" y2="180" stroke="#8250df" stroke-width="2" marker-end="url(#rcarrow)"/>
+  <line x1="182" y1="197" x2="358" y2="192" stroke="#8250df" stroke-width="2" marker-end="url(#rcarrow)"/>
+  <line x1="182" y1="255" x2="358" y2="205" stroke="#8250df" stroke-width="2" marker-end="url(#rcarrow)"/>
+
+  <line x1="32" y1="286" x2="608" y2="286" stroke="#e1e4e8"/>
+  <text x="32" y="312" font-size="12.5" fill="#57606a"><tspan font-family="ui-monospace,monospace" fill="#1f2328">Rc::clone(&amp;x)</tspan> = copy the pointer + <tspan font-weight="700" fill="#1f2328">count += 1</tspan>. No copy of the value — the string exists once.</text>
+  <text x="32" y="334" font-size="12.5" fill="#57606a">An owner going out of scope = <tspan font-weight="700" fill="#1f2328">count − 1</tspan>. When it hits <tspan font-weight="700" fill="#b02a37">0</tspan>, the last owner is gone → the value is freed.</text>
+  <text x="32" y="356" font-size="12.5" fill="#57606a">Each handle is one 8-byte pointer — same size as a <tspan font-family="ui-monospace,monospace" fill="#1f2328">Box</tspan>. The count lives once, on the heap, shared.</text>
+  <text x="32" y="382" font-size="12.5" fill="#57606a">Shared owners can only <tspan font-weight="700" fill="#1f2328">read</tspan> the value — mutating a shared value needs <tspan font-family="ui-monospace,monospace" fill="#1f2328">RefCell</tspan> (next).</text>
+</svg>

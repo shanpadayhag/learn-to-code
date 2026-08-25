@@ -19,6 +19,7 @@ how to program in *some* language — just not Rust yet.
 - [`if let` with `Option` / `Some`](#if-let)
 - [`as` — numeric casts](#as-cast)
 - [`Box<T>` — a pointer to the heap](#box)
+- [`Rc<T>` — shared ownership](#rc)
 - [`&mut` — mutable references](#mut-ref)
 - [`while` loops](#while)
 - [`for` + ranges — counting loops (`..`, `..=`, `.rev()`)](#for-ranges)
@@ -307,6 +308,41 @@ two halves of a linked list: "a pointer to the next node" *or* "nothing, this is
 end," with no null pointers involved.
 
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
+
+## `Rc<T>` — shared ownership {#rc}
+
+**In one line:** a reference-counted pointer that lets **many** owners share one heap
+value, freeing it only when the last owner goes away.
+
+**What it is.** A [`Box<T>`](#box) allows exactly one owner. `Rc<T>` (*reference
+counted*) relaxes that: it stores the value on the heap next to a **count** of how many
+owners point at it. Every new owner bumps the count; every owner dropped lowers it; when
+it reaches zero the value is freed. Single-threaded only — the cross-thread sibling is
+`Arc<T>`.
+
+```rust
+use std::rc::Rc;
+let a = Rc::new(String::from("hi")); // count 1
+let b = Rc::clone(&a);               // count 2 — same allocation, NOT a copy
+println!("{}", Rc::strong_count(&a)); // 2
+```
+
+**`Rc::clone` vs `.clone()`.** `Rc::clone(&x)` copies only the pointer and adds `1` to
+the count — cheap and fixed-cost, unlike [`String::clone`](#string) which duplicates the
+whole buffer. It's written in the explicit `Rc::clone(&x)` form on purpose, to flag "cheap
+count bump, not a deep copy."
+
+**Trace the types.** `Rc::new(v)` gives `Rc<T>` (the first owner). `Rc::clone(&x)` takes
+`&Rc<T>` and gives another `Rc<T>` aimed at the same heap block. `Rc::strong_count(&x)`
+reads the current owner count as a `usize`.
+
+**Why this way.** Use it when a value has no single obvious owner — several parts of a
+structure share one node and it must live until the last of them is done. The trade: `Rc`
+hands out **read-only** shared access (mutating a value with many aliases would break the
+[borrow rules](#mut-ref)); pair it with `RefCell<T>` as `Rc<RefCell<T>>` when the shared
+value also needs to change.
+
+First seen in: [From-Zero concept 30 — `Rc<T>`](../from-zero/rust/30-rc/use-it.md)
 
 ## `&mut` — mutable references {#mut-ref}
 

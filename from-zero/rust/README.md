@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 30 — *(up next)*
+**Current:** Concept 31 — *(up next)*
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -82,12 +82,12 @@ they aren't memory topics. This table is the source of truth for where you are.
 
 ### Phase 7 — Closures and iterators
 
-| # | Concept | Status |
-|---|---------|--------|
-| 26 | [Closures (`\|x\| ...`)](26-closures/use-it.md) | ✅ done |
-| 27 | [Iterator adapters (`.map` · `.filter` · `.collect`)](27-iterator-adapters/use-it.md) | ✅ done |
-| 28 | [`iter` vs `into_iter` vs `iter_mut` (borrow · consume · mutate)](28-iter-into-iter-iter-mut/use-it.md) | ✅ done |
-| 28a | [How an iterator works — `.next()` and a cursor](28a-how-next-works/use-it.md) *(interlude)* | ✅ done |
+| #   | Concept                                                                                                                    | Status |
+| --- | -------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 26  | [Closures (`\|x\| ...`)](26-closures/use-it.md)                                                                            | ✅ done |
+| 27  | [Iterator adapters (`.map` · `.filter` · `.collect`)](27-iterator-adapters/use-it.md)                                      | ✅ done |
+| 28  | [`iter` vs `into_iter` vs `iter_mut` (borrow · consume · mutate)](28-iter-into-iter-iter-mut/use-it.md)                    | ✅ done |
+| 28a | [How an iterator works — `.next()` and a cursor](28a-how-next-works/use-it.md) *(interlude)*                               | ✅ done |
 | 28b | [Scanning two streams — `.zip` · `.take` · `.take_while` · `.count`](28b-zip-take-takewhile-count/use-it.md) *(interlude)* | ✅ done |
 
 ### Phase 8 — Smart pointers (who owns the heap value)
@@ -95,7 +95,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 29 | [`Box<T>` (put one value on the heap)](29-box/use-it.md) | ✅ done |
-| 30 | [`Rc<T>` (many owners, one value)](30-rc/use-it.md) | ⏳ up next |
+| 30 | [`Rc<T>` (many owners, one value)](30-rc/use-it.md) | ✅ done |
 
 ### Later — macro-phases (firmed up as we reach them)
 
