@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="638" height="378" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="42" font-size="20" font-weight="700" fill="#1f2328">Box&lt;T&gt; = a small pointer on the stack, the value on the heap</text>
+  <text x="32" y="66" font-size="14" fill="#57606a"><tspan font-family="ui-monospace,monospace" fill="#1f2328">let boxed = Box::new(10);</tspan> — the 10 is moved to the heap; boxed holds its address</text>
+
+  <!-- Stack column -->
+  <text x="120" y="112" font-size="13" font-weight="700" fill="#57606a" text-anchor="middle">STACK</text>
+  <rect x="40" y="128" width="200" height="70" rx="8" fill="#eef1f5" stroke="#a9b2bd" stroke-width="2"/>
+  <text x="140" y="153" font-size="12" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">boxed: Box&lt;i32&gt;</text>
+  <rect x="60" y="162" width="160" height="26" rx="5" fill="#dbe9ff" stroke="#4a7fd6" stroke-width="2"/>
+  <text x="140" y="180" font-size="13" fill="#0b3d91" text-anchor="middle" font-weight="700" font-family="ui-monospace,monospace">0x7ff… (address)</text>
+  <text x="140" y="220" font-size="12" fill="#57606a" text-anchor="middle">just 8 bytes — a pointer</text>
+
+  <!-- Heap column -->
+  <text x="500" y="112" font-size="13" font-weight="700" fill="#57606a" text-anchor="middle">HEAP</text>
+  <rect x="400" y="128" width="200" height="70" rx="8" fill="#fff" stroke="#a9b2bd" stroke-width="2"/>
+  <text x="500" y="153" font-size="12" fill="#57606a" text-anchor="middle">room the Box owns</text>
+  <rect x="460" y="162" width="80" height="26" rx="5" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="500" y="180" font-size="15" fill="#1a7f37" text-anchor="middle" font-weight="700">10</text>
+  <text x="500" y="220" font-size="12" fill="#57606a" text-anchor="middle">the actual value</text>
+
+  <!-- arrow -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a7fd6"/>
+    </marker>
+  </defs>
+  <line x1="222" y1="175" x2="458" y2="175" stroke="#4a7fd6" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="340" y="167" font-size="12" fill="#4a7fd6" text-anchor="middle" font-weight="700">points to</text>
+
+  <line x1="32" y1="262" x2="608" y2="262" stroke="#e1e4e8"/>
+  <text x="32" y="290" font-size="13" fill="#1f2328" font-weight="700">The box is always 8 bytes — no matter how big the heap value is.</text>
+  <text x="32" y="312" font-size="12.5" fill="#57606a">That fixed size is what lets a recursive type (a node holding a node) finally have a knowable size:</text>
+  <text x="32" y="332" font-size="12.5" fill="#57606a" font-family="ui-monospace,monospace">next: Option&lt;Box&lt;Node&gt;&gt;</text>
+  <text x="250" y="332" font-size="12.5" fill="#57606a">— a pointer to the next node, or nothing, at a fixed 8 bytes.</text>
+  <text x="32" y="358" font-size="12.5" fill="#57606a">When <tspan font-family="ui-monospace,monospace" fill="#1f2328">boxed</tspan> goes out of scope, the one owner frees the heap value automatically.</text>
+</svg>

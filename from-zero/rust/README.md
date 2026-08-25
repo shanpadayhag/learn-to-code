@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 29 — *(up next)*
+**Current:** Concept 30 — *(up next)*
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -90,10 +90,17 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 28a | [How an iterator works — `.next()` and a cursor](28a-how-next-works/use-it.md) *(interlude)* | ✅ done |
 | 28b | [Scanning two streams — `.zip` · `.take` · `.take_while` · `.count`](28b-zip-take-takewhile-count/use-it.md) *(interlude)* | ✅ done |
 
+### Phase 8 — Smart pointers (who owns the heap value)
+
+| # | Concept | Status |
+|---|---------|--------|
+| 29 | [`Box<T>` (put one value on the heap)](29-box/use-it.md) | ✅ done |
+| 30 | [`Rc<T>` (many owners, one value)](30-rc/use-it.md) | ⏳ up next |
+
 ### Later — macro-phases (firmed up as we reach them)
 
-More collections → smart pointers (`Box` · `Rc` · `RefCell`) →
-closures & iterators → advanced (concurrency · `async` · `unsafe`).
+Smart pointers continue (`RefCell` · interior mutability) → advanced
+(concurrency · `async` · `unsafe`).
 
 ## How this relates to the rest of the repo
 
