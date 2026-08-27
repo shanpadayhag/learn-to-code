@@ -146,5 +146,6 @@ but pays a small cost to make the count safe. You'll meet `Arc` in the concurren
 - What the counter physically *is* — a second number sitting next to your value on the heap — why
   `Rc::clone` is one pointer copy plus `+1`, and how the count reaching zero triggers the free:
   [Under the hood](under-the-hood.md).
-- Then the smart-pointer story continues with **`RefCell<T>`** and interior mutability — the
-  read-only limit above, lifted safely — and the famous `Rc<RefCell<T>>` pairing.
+- Then [Concept 31 — `RefCell<T>`](../31-refcell/use-it.md): interior mutability — the read-only
+  limit above, lifted safely by moving the borrow check to run time — leading to the famous
+  [`Rc<RefCell<T>>`](../32-rc-refcell/use-it.md) pairing.

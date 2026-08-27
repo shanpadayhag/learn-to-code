@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328"><tspan font-family="ui-monospace,monospace">RefCell&lt;T&gt;</tspan> — the same borrow rule, checked at run time</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">a tiny <tspan font-weight="700" fill="#8250df">borrow flag</tspan> tracks who's borrowing now; break the rule and it <tspan font-weight="700" fill="#b02a37">panics</tspan> instead of failing to compile</text>
+
+  <!-- Left: compile-time & / &mut -->
+  <rect x="32" y="92" width="286" height="272" rx="12" fill="#eef4ff" stroke="#4c8dff" stroke-width="1.5"/>
+  <text x="175" y="120" font-size="14" font-weight="700" fill="#1f4e9c" text-anchor="middle">&amp; / &amp;mut — compile time</text>
+  <text x="175" y="144" font-size="12.5" fill="#57606a" text-anchor="middle">the compiler proves the rule, then</text>
+  <text x="175" y="162" font-size="12.5" fill="#57606a" text-anchor="middle">erases the check — zero runtime cost</text>
+
+  <rect x="70" y="188" width="210" height="52" rx="8" fill="#fff" stroke="#4c8dff" stroke-width="1.5"/>
+  <text x="175" y="212" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328" text-anchor="middle">let mut x = 5;</text>
+  <text x="175" y="230" font-size="12.5" font-family="ui-monospace,monospace" fill="#1f2328" text-anchor="middle">let r = &amp;mut x;</text>
+
+  <rect x="70" y="256" width="210" height="76" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="1.5"/>
+  <text x="175" y="280" font-size="12.5" fill="#b02a37" text-anchor="middle">break the rule →</text>
+  <text x="175" y="302" font-size="12.5" font-weight="700" fill="#b02a37" text-anchor="middle">won't compile</text>
+  <text x="175" y="322" font-size="11.5" fill="#57606a" text-anchor="middle">caught before the program runs</text>
+
+  <!-- Right: RefCell runtime -->
+  <rect x="362" y="92" width="286" height="272" rx="12" fill="#efe6ff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="505" y="120" font-size="14" font-weight="700" fill="#6b30c9" text-anchor="middle">RefCell — run time</text>
+  <text x="505" y="144" font-size="12.5" fill="#57606a" text-anchor="middle">a real flag in memory is checked</text>
+  <text x="505" y="162" font-size="12.5" fill="#57606a" text-anchor="middle">as each borrow happens</text>
+
+  <!-- the cell -->
+  <rect x="400" y="182" width="210" height="60" rx="8" fill="#fff" stroke="#8250df" stroke-width="1.5"/>
+  <rect x="412" y="196" width="120" height="32" rx="6" fill="#d7f5dd" stroke="#3fa45b" stroke-width="1.5"/>
+  <text x="472" y="217" font-size="13" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">value: 5</text>
+  <rect x="540" y="196" width="58" height="32" rx="6" fill="#fff3d4" stroke="#d4a72c" stroke-width="1.5"/>
+  <text x="569" y="212" font-size="10.5" fill="#9a6700" text-anchor="middle">flag</text>
+  <text x="569" y="224" font-size="10.5" font-family="ui-monospace,monospace" fill="#9a6700" text-anchor="middle">0</text>
+
+  <text x="505" y="262" font-size="12" font-family="ui-monospace,monospace" fill="#1f2328" text-anchor="middle">cell.borrow() / cell.borrow_mut()</text>
+
+  <rect x="400" y="274" width="210" height="76" rx="8" fill="#ffe3e3" stroke="#d1666b" stroke-width="1.5"/>
+  <text x="505" y="298" font-size="12.5" fill="#b02a37" text-anchor="middle">break the rule →</text>
+  <text x="505" y="320" font-size="12.5" font-weight="700" fill="#b02a37" text-anchor="middle">panic! (BorrowMutError)</text>
+  <text x="505" y="340" font-size="11.5" fill="#57606a" text-anchor="middle">caught while the program runs</text>
+
+  <text x="340" y="390" font-size="12.5" fill="#57606a" text-anchor="middle">same rule — <tspan font-weight="700" fill="#1f2328">many readers XOR one writer</tspan> — only the moment of checking moved</text>
+</svg>

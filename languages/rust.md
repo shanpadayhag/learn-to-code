@@ -20,6 +20,7 @@ how to program in *some* language — just not Rust yet.
 - [`as` — numeric casts](#as-cast)
 - [`Box<T>` — a pointer to the heap](#box)
 - [`Rc<T>` — shared ownership](#rc)
+- [`RefCell<T>` — mutate through a shared reference](#refcell)
 - [`&mut` — mutable references](#mut-ref)
 - [`while` loops](#while)
 - [`for` + ranges — counting loops (`..`, `..=`, `.rev()`)](#for-ranges)
@@ -343,6 +344,39 @@ hands out **read-only** shared access (mutating a value with many aliases would 
 value also needs to change.
 
 First seen in: [From-Zero concept 30 — `Rc<T>`](../from-zero/rust/30-rc/use-it.md)
+
+## `RefCell<T>` — mutate through a shared reference {#refcell}
+
+**In one line:** a wrapper that moves the borrow check from compile time to run time,
+letting you mutate a value through a shared `&` — and **panicking** if you break the
+borrow rules.
+
+**What it is.** [`&mut`](#mut-ref) enforces "many readers XOR one writer" at compile time,
+for free. `RefCell<T>` enforces the *same* rule at **run time** instead, using a small
+**borrow flag** stored next to the value. This lets you change a value you only hold a
+shared `&` to — called **interior mutability** — for patterns the compiler can't prove
+safe ahead of time.
+
+```rust
+use std::cell::RefCell;
+let cell = RefCell::new(5);   // no `mut` needed
+*cell.borrow_mut() += 10;     // write handle → change through a shared &
+println!("{}", cell.borrow()); // 15  (read handle)
+```
+
+**`.borrow()` / `.borrow_mut()`.** `.borrow()` returns a `Ref<T>` (a shared read; many at
+once); `.borrow_mut()` returns a `RefMut<T>` (one exclusive write). You reach the value
+through the handle with [`*`](#deref); the handle restores the flag when it drops, so
+**keep borrows short**.
+
+**The trade.** Break the rule — e.g. two live `.borrow_mut()` at once — and it compiles
+but **panics** (`already borrowed: BorrowMutError`). You swapped a compile-time guarantee
+for a runtime one, plus a tiny per-borrow check. Prefer plain `&mut`/`let mut` when it
+already compiles; reach for `RefCell` when it doesn't but you can prove the access is safe.
+Single-threaded only (the cross-thread siblings are `Mutex`/`RwLock`); most often seen
+paired with [`Rc`](#rc) as `Rc<RefCell<T>>` for shared **mutable** state.
+
+First seen in: [From-Zero concept 31 — `RefCell<T>`](../from-zero/rust/31-refcell/use-it.md)
 
 ## `&mut` — mutable references {#mut-ref}
 
