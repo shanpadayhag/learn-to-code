@@ -53,6 +53,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 14 | [Enums](14-enums/use-it.md) | ✅ done |
 | 15 | [`Option` (no more null)](15-option/use-it.md) | ✅ done |
 | 15a | [Opening an Option safely (`.unwrap()`, tuple-match, `.zip()`)](15a-opening-options-safely/use-it.md) *(interlude)* | ✅ done |
+| 15b | [Reaching inside an Option (`.take()`, `.as_ref()`, `.as_mut()`)](15b-taking-and-borrowing-inside-option/use-it.md) *(interlude)* | ✅ done |
 | 16 | [Pattern matching with `match`](16-match/use-it.md) | ✅ done |
 
 ### Phase 4 — Collections and generics (many values, any type)
@@ -95,6 +96,7 @@ they aren't memory topics. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 29 | [`Box<T>` (put one value on the heap)](29-box/use-it.md) | ✅ done |
+| 29a | [Walking and building a linked list (Add Two Numbers)](29a-walking-a-linked-list/use-it.md) *(interlude)* | ✅ done |
 | 30 | [`Rc<T>` (many owners, one value)](30-rc/use-it.md) | ✅ done |
 
 ### Later — macro-phases (firmed up as we reach them)

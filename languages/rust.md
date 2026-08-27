@@ -483,6 +483,10 @@ So the variable is always left in a valid state. If the list was already empty,
 **Without it.** You'd reach for `std::mem::replace(&mut first_digit, None)` by hand —
 which is exactly what `.take()` is shorthand for.
 
+Taught from zero — `.take()` alongside `.as_ref()` / `.as_mut()` as the three ways to reach
+inside an `Option` without consuming it — in
+[From-Zero Interlude 15b](../from-zero/rust/15b-taking-and-borrowing-inside-option/use-it.md).
+
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
 
 ## `Option::as_mut` {#option-as-mut}
@@ -499,6 +503,11 @@ opposite of what we want. `.as_mut()` instead borrows into the `Option`:
 
 So: `.take()` when you mean to *remove* the value, `.as_mut()` when you mean to *keep
 it and borrow it*.
+
+Taught from zero — pushing the borrow *inside* the Option — in
+[From-Zero Interlude 15b](../from-zero/rust/15b-taking-and-borrowing-inside-option/use-it.md);
+applied to the tail-cursor list build in
+[From-Zero Interlude 29a](../from-zero/rust/29a-walking-a-linked-list/use-it.md).
 
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
 
