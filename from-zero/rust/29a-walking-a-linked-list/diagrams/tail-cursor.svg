@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="678" height="398" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328">Building a list: a dummy head + a <tspan font-family="ui-monospace,monospace" fill="#8250df">tail</tspan> cursor that steps forward</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">attach a node after <tspan font-family="ui-monospace,monospace">tail</tspan>, then move <tspan font-family="ui-monospace,monospace">tail</tspan> onto it — the real answer is everything after the dummy</text>
+
+  <defs>
+    <marker id="ptr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#57606a"/>
+    </marker>
+    <marker id="cur" markerWidth="10" markerHeight="10" refX="5" refY="8" orient="auto">
+      <path d="M5,9 L1,1 L9,1 z" fill="#8250df"/>
+    </marker>
+  </defs>
+
+  <!-- node helper style: box split into val | next -->
+  <!-- dummy -->
+  <g>
+    <rect x="40" y="150" width="90" height="46" rx="8" fill="#eaecef" stroke="#8a94a0" stroke-width="2"/>
+    <line x1="100" y1="150" x2="100" y2="196" stroke="#8a94a0" stroke-width="1.5"/>
+    <text x="70" y="179" font-size="15" font-family="ui-monospace,monospace" fill="#57606a" text-anchor="middle">0</text>
+    <circle cx="115" cy="173" r="4" fill="#57606a"/>
+    <text x="85" y="216" font-size="11.5" fill="#8a94a0" text-anchor="middle">dummy (discarded)</text>
+  </g>
+
+  <!-- node 7 -->
+  <g>
+    <rect x="200" y="150" width="90" height="46" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+    <line x1="260" y1="150" x2="260" y2="196" stroke="#3fa45b" stroke-width="1.5"/>
+    <text x="230" y="179" font-size="15" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">7</text>
+    <circle cx="275" cy="173" r="4" fill="#3fa45b"/>
+  </g>
+
+  <!-- node 0 -->
+  <g>
+    <rect x="360" y="150" width="90" height="46" rx="8" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+    <line x1="420" y1="150" x2="420" y2="196" stroke="#3fa45b" stroke-width="1.5"/>
+    <text x="390" y="179" font-size="15" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">0</text>
+    <circle cx="435" cy="173" r="4" fill="#3fa45b"/>
+  </g>
+
+  <!-- node 8 (just attached) -->
+  <g>
+    <rect x="520" y="150" width="90" height="46" rx="8" fill="#fff3d4" stroke="#d4a72c" stroke-width="2.5"/>
+    <line x1="580" y1="150" x2="580" y2="196" stroke="#d4a72c" stroke-width="1.5"/>
+    <text x="550" y="179" font-size="15" font-family="ui-monospace,monospace" fill="#9a6700" text-anchor="middle">8</text>
+    <text x="595" y="178" font-size="13" font-family="ui-monospace,monospace" fill="#b02a37" text-anchor="middle">∅</text>
+    <text x="565" y="216" font-size="11.5" fill="#9a6700" text-anchor="middle">just attached</text>
+  </g>
+
+  <!-- next-pointers between nodes -->
+  <line x1="128" y1="173" x2="196" y2="173" stroke="#57606a" stroke-width="2" marker-end="url(#ptr)"/>
+  <line x1="288" y1="173" x2="356" y2="173" stroke="#57606a" stroke-width="2" marker-end="url(#ptr)"/>
+  <line x1="448" y1="173" x2="516" y2="173" stroke="#57606a" stroke-width="2" marker-end="url(#ptr)"/>
+
+  <!-- tail cursor pointing at the just-attached node -->
+  <line x1="565" y1="285" x2="565" y2="202" stroke="#8250df" stroke-width="2.5" marker-end="url(#cur)"/>
+  <rect x="518" y="288" width="94" height="30" rx="7" fill="#efe6ff" stroke="#8250df" stroke-width="2"/>
+  <text x="565" y="308" font-size="13" font-family="ui-monospace,monospace" fill="#8250df" text-anchor="middle">tail</text>
+
+  <!-- the step annotation -->
+  <text x="340" y="352" font-size="13" fill="#57606a" text-anchor="middle"><tspan font-family="ui-monospace,monospace" font-weight="700" fill="#8250df">tail = tail.next.as_mut().unwrap()</tspan>  —  re-points the cursor onto the new node,</text>
+  <text x="340" y="373" font-size="13" fill="#57606a" text-anchor="middle">so the next attach lands at the end. The nodes never move; only <tspan font-family="ui-monospace,monospace" fill="#8250df">tail</tspan> walks.</text>
+</svg>

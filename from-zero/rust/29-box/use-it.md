@@ -133,6 +133,9 @@ If none of those apply, don't box — inline is simpler and faster. `Box` is for
 - What a `Box` actually *is* in memory — an 8-byte pointer on the stack aimed at a value on the
   heap — why `Box<i32>` and `Box<[i32; 100]>` are the **same size**, and why moving a `Box` is
   cheap while the value it owns never budges: [Under the hood](under-the-hood.md).
+- Then [Interlude 29a — Walking and building a linked list](../29a-walking-a-linked-list/use-it.md):
+  now that you can *define* a boxed node, how to *read* a chain you're handed and *build* one node
+  at a time — the pattern behind [Add Two Numbers](../../../problems/0002-add-two-numbers/README.md).
 - Then [Concept 30 — `Rc<T>`](../30-rc/use-it.md): a `Box` allows exactly **one** owner. When
   several parts of a program need to own the *same* value and you can't say which will finish
   last, `Rc` shares one heap value between many owners by counting them.
