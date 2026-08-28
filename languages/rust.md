@@ -67,6 +67,7 @@ how to program in *some* language — just not Rust yet.
 - [string indexing — why `s[i]` is forbidden](#string-indexing)
 - [`.trim()` — a borrowed slice without the outer whitespace](#trim)
 - [`trait` — defining and implementing shared behaviour](#trait)
+- [`thread::spawn` — run code on a new thread](#thread-spawn)
 
 ## `use` declarations {#use}
 
@@ -1728,3 +1729,40 @@ common-prefix length `first.bytes().zip(word.bytes()).take_while(|(a, b)| a == b
 exactly that shape.
 
 First seen in: [From-Zero Interlude 28b](../from-zero/rust/28b-zip-take-takewhile-count/use-it.md)
+
+## `thread::spawn` — run code on a new thread {#thread-spawn}
+
+**In one line:** starts a **second** line of execution, on its own stack, running the closure you
+hand it — so two pieces of code make progress **at the same time**.
+
+**What it is.** `std::thread::spawn(f)` launches a new OS thread that runs the closure `f`, while the
+current thread keeps going. It returns a **`JoinHandle`**; call `.join()` on it to block until that
+thread finishes and receive what its closure returned, wrapped in a [`Result`](#result) (`Ok(value)`,
+or `Err` if the thread panicked).
+
+```rust
+use std::thread;
+let handle = thread::spawn(|| 2 + 2);   // runs on a new thread
+let answer = handle.join().unwrap();     // wait; get the return value back
+println!("{}", answer);                   // 4
+```
+
+**`move` is usually required.** A spawned thread may outlive the function that started it, so its
+closure can't *borrow* the caller's local variables — that reference could dangle once the caller's
+[stack frame](#pub-fn) is gone. Prefix the closure with `move` to make it **take ownership** of
+everything it captures; the value is moved onto the thread and lives as long as the thread does. It's
+the ordinary [move](#to-owned-clone) rule doing double duty as a concurrency safety guarantee.
+
+```rust
+let data = String::from("work");
+let handle = thread::spawn(move || println!("{}", data)); // `data` moved into the thread
+handle.join().unwrap();
+// `data` is no longer usable here — ownership left.
+```
+
+**Why this way.** Threads suit independent work that can run at once (two files, a slow computation
+off to the side). Order between threads is **not** guaranteed without `.join()`. Handing one value to
+one thread is what `move` does; letting *several* threads share one value needs the thread-safe pair
+`Arc<Mutex<T>>` (the concurrent siblings of [`Rc`](#rc)/[`RefCell`](#refcell)).
+
+First seen in: [From-Zero concept 34 — threads](../from-zero/rust/34-threads/use-it.md)

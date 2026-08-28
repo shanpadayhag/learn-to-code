@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 440" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="698" height="438" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328">Threads — a second line of execution, on its own stack</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a"><tspan font-family="ui-monospace,monospace" font-weight="700" fill="#bc4c00">move</tspan> hands ownership across the boundary, so the value can't dangle when <tspan font-weight="700">main</tspan> moves on</text>
+
+  <defs>
+    <marker id="tMove" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#bc4c00"/>
+    </marker>
+    <marker id="tHeap" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#1a7f37"/>
+    </marker>
+  </defs>
+
+  <!-- main thread stack -->
+  <text x="150" y="104" font-size="12.5" font-weight="700" fill="#0969da" text-anchor="middle">main thread — its own stack</text>
+  <rect x="50" y="116" width="200" height="150" rx="10" fill="#eaf2fb" stroke="#0969da" stroke-width="2"/>
+  <rect x="70" y="136" width="160" height="60" rx="7" fill="#fff" stroke="#0969da" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="150" y="160" font-size="11.5" fill="#8a94a0" text-anchor="middle" font-family="ui-monospace,monospace">data: String</text>
+  <text x="150" y="180" font-size="10.5" fill="#8a94a0" text-anchor="middle">(moved out — gone from here)</text>
+  <text x="150" y="230" font-size="11" fill="#57606a" text-anchor="middle">main keeps running…</text>
+  <text x="150" y="250" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">handle.join()</text>
+
+  <!-- spawned thread stack -->
+  <text x="550" y="104" font-size="12.5" font-weight="700" fill="#bc4c00" text-anchor="middle">spawned thread — its own stack</text>
+  <rect x="450" y="116" width="200" height="150" rx="10" fill="#fff1e7" stroke="#bc4c00" stroke-width="2"/>
+  <rect x="470" y="136" width="160" height="60" rx="7" fill="#fff" stroke="#bc4c00" stroke-width="1.5"/>
+  <text x="550" y="160" font-size="11.5" fill="#bc4c00" text-anchor="middle" font-family="ui-monospace,monospace">data: String</text>
+  <text x="550" y="180" font-size="10.5" fill="#bc4c00" text-anchor="middle">now OWNED here</text>
+  <text x="550" y="230" font-size="11" fill="#57606a" text-anchor="middle" font-family="ui-monospace,monospace">|| { use data }</text>
+  <text x="550" y="250" font-size="11" fill="#57606a" text-anchor="middle">runs at the same time</text>
+
+  <!-- move arrow between stacks -->
+  <line x1="250" y1="166" x2="470" y2="166" stroke="#bc4c00" stroke-width="2.5" marker-end="url(#tMove)"/>
+  <rect x="300" y="120" width="120" height="24" rx="6" fill="#fff" stroke="#bc4c00" stroke-width="1.5"/>
+  <text x="360" y="137" font-size="11.5" font-weight="700" fill="#bc4c00" text-anchor="middle" font-family="ui-monospace,monospace">thread::spawn</text>
+  <text x="360" y="188" font-size="10.5" fill="#bc4c00" text-anchor="middle">move: ownership crosses over</text>
+
+  <!-- shared heap buffer -->
+  <text x="350" y="308" font-size="12.5" font-weight="700" fill="#1a7f37" text-anchor="middle">the heap (one buffer — never copied)</text>
+  <rect x="230" y="320" width="240" height="46" rx="9" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+  <text x="350" y="348" font-size="13" font-family="ui-monospace,monospace" fill="#1a7f37" text-anchor="middle">"work" · len 4 · cap 4</text>
+  <line x1="550" y1="196" x2="430" y2="322" stroke="#1a7f37" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#tHeap)"/>
+
+  <text x="350" y="398" font-size="12" fill="#57606a" text-anchor="middle">only the owner (ptr · len · cap) moves between stacks — the heap buffer stays put, just re-owned</text>
+  <text x="350" y="422" font-size="12" font-style="italic" fill="#8a94a0" text-anchor="middle">without move the closure would BORROW main's frame — which may vanish first → Rust rejects it</text>
+</svg>
