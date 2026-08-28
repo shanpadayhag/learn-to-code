@@ -21,6 +21,17 @@ The surprise for beginners: you've been relying on lifetimes since Concept 10 **
 writing one**. Most of the time the compiler works them out silently. This lesson is about the
 few times it can't — and asks you to write the name `'a` yourself.
 
+### In one line
+A reference breaks if its value is **destroyed while you're still pointing at it** — and it doesn't
+matter *how* it got destroyed:
+
+- it got **moved** somewhere else (ownership left),
+- it went **out of scope** and was cleaned up,
+- or the **function it lived in returned**.
+
+`'a` is just the compiler proving *none of those happen* before you're finished with the reference.
+That's the whole job of a lifetime.
+
 ## You've already used lifetimes (invisibly)
 Every `&` you've written had a lifetime; the compiler just filled it in for you. This compiles
 with no annotation:
