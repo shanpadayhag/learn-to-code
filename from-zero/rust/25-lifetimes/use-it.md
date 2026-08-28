@@ -95,6 +95,48 @@ So the returned reference can never outlive the shorter-lived of its inputs. Tha
 guarantee that stops a dangling reference: the answer is provably tied to data that's still
 alive.
 
+## The trap: don't return a reference to something you made *inside*
+This is the mistake almost everyone hits first. You make a value in the function and try to hand
+back a reference to it:
+
+```rust
+fn generate_value<'a>() -> &'a String {
+    let val = String::from("Hello World");  // a NEW value, born in this function
+    &val                                     // ... hand back its address
+}                                            // ← val is cleaned up here
+```
+
+It won't compile (`error[E0515]: cannot return value referencing temporary value`). Here's the
+whole reason in three steps:
+
+1. A reference isn't a copy — it's just an **address**, a note that says *"the value is over
+   there."*
+2. `String::from(...)` makes a **new value that lives inside this function**. `&val` is a note
+   pointing at it.
+3. When the function ends, that value is **cleaned up** — so the note now points at nothing. 💥
+
+```
+inside:  val ──► "Hello World"        after return:  val ──► 🔥 (cleaned up)
+```
+
+No `'a` can save this, because the value simply doesn't live long enough — there's nothing
+outside for the borrow to tie to. **`'a` describes a borrow of data that already lives somewhere;
+it can't keep a local value alive.**
+
+The fix is to stop borrowing and **return the value itself** — hand over ownership, no lifetime
+needed:
+
+```rust
+fn generate_value() -> String {
+    let mut val = String::from("Hello World");
+    val.push_str("!");
+    val                                      // the value moves OUT to the caller
+}
+```
+
+Rule of thumb: **made it inside → return the value. Borrowing something the caller already owns →
+return a `&reference` (and that's when `'a` shows up).**
+
 ## Back to your own code
 This is the `'a` you hit in the [Longest Common Prefix challenge](../../../challenges/longest-common-prefix/solution.rs.md):
 
