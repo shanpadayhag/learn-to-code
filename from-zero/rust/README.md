@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 33 — *(up next)*
+**Current:** Concept 34 — *(up next)*
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -100,11 +100,11 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 30 | [`Rc<T>` (many owners, one value)](30-rc/use-it.md) | ✅ done |
 | 31 | [`RefCell<T>` (mutate through a shared reference)](31-refcell/use-it.md) | ✅ done |
 | 32 | [`Rc<RefCell<T>>` (shared, mutable state)](32-rc-refcell/use-it.md) | ✅ done |
+| 33 | [`Weak<T>` (breaking reference cycles)](33-weak/use-it.md) | ✅ done |
 
 ### Later — macro-phases (firmed up as we reach them)
 
-Smart pointers wrap up (`Weak` · breaking reference cycles) → advanced
-(concurrency · `async` · `unsafe`).
+Advanced: concurrency (`async`) · `unsafe`.
 
 ## How this relates to the rest of the repo
 

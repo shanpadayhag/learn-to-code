@@ -20,6 +20,7 @@ how to program in *some* language — just not Rust yet.
 - [`as` — numeric casts](#as-cast)
 - [`Box<T>` — a pointer to the heap](#box)
 - [`Rc<T>` — shared ownership](#rc)
+- [`Weak<T>` — a non-owning `Rc` handle](#weak)
 - [`RefCell<T>` — mutate through a shared reference](#refcell)
 - [`&mut` — mutable references](#mut-ref)
 - [`while` loops](#while)
@@ -344,6 +345,41 @@ hands out **read-only** shared access (mutating a value with many aliases would 
 value also needs to change.
 
 First seen in: [From-Zero concept 30 — `Rc<T>`](../from-zero/rust/30-rc/use-it.md)
+
+## `Weak<T>` — a non-owning `Rc` handle {#weak}
+
+**In one line:** a handle that *points at* an [`Rc`](#rc) value without owning it, so it never
+keeps the value alive — the tool for breaking reference cycles.
+
+**What it is.** An `Rc` allocation carries **two** counts: a **strong** count (owning handles) and
+a **weak** count (non-owning handles). The value is dropped when **strong** hits `0`; the allocation
+itself is freed when **both** hit `0`. A `Weak<T>` bumps only the weak count, so it has no say over
+the value's lifetime.
+
+```rust
+use std::rc::{Rc, Weak};
+let strong = Rc::new(42);
+let weak: Weak<i32> = Rc::downgrade(&strong); // strong count still 1
+println!("{:?}", weak.upgrade().map(|r| *r)); // Some(42)
+drop(strong);
+println!("{:?}", weak.upgrade());              // None — freed, safely
+```
+
+**`downgrade` / `upgrade`.** `Rc::downgrade(&rc)` turns an owning `Rc<T>` into a non-owning
+`Weak<T>`. To read through it you must `weak.upgrade()`, which returns `Option<Rc<T>>`: `Some(rc)`
+(a fresh temporary owner) while the value lives, `None` once every strong owner is gone. That
+[`Option`](#option) is the guard rail — a `Weak` can never hand you a dangling pointer.
+`Weak::new()` makes an empty handle whose `upgrade()` is always `None` (a "nothing here yet"
+placeholder).
+
+**Why this way.** In a two-way structure — child↔parent, node↔graph — making *both* directions
+`Rc` creates a cycle whose counts never reach `0`, i.e. a leak. Fix it by the rule
+**parent-owns-child uses `Rc`, child-points-back uses `Weak`**: the back-link points home without
+propping the count up, so the loop can always come apart. Reach for `Weak` specifically to break an
+ownership loop or to hold a deliberately non-keeping reference (a cache/observer that shouldn't keep
+its target alive).
+
+First seen in: [From-Zero concept 33 — `Weak<T>`](../from-zero/rust/33-weak/use-it.md)
 
 ## `RefCell<T>` — mutate through a shared reference {#refcell}
 
