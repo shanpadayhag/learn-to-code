@@ -74,3 +74,4 @@ to the programmer, which is why double-free and use-after-free bugs are so commo
 
 ## Shows up in
 - [From-Zero Concept 08 — Ownership and moves](../from-zero/rust/08-ownership-and-moves/under-the-hood.md)
+- [From-Zero Concept 35 — `Arc<Mutex<T>>`](../from-zero/rust/35-arc-mutex/under-the-hood.md)

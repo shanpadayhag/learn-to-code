@@ -70,6 +70,7 @@ how to program in *some* language — just not Rust yet.
 - [`thread::spawn` — run code on a new thread](#thread-spawn)
 - [`Arc<T>` — shared ownership across threads](#arc)
 - [`Mutex<T>` — one thread at a time](#mutex)
+- [`mpsc::channel` — send values between threads](#mpsc-channel)
 
 ## `use` declarations {#use}
 
@@ -1838,3 +1839,45 @@ scope short — other threads are blocked for exactly as long as it lives. Locki
 hold blocks forever: a **deadlock**.
 
 First seen in: [From-Zero concept 35 — `Arc<Mutex<T>>`](../from-zero/rust/35-arc-mutex/use-it.md)
+
+## `mpsc::channel` — send values between threads {#mpsc-channel}
+
+**In one line:** a one-way pipe between threads — one end sends owned values in, the other receives
+them out in order, and **sending moves ownership**, so nothing is shared and no lock is involved.
+
+**What it is.** `std::sync::mpsc::channel()` returns a `(Sender<T>, Receiver<T>)` pair. `mpsc` is
+**m**ultiple **p**roducer, **s**ingle **c**onsumer: clone the `Sender` for as many sending threads as
+you like; there is exactly one `Receiver`.
+
+```rust
+use std::sync::mpsc;
+use std::thread;
+
+let (sender, receiver) = mpsc::channel();
+
+for id in 1..=3 {
+    let sender = sender.clone();                 // one sending end per thread
+    thread::spawn(move || sender.send(id).unwrap());
+}
+drop(sender);                                     // ⚠️ close the pipe: see below
+
+for value in receiver {                           // blocks between values, ends when closed
+    println!("{}", value);
+}
+```
+
+- **`.send(v)`** moves `v` into the channel; it returns [`Result`](#result), `Err` only if the
+  `Receiver` was dropped (and the `Err` hands your value back).
+- **`.recv()`** blocks until a value arrives; `Err` means every `Sender` has been dropped.
+- **`for x in receiver`** yields values until the channel closes. **`.try_recv()`** never blocks.
+
+**The one trap.** The channel counts live senders; the loop ends only when that count hits **0**. If
+the thread that owns the receiver also still holds a `Sender`, it waits forever — hence the
+`drop(sender)` above (or let it fall out of scope first).
+
+**Channel or [`Arc<Mutex<T>>`](#mutex)?** Send when the value can travel — pipelines, work queues,
+collecting results; share behind a lock when threads must all read *and* write one piece of state.
+The channel needs no lock in your code because ownership means the value belongs to exactly one place
+at every instant.
+
+First seen in: [From-Zero concept 36 — channels](../from-zero/rust/36-channels/use-it.md)
