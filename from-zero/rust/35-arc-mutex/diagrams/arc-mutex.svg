@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 520" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="698" height="518" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328">Arc&lt;Mutex&lt;T&gt;&gt; — many threads own it, one at a time may change it</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">every thread's stack holds its own <tspan font-family="ui-monospace,monospace" font-weight="700" fill="#8250df">Arc</tspan> handle · all of them point at the <tspan font-weight="700">same</tspan> heap box</text>
+
+  <defs>
+    <marker id="amPtr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#8250df"/>
+    </marker>
+    <marker id="amWait" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#9a6700"/>
+    </marker>
+  </defs>
+
+  <!-- three thread stacks -->
+  <text x="120" y="96" font-size="12" font-weight="700" fill="#0969da" text-anchor="middle">main thread — stack</text>
+  <rect x="35" y="106" width="170" height="86" rx="9" fill="#eaf2fb" stroke="#0969da" stroke-width="2"/>
+  <rect x="52" y="122" width="136" height="30" rx="6" fill="#fff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="120" y="142" font-size="11.5" font-family="ui-monospace,monospace" fill="#8250df" text-anchor="middle">counter: Arc</text>
+  <text x="120" y="174" font-size="10.5" fill="#57606a" text-anchor="middle">waiting in join()</text>
+
+  <text x="350" y="96" font-size="12" font-weight="700" fill="#bc4c00" text-anchor="middle">worker A — stack</text>
+  <rect x="265" y="106" width="170" height="86" rx="9" fill="#fff1e7" stroke="#bc4c00" stroke-width="2"/>
+  <rect x="282" y="122" width="136" height="30" rx="6" fill="#fff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="350" y="142" font-size="11.5" font-family="ui-monospace,monospace" fill="#8250df" text-anchor="middle">clone: Arc</text>
+  <rect x="282" y="158" width="136" height="26" rx="6" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="350" y="176" font-size="10.5" font-family="ui-monospace,monospace" fill="#9a6700" text-anchor="middle">MutexGuard — its turn</text>
+
+  <text x="580" y="96" font-size="12" font-weight="700" fill="#bc4c00" text-anchor="middle">worker B — stack</text>
+  <rect x="495" y="106" width="170" height="86" rx="9" fill="#fff1e7" stroke="#bc4c00" stroke-width="2"/>
+  <rect x="512" y="122" width="136" height="30" rx="6" fill="#fff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="580" y="142" font-size="11.5" font-family="ui-monospace,monospace" fill="#8250df" text-anchor="middle">clone: Arc</text>
+  <text x="580" y="176" font-size="10.5" fill="#9a6700" text-anchor="middle">asleep in .lock() — waiting</text>
+
+  <!-- pointers into the heap box -->
+  <line x1="120" y1="192" x2="250" y2="292" stroke="#8250df" stroke-width="1.8" marker-end="url(#amPtr)"/>
+  <line x1="350" y1="192" x2="350" y2="292" stroke="#8250df" stroke-width="1.8" marker-end="url(#amPtr)"/>
+  <line x1="580" y1="192" x2="452" y2="292" stroke="#8250df" stroke-width="1.8" marker-end="url(#amPtr)"/>
+
+  <!-- the one heap allocation -->
+  <text x="350" y="288" font-size="12.5" font-weight="700" fill="#1a7f37" text-anchor="middle">the heap — ONE box, shared by all three</text>
+  <rect x="175" y="298" width="350" height="152" rx="11" fill="#d7f5dd" stroke="#3fa45b" stroke-width="2"/>
+
+  <rect x="195" y="316" width="310" height="34" rx="7" fill="#fff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="210" y="338" font-size="12" font-family="ui-monospace,monospace" fill="#8250df">strong: 3</text>
+  <text x="490" y="338" font-size="10.5" fill="#57606a" text-anchor="end">atomic count — safe to bump from any thread</text>
+
+  <rect x="195" y="356" width="310" height="34" rx="7" fill="#fff8c5" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="210" y="378" font-size="12" font-family="ui-monospace,monospace" fill="#9a6700">lock: HELD</text>
+  <text x="490" y="378" font-size="10.5" fill="#57606a" text-anchor="end">worker A is inside · worker B waits</text>
+
+  <rect x="195" y="396" width="310" height="36" rx="7" fill="#fff" stroke="#1a7f37" stroke-width="1.8"/>
+  <text x="210" y="419" font-size="12.5" font-family="ui-monospace,monospace" fill="#1a7f37">value: 27</text>
+  <text x="490" y="419" font-size="10.5" fill="#57606a" text-anchor="end">only reachable while you hold the lock</text>
+
+  <!-- waiting arrow -->
+  <path d="M600,196 C640,240 620,330 530,368" fill="none" stroke="#9a6700" stroke-width="1.6" stroke-dasharray="4 4" marker-end="url(#amWait)"/>
+
+  <text x="350" y="478" font-size="12" fill="#57606a" text-anchor="middle">drop the guard (end of scope) → lock flips free → the next waiting thread wakes and goes in</text>
+  <text x="350" y="500" font-size="12" font-style="italic" fill="#8a94a0" text-anchor="middle">Arc = Rc with an unbreakable count · Mutex = RefCell that makes threads queue instead of panicking</text>
+</svg>

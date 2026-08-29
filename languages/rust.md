@@ -68,6 +68,8 @@ how to program in *some* language — just not Rust yet.
 - [`.trim()` — a borrowed slice without the outer whitespace](#trim)
 - [`trait` — defining and implementing shared behaviour](#trait)
 - [`thread::spawn` — run code on a new thread](#thread-spawn)
+- [`Arc<T>` — shared ownership across threads](#arc)
+- [`Mutex<T>` — one thread at a time](#mutex)
 
 ## `use` declarations {#use}
 
@@ -1766,3 +1768,73 @@ one thread is what `move` does; letting *several* threads share one value needs 
 `Arc<Mutex<T>>` (the concurrent siblings of [`Rc`](#rc)/[`RefCell`](#refcell)).
 
 First seen in: [From-Zero concept 34 — threads](../from-zero/rust/34-threads/use-it.md)
+
+## `Arc<T>` — shared ownership across threads {#arc}
+
+**In one line:** [`Rc<T>`](#rc) with a thread-safe owner count — many threads own one heap value.
+
+**What it is.** `std::sync::Arc<T>` ("**a**tomically **r**eference **c**ounted") is the same
+count-the-owners pointer as `Rc`, except the count is updated with **atomic** instructions, so two
+threads bumping it at the same instant can't corrupt it. `Arc::clone(&handle)` makes another owner
+(a pointer copy plus `+1`); the value is freed when the last handle drops.
+
+```rust
+use std::sync::Arc;
+use std::thread;
+
+let names = Arc::new(vec![String::from("ada"), String::from("alan")]);
+
+for _ in 0..2 {
+    let names = Arc::clone(&names);            // one owner per thread
+    thread::spawn(move || println!("{}", names.len()));
+}
+```
+
+**Why not just `Rc`?** `Rc`'s count is a plain `+= 1`, which the machine performs as read → add →
+write. Two threads can read the same old value and both write the same new one, losing an increment —
+the count then hits zero while a handle is still alive, freeing the value underneath it. The compiler
+rejects `Rc` across threads for exactly that reason. Atomics cost slightly more than plain arithmetic,
+so keep using `Rc` on a single thread.
+
+**`Arc` alone is read-only**, just like `Rc`. To *change* the shared value, pair it with a
+[`Mutex`](#mutex): `Arc<Mutex<T>>` is the thread-safe echo of [`Rc<RefCell<T>>`](#refcell).
+
+First seen in: [From-Zero concept 35 — `Arc<Mutex<T>>`](../from-zero/rust/35-arc-mutex/use-it.md)
+
+## `Mutex<T>` — one thread at a time {#mutex}
+
+**In one line:** a lock wrapped around a value: whoever holds the lock may change it, and everyone
+else waits their turn.
+
+**What it is.** `std::sync::Mutex<T>` ("**mut**ual **ex**clusion") stores a value plus a lock flag.
+`.lock()` waits until the flag is free, flips it, and returns a **`MutexGuard`** inside a
+[`Result`](#result). The guard acts like a [`&mut T`](#mut-ref); when it **drops** (end of scope) the
+lock is released — there is no `unlock` to forget.
+
+```rust
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+let counter = Arc::new(Mutex::new(0));
+let handle = {
+    let counter = Arc::clone(&counter);
+    thread::spawn(move || {
+        let mut value = counter.lock().unwrap();   // waits for its turn
+        *value += 1;
+    })                                              // guard drops here → unlocked
+};
+handle.join().unwrap();
+println!("{}", *counter.lock().unwrap());          // 1
+```
+
+**Compared with [`RefCell`](#refcell)**, which does the same job on one thread: `RefCell` **panics**
+if the value is already borrowed (a second borrow is a bug); `Mutex` **waits** instead (queuing is the
+normal case). `.lock()`'s `Err` means a thread **panicked while holding the lock**, so the value may
+be half-updated — Rust calls that a *poisoned* mutex.
+
+**Why this way.** The guard is the only route to the data, so you cannot read or write without
+locking, and scope-based release means an early `return` or a panic still unlocks. Keep the guard's
+scope short — other threads are blocked for exactly as long as it lives. Locking a mutex you already
+hold blocks forever: a **deadlock**.
+
+First seen in: [From-Zero concept 35 — `Arc<Mutex<T>>`](../from-zero/rust/35-arc-mutex/use-it.md)
