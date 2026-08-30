@@ -135,5 +135,6 @@ fn main() {
 ## Next
 - You now have both halves of Rust concurrency: **share a value** behind `Arc<Mutex<T>>`, or **send
   values** down a channel — and both are ownership rules you already knew, applied across stacks.
-- The one thing both still do is **block**: a thread waiting on a lock or on `recv` is parked, doing
-  nothing. The next step is `async`, where waiting doesn't tie up a thread at all.
+- Both rested on the same permission slip, checked at every boundary and never yet named:
+  [`Send` and `Sync`](../37-send-and-sync/use-it.md) — may this value *move* to another thread, and
+  may it be *shared* with one? That's what closes Phase 9.

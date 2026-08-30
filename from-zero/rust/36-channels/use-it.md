@@ -148,5 +148,6 @@ need to read *and* write one shared thing.
 ## Next
 - What a channel **is** in memory — a queue on the heap, handles on each stack, and how a value's
   ownership travels from one stack, through the queue, onto another: [Under the hood](under-the-hood.md).
-- After that, Phase 9's last question: what if a thread shouldn't *block* while it waits? That's where
-  `async` comes in.
+- After that, Phase 9's last question: what exactly does the compiler check when a value crosses a
+  thread boundary? Both the `move` in Concept 34 and the `Rc` → `Arc` swap in Concept 35 were one
+  rule with a name — [`Send` and `Sync`](../37-send-and-sync/use-it.md).

@@ -71,6 +71,7 @@ how to program in *some* language — just not Rust yet.
 - [`Arc<T>` — shared ownership across threads](#arc)
 - [`Mutex<T>` — one thread at a time](#mutex)
 - [`mpsc::channel` — send values between threads](#mpsc-channel)
+- [`Send` and `Sync` — what may cross a thread](#send-sync)
 
 ## `use` declarations {#use}
 
@@ -1881,3 +1882,54 @@ The channel needs no lock in your code because ownership means the value belongs
 at every instant.
 
 First seen in: [From-Zero concept 36 — channels](../from-zero/rust/36-channels/use-it.md)
+
+## `Send` and `Sync` — what may cross a thread {#send-sync}
+
+**In one line:** two marker traits the compiler checks at every thread boundary — **`Send`** = this
+value may *move* to another thread, **`Sync`** = a `&` to it may be *shared* with another thread.
+
+**What they are.** Traits with no methods, present only so a bound can ask about them. The exact
+relationship is worth memorising:
+
+> **`T: Sync`** if and only if **`&T: Send`.**
+
+They are **auto traits**: never `impl`ed, never `derive`d. The compiler grants them structurally —
+a struct or enum is `Send` if **every field** is `Send`, `Sync` if every field is `Sync`. So you
+never gain them by writing code, you only *lose* them to one bad field. They cost nothing at
+runtime: `Rc<i32>` and `Arc<i32>` are both 8 bytes and identical in memory.
+
+| type | `Send` | `Sync` | why |
+|---|---|---|---|
+| `i32`, `String`, `Vec<T>` | ✅ | ✅ | plain data |
+| `&T` | ✅ *(if `T: Sync`)* | ✅ | sending a reference **is** sharing the value |
+| [`Rc<T>`](#rc) | ❌ | ❌ | non-atomic owner count |
+| [`RefCell<T>`](#refcell) | ✅ *(if `T: Send`)* | ❌ | non-atomic borrow flag |
+| [`Arc<T>`](#arc) | ✅ *(if `T: Send + Sync`)* | ✅ *(same)* | atomic count |
+| [`Mutex<T>`](#mutex) | ✅ *(if `T: Send`)* | ✅ *(same)* | the lock makes sharing safe |
+| `MutexGuard<'_, T>` | ❌ | ✅ *(if `T: Sync`)* | must be unlocked by the locking thread |
+
+**Where the check happens.** Nowhere special — it's [`thread::spawn`](#thread-spawn)'s own signature,
+`F: FnOnce() -> T + Send + 'static, T: Send`. A [closure](#closures) is `Send` exactly when all its
+captures are, which is why the error points at the closure and then at the offending field inside it.
+
+**Ask the compiler about any type** in two lines — the bound is the whole test:
+
+```rust
+fn assert_send<T: Send>() {}
+fn assert_sync<T: Sync>() {}
+
+assert_send::<Arc<i32>>();        // fine
+// assert_send::<Rc<i32>>();      // `Rc<i32>` cannot be sent between threads safely
+// assert_sync::<RefCell<i32>>(); // `RefCell<i32>` cannot be shared between threads safely
+```
+
+**Reading the errors.** They differ by one word, and the word names the trait: **"cannot be sent"** =
+`Send`, **"cannot be shared"** = `Sync`. `note: required because it appears within the type X` is the
+auto-trait rule naming the field that lost it. The fix is to change the field, never to fight the
+trait: `Rc` → `Arc`, `RefCell` → `Mutex`.
+
+**Escape hatches.** `impl !Send for MyType {}` opts out; `unsafe impl Send for MyType {}` claims a
+trait the compiler wouldn't grant and means *"I have verified this by hand"* — how `Arc` and `Mutex`
+get theirs, since atomics and locks are beyond what the compiler can reason about.
+
+First seen in: [From-Zero concept 37 — `Send` and `Sync`](../from-zero/rust/37-send-and-sync/use-it.md)

@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 37 — *(up next)*
+**Current:** Concept 38 — *(up next)*
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -109,10 +109,11 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 34 | [Threads (`thread::spawn` and `move`)](34-threads/use-it.md) | ✅ done |
 | 35 | [`Arc<Mutex<T>>` (shared, mutable state across threads)](35-arc-mutex/use-it.md) | ✅ done |
 | 36 | [Channels (`mpsc::channel`)](36-channels/use-it.md) | ✅ done |
+| 37 | [`Send` and `Sync` (what may cross a thread)](37-send-and-sync/use-it.md) | ✅ done |
 
 ### Later — macro-phases (firmed up as we reach them)
 
-Concurrency wraps up with `async` → then `unsafe`.
+Phase 9 is complete. Phase 10 opens with `async` → then `unsafe`.
 
 ## How this relates to the rest of the repo
 
