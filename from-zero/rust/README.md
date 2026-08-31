@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 38 — *(up next)*
+**Current:** Concept 39 — *(up next)*
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -111,9 +111,16 @@ they aren't memory topics. This table is the source of truth for where you are.
 | 36 | [Channels (`mpsc::channel`)](36-channels/use-it.md) | ✅ done |
 | 37 | [`Send` and `Sync` (what may cross a thread)](37-send-and-sync/use-it.md) | ✅ done |
 
+### Phase 10 — Async (a function that can pause)
+
+| # | Concept | Status |
+|---|---------|--------|
+| 38 | [`async` and `.await` (a function that can pause)](38-async-and-await/use-it.md) | ✅ done |
+| 39 | `Future`, `poll`, and the executor | ⬜ up next |
+
 ### Later — macro-phases (firmed up as we reach them)
 
-Phase 9 is complete. Phase 10 opens with `async` → then `unsafe`.
+Phases 1–9 are complete. Phase 10 continues with the executor that drives a future, then `unsafe`.
 
 ## How this relates to the rest of the repo
 

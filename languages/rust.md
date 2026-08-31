@@ -72,6 +72,7 @@ how to program in *some* language — just not Rust yet.
 - [`Mutex<T>` — one thread at a time](#mutex)
 - [`mpsc::channel` — send values between threads](#mpsc-channel)
 - [`Send` and `Sync` — what may cross a thread](#send-sync)
+- [`async` / `.await` — a function that can pause](#async-await)
 
 ## `use` declarations {#use}
 
@@ -1933,3 +1934,62 @@ trait the compiler wouldn't grant and means *"I have verified this by hand"* —
 get theirs, since atomics and locks are beyond what the compiler can reason about.
 
 First seen in: [From-Zero concept 37 — `Send` and `Sync`](../from-zero/rust/37-send-and-sync/use-it.md)
+
+## `async` / `.await` — a function that can pause {#async-await}
+
+**In one line:** `async` changes what a function *returns* — instead of running and giving you a `T`,
+calling it builds a **future**: a paused function, holding its own locals, that runs nothing until
+something drives it.
+
+**The rewrite.** `async fn` is a return type in disguise. These are the same function:
+
+```rust
+async fn add_one(x: u32) -> u32 { x + 1 }
+fn      add_one(x: u32) -> impl Future<Output = u32> { async move { x + 1 } }
+```
+
+So calling it executes no statement of the body. Forget to drive it and the compiler says so:
+`warning: unused implementer of Future that must be used` / `futures do nothing unless you .await or
+poll them`.
+
+**`.await`** is a **suffix** — `brew().await`, never `await brew()` — so it chains with `?` and method
+calls. It means "drive this future to completion, and pause *me* while it can't finish". It is only
+legal inside an `async` fn or `async` block (`error[E0728]` otherwise), which is why every async
+program has one plain function at the bottom running an [executor](#future-poll).
+
+**What the compiler builds.** An [enum](#enum) with one variant per suspend point, each holding the
+locals that must survive that pause:
+
+```rust
+enum BreakfastFuture {
+    NotStarted,
+    AtBrew  { brew_future: BrewFuture },
+    AtToast { cup: String, toast_future: ToastFuture },
+    Finished,
+}
+```
+
+An enum is as big as its largest variant, so **what you hold across an `.await` is what your task
+costs** — and you can measure it with `size_of_val`:
+
+| | size |
+|---|---|
+| `async fn nothing() {}` | 1 byte |
+| three `.await`s nested (`level_c` → `level_b` → `level_a` → `nothing`) | 4 bytes |
+| a `[u8; 512]` that dies *before* the await | 16 bytes |
+| the same array held *across* the await | 514 bytes |
+
+Nesting means a whole call chain is **one flat struct**, sized at compile time — no stack, no
+allocation. Compare a thread's 2 MiB stack, held whether it works or waits.
+
+**Consequences worth knowing.**
+- Futures are **lazy**: an undriven future simply never happens, and cancelling a task is *dropping*
+  it — [ownership](#let-mut) frees whatever it was holding.
+- An `async fn` that awaits itself needs a [`Box`](#box), same as any recursive type.
+- Holding a `MutexGuard` across an `.await` makes the future non-[`Send`](#send-sync), so it can't be
+  spawned — the guard becomes a field, and the field's missing trait propagates.
+- Bare `rustc` defaults to the 2015 edition, where `async` isn't a keyword. Use
+  `rustc --edition 2024 file.rs`; `cargo` sets an edition for you.
+
+First seen in: [From-Zero concept 38 — `async` and `.await`](../from-zero/rust/38-async-and-await/use-it.md)
+
