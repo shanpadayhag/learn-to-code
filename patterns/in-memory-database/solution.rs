@@ -164,3 +164,50 @@ fn rebuild_record(snapshot_record: &SnapshotRecord, timestamp: Timestamp) -> Rec
         })
         .collect()
 }
+
+fn main() {
+    let mut database = InMemoryDatabase::new();
+
+    database.set_at("user:1", "name", "ana", 1);
+    database.set_at("user:1", "city", "cebu", 1);
+    database.set_at("user:1", "nickname", "an", 1);
+
+    check("get name at 2", database.get_at("user:1", "name", 2), Some("ana"));
+    check("get email at 2", database.get_at("user:1", "email", 2), None);
+    check(
+        "scan at 2",
+        database.scan_at("user:1", 2),
+        vec!["city(cebu)", "name(ana)", "nickname(an)"],
+    );
+    check(
+        "scan prefix n at 2",
+        database.scan_by_prefix_at("user:1", "n", 2),
+        vec!["name(ana)", "nickname(an)"],
+    );
+
+    check("delete city at 3", database.delete_at("user:1", "city", 3), true);
+    check("delete city again at 4", database.delete_at("user:1", "city", 4), false);
+
+    database.set_at_with_ttl("user:1", "session", "token", 5, 10);
+    check("get session at 9", database.get_at("user:1", "session", 9), Some("token"));
+    check("get session at 15", database.get_at("user:1", "session", 15), None);
+    check("scan at 15", database.scan_at("user:1", 15), vec!["name(ana)", "nickname(an)"]);
+
+    check("backup at 8", database.backup(8), 1);
+    database.set_at("user:1", "name", "bea", 20);
+    check("get name at 20", database.get_at("user:1", "name", 20), Some("bea"));
+
+    database.restore(30, 8);
+    check("get name at 30", database.get_at("user:1", "name", 30), Some("ana"));
+    check("get session at 36", database.get_at("user:1", "session", 36), Some("token"));
+    check("get session at 37", database.get_at("user:1", "session", 37), None);
+}
+
+fn check<T, U>(label: &str, actual: T, expected: U)
+where
+    T: std::fmt::Debug + PartialEq<U>,
+    U: std::fmt::Debug,
+{
+    assert_eq!(actual, expected);
+    println!("{label} = {actual:?}");
+}

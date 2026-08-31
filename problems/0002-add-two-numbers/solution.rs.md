@@ -137,3 +137,35 @@ So `result_tail` now points at the node we just appended, ready for the next col
 `result_head` is still the dummy node we started with, so the real answer begins at
 `result_head.next`. Returning it (last expression, no semicolon) hands back the list
 from the first *real* digit onward and quietly drops the dummy.
+
+## Running it
+```
+rustc solution.rs && ./solution
+```
+
+This problem hides more than most behind LeetCode's editor: not just the
+[`Solution`](../../languages/rust.md#unit-struct) type and
+[`main`](../../languages/rust.md#main), but `ListNode` itself. The file writes all of
+it out, with `ListNode` copied field-for-field from LeetCode's own definition — same
+`val`, same `next`, same `new` constructor — so the `impl Solution` block still
+compiles unchanged on their side.
+
+- `#[derive(PartialEq, Eq, Clone, Debug)]` — the derives LeetCode puts on `ListNode`.
+  They ask the compiler to write the "compare two nodes" and "print a node" code for
+  us instead of implementing it by hand.
+- `build_list(&[i32]) -> Option<Box<ListNode>>` — the harness thinks in plain vectors
+  like `[2, 4, 3]`; the solution thinks in linked nodes. This converts one to the
+  other with [`.fold()`](../../languages/rust.md#fold): walking the digits
+  [in reverse](../../languages/rust.md#rev) and wrapping the list-so-far as each new
+  node's `next` builds the chain from the tail up.
+- `collect_digits(Option<Box<ListNode>>) -> Vec<i32>` — the way back, using
+  [`while let`](../../languages/rust.md#while-let): keep pulling nodes while there's
+  still a `Some`, push each `val`, and step to `next`. The loop ends by itself at the
+  `None` that marks the end of the list.
+- Both converters live *outside* the submit block on purpose — they're harness
+  plumbing, and pasting them into LeetCode would be pointless (their judge does the
+  same conversion for you).
+- `check(...)` asserts with [`assert_eq!`](../../languages/rust.md#assert-eq) on the
+  digit vectors, then prints the sum as `[2, 4, 3] + [5, 6, 4] = [7, 0, 8]`. The cases
+  are the LeetCode examples plus the two carry traps: `5 + 5` growing a new digit, and
+  `1 + 999` where the carry ripples the whole way and past the shorter list's end.

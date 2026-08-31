@@ -420,6 +420,9 @@ snapshot plus **O(S)** to rebuild `S` fields.
 **Space:** **O(K·F)** for live data. Backups are **full copies**, so the shelf costs
 **O(B·N)** — flag that tradeoff out loud (deltas or structural sharing if it mattered).
 Expired-but-unread fields also linger until overwritten (the lazy-expiry cost).
+**Run:** `rustc solution.rs && ./solution` — [`solution.rs`](solution.rs) adds a
+harness that drives one scripted session through all four levels and asserts the
+state after every step.
 **Syntax notes:** [solution.rs.md](solution.rs.md)
 
 ## Remember This

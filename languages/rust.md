@@ -74,6 +74,13 @@ how to program in *some* language — just not Rust yet.
 - [`Send` and `Sync` — what may cross a thread](#send-sync)
 - [`async` / `.await` — a function that can pause](#async-await)
 - [`Future`, `poll`, and executors](#future-poll)
+- [`fn main` — the program's entry point](#main)
+- [unit structs — `struct Solution;`](#unit-struct)
+- [`println!` — print a line](#println)
+- [`assert_eq!` — a check that stops the program](#assert-eq)
+- [`while let` — loop while a pattern still matches](#while-let)
+- [`.fold()` — collapse an iterator into one value](#fold)
+- [`where` clauses — bounds moved below the signature](#where)
 
 ## `use` declarations {#use}
 
@@ -2077,3 +2084,235 @@ and a work-stealing thread pool — which is why `spawn` demands `F: Future + Se
 shape, industrial version.
 
 First seen in: [From-Zero concept 39 — `Future`, `poll`, and the executor](../from-zero/rust/39-future-poll-and-the-executor/use-it.md)
+
+## `fn main` — the program's entry point {#main}
+
+**In one line:** the function the operating system calls when your program starts;
+without it, `rustc` refuses to build a runnable file.
+
+**What it is.** A `.rs` file full of functions is just a *library* — nothing in it
+runs on its own, because nothing says where to begin. `fn main() { ... }` is that
+starting line. When you run `rustc solution.rs && ./solution`, the binary starts at
+the first statement inside `main`, runs to the closing brace, and exits.
+
+```rust
+fn main() {
+    println!("this runs first");
+}
+```
+
+**Why LeetCode files have none.** LeetCode's editor shows you only an `impl
+Solution` block. Their judge pastes it into a bigger file that already has a `main`,
+reads the test input, calls your method, and compares the output — you just never
+see that half. Copy their half-file to your machine and `rustc` says
+`` error[E0601]: `main` function not found ``, because the part that starts the
+program was never yours.
+
+So every solution in this repo writes the missing half itself: the
+[unit struct](#unit-struct) they hide, plus a `main` that feeds the examples in and
+checks what comes out. The `impl Solution` block in between stays exactly what you
+paste back into LeetCode.
+
+**No arguments, no return.** `main` takes nothing and normally returns nothing;
+command-line arguments come from `std::env::args()` instead. It *may* return
+`Result<(), E>`, in which case an `Err` exits with a failure code — handy when the
+body uses [`?`](#question-mark).
+
+First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
+
+## unit structs — `struct Solution;` {#unit-struct}
+
+**In one line:** a [struct](#struct) with no fields — a type that holds nothing and
+exists only to hang functions off.
+
+`struct Solution;` (note the semicolon, not `{}`) declares a type with zero data. On
+its own it's useless. Paired with an [`impl` block](#impl) it becomes a **namespace**:
+
+```rust
+struct Solution;
+
+impl Solution {
+    pub fn two_sum(numbers: Vec<i32>, target: i32) -> Vec<i32> { /* ... */ }
+}
+
+Solution::two_sum(vec![2, 7], 9);
+```
+
+Nothing here needs an *instance* — you never write `let s = Solution;`. The functions
+take all their input as parameters and are called through the type name with `::`,
+the way `HashMap::new()` is. That's why the value carries no fields: there's no state
+to carry.
+
+**Could you do without it?** Yes — a plain `fn two_sum(...)` at the top level works
+identically and is what you'd write in real Rust. LeetCode's harness insists on the
+`Solution::` spelling because its judge is written once for languages where every
+function must live inside a class (Java, C#), so the Rust track copies that shape.
+It's a house rule, not a Rust one.
+
+First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
+
+## `println!` — print a line {#println}
+
+**In one line:** writes text plus a newline to the terminal, filling each `{}` hole
+with a value.
+
+```rust
+let answer = vec![0, 1];
+println!("two_sum = {:?}", answer);        // two_sum = [0, 1]
+
+let name = "ana";
+println!("hello {name}");                  // hello ana
+```
+
+**Three things to know:**
+
+1. **`{}` versus `{:?}`.** `{}` asks for the *Display* form — the tidy, human
+   version a type chooses to show (`77`, `ana`). `{:?}` asks for the *Debug* form —
+   the programmer's version, which shows structure (`[0, 1]`, `Some("ana")`).
+   Collections like `Vec` and wrappers like `Option` have **only** `Debug`, so
+   printing one with `{}` fails to compile; that's why the harnesses use `{:?}`.
+2. **Inline names.** If the value is a plain variable, you can put its name inside
+   the braces — `println!("{name}")` instead of `println!("{}", name)`. Only a bare
+   variable name works there; an expression like `stored.value` still goes in the
+   argument list.
+3. **It's a macro.** The `!` means `println!` is expanded at compile time, which is
+   how it can check your holes against your arguments and reject a mismatch before
+   the program ever runs. A normal function couldn't take a varying number of
+   differently-typed arguments like that.
+
+The same holes-and-values syntax powers [`format!`](#format) (returns a `String`
+instead of printing) and the [format specifiers](#format-spec) like `{:.1}`.
+
+First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
+
+## `assert_eq!` — a check that stops the program {#assert-eq}
+
+**In one line:** compares two values and, if they differ, crashes the program on the
+spot with both values printed.
+
+```rust
+assert_eq!(Solution::two_sum(vec![2, 7, 11, 15], 9), vec![0, 1]);
+```
+
+If the two sides match, the line does nothing and execution moves on. If they don't,
+the program **panics** — stops immediately, prints the file and line, and shows what
+it got versus what it expected:
+
+```
+thread 'main' panicked at solution.rs:24:5:
+assertion `left == right` failed
+  left: [1, 2]
+ right: [0, 1]
+```
+
+**Why the harness asserts instead of just printing.** A `println!` of a wrong answer
+looks exactly like a `println!` of a right one — you have to read every line and
+compare by eye. An `assert_eq!` makes the *expected* value part of the program: a
+passing run prints its results calmly, and a broken solution can't slip past quietly,
+because the run dies at the first mismatch with the failing case named.
+
+That's also why the solutions carry no comments claiming what they return. A comment
+saying "returns [0, 1]" is checked by nobody; `assert_eq!` is checked on every run.
+
+**Relatives:** `assert!(condition)` for a plain true/false check, and `assert_ne!`
+for "these must differ". Both sides of `assert_eq!` need
+[`Debug`](#println) so the failure can be printed, and the two types must be
+comparable with `==`.
+
+First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
+
+## `while let` — loop while a pattern still matches {#while-let}
+
+**In one line:** keeps looping as long as a value keeps matching a pattern, and hands
+you the contents each time round.
+
+It's [`if let`](#if-let) with a loop instead of a branch. Walking a linked list is the
+classic use — keep going while there's still a node, stop at the `None` end:
+
+```rust
+let mut node = head;
+while let Some(current) = node {
+    digits.push(current.val);
+    node = current.next;
+}
+```
+
+**Trace what happens.** `node` is an `Option<Box<ListNode>>` — a node, or the end of
+the list. Each pass, `while let Some(current) = node` tries the pattern: if `node` is
+a `Some`, `current` is bound to the node inside and the body runs; if it's `None`,
+the pattern fails and the loop ends. The last line moves the loop on by making `node`
+the next link.
+
+**The `while` version is clumsier.** With a plain [`while`](#while) you'd write
+`while node.is_some()` and then dig the value out by hand with
+[`.unwrap()`](#unwrap) — a second step that can panic, guarding a condition you
+already tested. `while let` does the test and the extraction in one move, and there's
+no `unwrap` to get wrong.
+
+First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
+
+## `.fold()` — collapse an iterator into one value {#fold}
+
+**In one line:** walks an iterator carrying a running value, and hands you that value
+at the end.
+
+```rust
+let total = [1, 2, 3].iter().fold(0, |running_total, n| running_total + n); // 6
+```
+
+`.fold(start, |accumulator, item| ...)` takes two things: the value to start with,
+and a [closure](#closures) that combines the running value with the next item. What
+the closure returns becomes the running value for the next item. `.sum()` is just a
+`.fold(0, |a, b| a + b)` with a name.
+
+**Building a linked list backwards is the interesting case:**
+
+```rust
+digits
+    .iter()
+    .rev()
+    .fold(None, |next, &digit| Some(Box::new(ListNode { val: digit, next })))
+```
+
+The running value here isn't a number — it's *the list built so far*. Start with
+`None` (the empty tail), walk the digits [in reverse](#rev), and each step wraps the
+list-so-far as the `next` of a fresh node. After the last (leftmost) digit, the
+running value is the whole chain, head first.
+
+**Why not a loop?** You can write the same thing with `let mut head = None;` and a
+`for`, and it reads fine. `.fold` earns its place when you want the result as a
+single expression with no mutable variable to accidentally use half-built — the whole
+construction is one value that only exists finished.
+
+First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
+
+## `where` clauses — bounds moved below the signature {#where}
+
+**In one line:** the same [generic](#generics) trait bounds, written under the
+signature instead of inline, so the parameter list stays readable.
+
+These two are identical to the compiler:
+
+```rust
+fn check<T: std::fmt::Debug + PartialEq<U>, U: std::fmt::Debug>(label: &str, actual: T, expected: U) {}
+
+fn check<T, U>(label: &str, actual: T, expected: U)
+where
+    T: std::fmt::Debug + PartialEq<U>,
+    U: std::fmt::Debug,
+{
+}
+```
+
+The first crams the requirements between the angle brackets, pushing the actual
+parameters off the edge. The `where` form names the type parameters up top and lists
+what each must be able to do below — one bound per line. Reach for it as soon as a
+signature has more than one bound, or a bound with more than one trait in it.
+
+**Reading the bounds above:** `T: PartialEq<U>` says the two sides must be comparable
+even though they're *different* types — which is what lets a harness compare a
+`Vec<String>` the code produced against the `vec!["a", "b"]` of `&str` literals you
+typed. `Debug` on both is what [`assert_eq!`](#assert-eq) needs to print them if the
+check fails.
+
+First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)

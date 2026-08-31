@@ -1,1 +1,6 @@
 .obsidian/
+
+# compiled solutions and exercises
+solution
+*-solution
+*.dSYM/

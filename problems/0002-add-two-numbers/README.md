@@ -178,6 +178,9 @@ impl Solution {
 and `n` are the two lengths.   **Space:** O(max(m, n)) — the answer list holds one node
 per column, at most `max(m, n) + 1` of them; aside from that the work uses a fixed
 amount of extra memory.
+**Run:** `rustc solution.rs && ./solution` — [`solution.rs`](solution.rs) wraps the
+block above in the scaffolding LeetCode hides (`struct Solution;` and `ListNode`) plus a harness
+that asserts every example.
 **Syntax notes:** [solution.rs.md](solution.rs.md)
 
 ## Remember This

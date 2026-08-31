@@ -102,3 +102,25 @@ longest as i32
 ```
 `longest` is a `usize`; the judge wants an `i32`, so we [cast](../../languages/rust.md#as-cast)
 it. As the last expression with no semicolon, it *is* the return value.
+
+## Running it
+```
+rustc solution.rs && ./solution
+```
+
+The `impl Solution` block is exactly what goes into LeetCode; the rest of the file is
+the half their editor hides plus the harness:
+
+- `struct Solution;` — [unit struct](../../languages/rust.md#unit-struct), and
+  `fn main` — [entry point](../../languages/rust.md#main). Same two pieces as
+  [Two Sum](../0001-two-sum/solution.rs.md).
+- `check(text, expected)` takes a `&str` and calls `.to_string()` on it, because the
+  signature LeetCode fixes wants an owned [`String`](../../languages/rust.md#string)
+  while a literal in the harness is a borrowed `&str`.
+- The cases cover the three LeetCode examples plus the ones that break naive
+  solutions: `""` (empty), `" "` (a single space is still a character), `"dvdf"` (the
+  repeat is *behind* the window start, so the left edge must not slide backwards), and
+  an all-distinct string where the answer is the whole length.
+- `println!("... {:?} ...", text)` — [`println!`](../../languages/rust.md#println) with
+  `{:?}` on the text on purpose: the debug form quotes the string, so the empty and
+  single-space cases are visible in the output instead of vanishing.

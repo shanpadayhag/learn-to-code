@@ -141,3 +141,30 @@ self.records = rebuild_records(snapshot, timestamp);
 target (or returns if there is none). `rebuild_record` mirrors backup —
 `snapshot_value.remaining_ttl.map(|remaining| timestamp + remaining)` — turning the stored
 duration back into an absolute deadline measured from the restore time.
+
+## Running it
+```
+rustc solution.rs && ./solution
+```
+
+There's no hidden LeetCode class here — `InMemoryDatabase` is the whole public
+surface — so the file only adds a [`main`](../../languages/rust.md#main) that drives
+one scripted session through all four levels and checks the state after every step.
+
+- The script is written as a story with explicit timestamps: write three fields at
+  `1`, read them back, scan and prefix-scan at `2`, delete at `3`, re-delete at `4` to
+  show it now reports `false`, set a field with a 10-tick TTL at `5`, watch it read
+  back at `9` and vanish at `15`, back up at `8`, overwrite a value at `20`, then
+  restore at `30` and confirm the old value is back.
+- The TTL-across-restore case is the one worth tracing: the field is set at `5` to
+  expire at `15`, the backup at `8` stores it as *7 ticks remaining*, and the restore
+  at `30` turns that back into a deadline of `37`. So it's alive at `36` and gone at
+  `37` — a rebased lifetime, not a resurrected one.
+- `check(label, actual, expected)` — one helper for every assertion, with a
+  [`where` clause](../../languages/rust.md#where) instead of inline bounds. `T:
+  PartialEq<U>` lets it compare *different* types, which is what allows the
+  `Vec<String>` a scan returns to be checked against a plain `vec!["name(ana)", ...]`
+  of string literals with no conversion at the call site.
+- It [asserts](../../languages/rust.md#assert-eq) first and
+  [prints](../../languages/rust.md#println) after, so the output doubles as a
+  transcript of the session and any mismatch stops the run at the labelled step.

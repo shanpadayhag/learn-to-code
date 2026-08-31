@@ -123,3 +123,32 @@ return value — so this hands back an empty `Vec<i32>`. The problem guarantees 
 answer exists, so we never actually arrive here, but every path through a Rust
 function must produce the declared return type, and the compiler rejects the function
 without it.
+
+## Running it
+`solution.rs` is a whole program, not the half-file LeetCode shows you. Run it with:
+
+```
+rustc solution.rs && ./solution
+```
+
+The algorithm above is untouched — it's still exactly what you paste into LeetCode.
+Around it sit the two pieces their editor supplies off-screen, plus the harness that
+proves the thing works:
+
+- `struct Solution;` — [unit struct](../../languages/rust.md#unit-struct): a type with
+  no fields, there only so the method can be called as `Solution::two_sum(...)`.
+  LeetCode declares it invisibly; without it this file wouldn't compile.
+- `fn main() { ... }` — [`fn main`](../../languages/rust.md#main): where the program
+  starts. LeetCode's judge owns this half, which is why a copied solution alone errors
+  with `` `main` function not found ``.
+- `assert_eq!(answer, expected)` — [`assert_eq!`](../../languages/rust.md#assert-eq):
+  states the expected answer as code. A wrong result stops the run at the failing case
+  instead of scrolling past.
+- `println!("two_sum({:?}, {}) = {:?}", ...)` —
+  [`println!`](../../languages/rust.md#println): shows each case's input and answer, so
+  a passing run reads like a worked example. `{:?}` is used for the vectors because a
+  `Vec` prints only in the debug form.
+- `check(...)` — one named function per case keeps `main` a readable list of examples:
+  the LeetCode examples first, then negatives and a repeated `0` for the edge cases.
+- `numbers.clone()` — [`.clone()`](../../languages/rust.md#to-owned-clone): `two_sum`
+  *consumes* its `Vec`, so the harness hands it a copy and keeps the original to print.

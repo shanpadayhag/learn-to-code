@@ -19,6 +19,11 @@ From-scratch, learn-by-doing courses that build a language up one idea at a time
 
 ## Problems
 
+Every solution file is a **whole runnable program**, not the half-file LeetCode's
+editor shows: `rustc solution.rs && ./solution` runs the examples and asserts the
+answers. The `impl Solution` block inside is still exactly what you paste back into
+LeetCode.
+
 | # | Title | Difficulty | Languages | Pattern |
 |---|-------|-----------|-----------|---------|
 | 1 | [Two Sum](problems/0001-two-sum/README.md) | Easy | Rust | [Hash Map](glossary/hash-map.md) |

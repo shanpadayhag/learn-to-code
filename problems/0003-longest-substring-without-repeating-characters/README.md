@@ -202,6 +202,9 @@ ever moves forward, so together they do at most `2n` steps; every map
 lookup/insert is O(1) on average.   **Space:** O(min(n, k)) — the map holds at most
 one entry per *distinct* character, so it's capped by both the string length `n`
 and the size `k` of the character set (e.g. 128 for ASCII).
+**Run:** `rustc solution.rs && ./solution` — [`solution.rs`](solution.rs) wraps the
+block above in the scaffolding LeetCode hides (`struct Solution;`) plus a harness
+that asserts every example.
 **Syntax notes:** [solution.rs.md](solution.rs.md)
 
 ## Remember This

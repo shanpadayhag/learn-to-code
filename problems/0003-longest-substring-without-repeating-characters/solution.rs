@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+struct Solution;
+
 impl Solution {
     pub fn length_of_longest_substring(text: String) -> i32 {
         let mut last_seen_index: HashMap<char, usize> = HashMap::new();
@@ -18,4 +20,20 @@ impl Solution {
 
         longest as i32
     }
+}
+
+fn main() {
+    check("abcabcbb", 3);
+    check("bbbbb", 1);
+    check("pwwkew", 3);
+    check("", 0);
+    check(" ", 1);
+    check("dvdf", 3);
+    check("abcdefg", 7);
+}
+
+fn check(text: &str, expected: i32) {
+    let longest = Solution::length_of_longest_substring(text.to_string());
+    assert_eq!(longest, expected);
+    println!("length_of_longest_substring({:?}) = {}", text, longest);
 }

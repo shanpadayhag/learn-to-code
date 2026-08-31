@@ -134,6 +134,9 @@ impl Solution {
 **Time:** O(n) — one pass over the list, and each map lookup/insert is O(1) on
 average.   **Space:** O(n) — in the worst case we store almost every number in the
 map before finding the pair.
+**Run:** `rustc solution.rs && ./solution` — [`solution.rs`](solution.rs) wraps the
+block above in the scaffolding LeetCode hides (`struct Solution;`) plus a harness
+that asserts every example.
 **Syntax notes:** [solution.rs.md](solution.rs.md)
 
 ## Remember This
