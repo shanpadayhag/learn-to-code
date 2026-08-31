@@ -73,6 +73,7 @@ how to program in *some* language — just not Rust yet.
 - [`mpsc::channel` — send values between threads](#mpsc-channel)
 - [`Send` and `Sync` — what may cross a thread](#send-sync)
 - [`async` / `.await` — a function that can pause](#async-await)
+- [`Future`, `poll`, and executors](#future-poll)
 
 ## `use` declarations {#use}
 
@@ -1993,3 +1994,86 @@ allocation. Compare a thread's 2 MiB stack, held whether it works or waits.
 
 First seen in: [From-Zero concept 38 — `async` and `.await`](../from-zero/rust/38-async-and-await/use-it.md)
 
+## `Future`, `poll`, and executors {#future-poll}
+
+**In one line:** a future is a value you poke until it says it's done, and an **executor** is the
+ordinary non-async loop doing the poking — hold two futures in that loop and you get concurrency on
+one thread.
+
+**The trait, in full.** One method:
+
+```rust
+pub trait Future {
+    type Output;
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
+}
+```
+
+- **`Poll<T>`** — an enum, `Ready(T)` or `Pending`. [`Option`](#if-let)'s shape, named for *time*.
+- **`Pin<&mut Self>`** — a `&mut self` carrying a promise: *this value will never move again*. A
+  paused future's fields can point at each other, so moving it after the first poll would dangle.
+  `Unpin` is the opt-out for types that don't care; `async`-generated futures are the exception
+  (`error[E0277]: ... cannot be unpinned`).
+- **`cx`** — carries a [`Waker`](#future-poll), the callback meaning "poll me, I can progress now".
+
+**Writing one by hand** — state in the fields, the decision in `poll`:
+
+```rust
+struct Pause { polls_left: u32 }
+
+impl Future for Pause {
+    type Output = ();
+    fn poll(mut self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<()> {
+        if self.polls_left == 0 { Poll::Ready(()) }
+        else { self.polls_left -= 1; Poll::Pending }
+    }
+}
+```
+
+**A complete executor for one task:**
+
+```rust
+fn block_on<F: Future>(future: F) -> F::Output {
+    let mut future = pin!(future);                           // park it at one address
+    let mut context = Context::from_waker(Waker::noop());    // a waker that does nothing
+    loop {
+        match future.as_mut().poll(&mut context) {           // .as_mut() re-borrows the pin
+            Poll::Ready(value) => return value,
+            Poll::Pending => {}
+        }
+    }
+}
+```
+
+`pin!` pins on the stack (free, frame-bound); `Box::pin` pins on the heap (one allocation, and the
+task can then be queued) — which is why a spawned task is typically `Pin<Box<dyn Future + Send>>`.
+
+**`.await` is sequential; the executor is what makes things concurrent.** Same two tasks, same one
+thread, no `spawn` anywhere — only the driving loop differs:
+
+```text
+awaited in one task:              polled together in one loop:
+  toast 1, toast 2, toast 3,        toast 1, eggs 1, toast 2,
+  eggs 1, eggs 2                    eggs 2, toast 3
+```
+
+That is what `join!` and `tokio::spawn` do for you. Writing two `.await`s in a row and expecting them
+to overlap is the commonest async bug in every language.
+
+**Rules the loop must keep.**
+- Never poll a future after it returned `Ready` — a generated future panics with
+  `` `async fn` resumed after completion ``. Keep an `Option` per task to remember.
+- The poll count is *pauses + 1*: a future must be asked once more to report it's finished.
+- A future may return `Pending` **only after** arranging for `wake()` to be called. Break that and
+  the task hangs forever.
+
+**Why `Waker::noop()` spins.** It's a real waker whose `wake()` does nothing, so on `Pending` the loop
+can only ask again — fine for a future that becomes ready by being asked, useless for real I/O. A real
+runtime sleeps on `epoll`/`kqueue`/IOCP and is woken by the OS, then re-queues the task. Building a
+`Waker` by hand needs `unsafe`, since it's a hand-written vtable — hence the safe stand-in.
+
+**What `tokio` adds:** a real waker per task, a sleeping run queue, `spawn` for thousands of tasks,
+and a work-stealing thread pool — which is why `spawn` demands `F: Future + Send + 'static`. Same
+shape, industrial version.
+
+First seen in: [From-Zero concept 39 — `Future`, `poll`, and the executor](../from-zero/rust/39-future-poll-and-the-executor/use-it.md)

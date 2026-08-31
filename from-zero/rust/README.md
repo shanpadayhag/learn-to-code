@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 39 — *(up next)*
+**Current:** Concept 40 — *(up next)*
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -116,11 +116,13 @@ they aren't memory topics. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 38 | [`async` and `.await` (a function that can pause)](38-async-and-await/use-it.md) | ✅ done |
-| 39 | `Future`, `poll`, and the executor | ⬜ up next |
+| 39 | [`Future`, `poll`, and the executor (who runs a paused function)](39-future-poll-and-the-executor/use-it.md) | ✅ done |
+| 40 | `unsafe` (the door out of the rules) | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 
-Phases 1–9 are complete. Phase 10 continues with the executor that drives a future, then `unsafe`.
+Phases 1–9 are complete, and Phase 10 has its async half. What remains is `unsafe` — the floor
+under every abstraction in this track.
 
 ## How this relates to the rest of the repo
 
