@@ -76,6 +76,7 @@ how to program in *some* language — just not Rust yet.
 - [`Future`, `poll`, and executors](#future-poll)
 - [`unsafe` — the door out of the rules](#unsafe)
 - [raw pointers — `*const T` / `*mut T`](#raw-pointers)
+- [`mod` — modules, paths and privacy](#modules)
 - [`fn main` — the program's entry point](#main)
 - [unit structs — `struct Solution;`](#unit-struct)
 - [`println!` — print a line](#println)
@@ -2485,3 +2486,71 @@ typed. `Debug` on both is what [`assert_eq!`](#assert-eq) needs to print them if
 check fails.
 
 First seen in: [In-Memory Database](../patterns/in-memory-database/solution.rs.md)
+
+## `mod` — modules, paths and privacy {#modules}
+
+**In one line:** a named box for items with a wall around it that is closed by
+default — the thing `::` in every path has been separating all along.
+
+```rust
+mod weather {
+    pub mod sensors {
+        pub fn read_celsius() -> f64 { 21.5 }
+        fn calibration_offset() -> f64 { 0.4 }      // private
+    }
+
+    fn label() -> &'static str { "hourly reading" }  // private
+
+    pub fn report() -> String {
+        format!("{}: {:.1}", label(), sensors::read_celsius())
+    }
+}
+
+use weather::sensors::read_celsius;      // shortens a path; grants nothing
+use weather::sensors as probe;           // renames it
+pub use weather::sensors::read_celsius as reading;   // re-export
+```
+
+**The one privacy rule.** An item is visible to the module it is in *and every
+module inside that one*, however deep. To anything else it exists only if marked
+`pub`. So looking **up** the tree is always allowed, private items included;
+looking **down** reaches only what said `pub`. Reaching a private item from
+outside is `error[E0603]`, which is a different complaint from `E0425 cannot find
+value` — E0603 means the compiler found it and won't let you use it.
+
+**Three path roots:** `crate::a::b` from the crate root, `super::b` one module up,
+`b` relative to here. Prefer relative paths for close neighbours so a subtree
+survives being moved.
+
+**`use` only nicknames.** It does not open anything (the item must already be
+`pub`) and does not copy anything. `pub use` re-exports: the item gains a second,
+shorter public name — how `std::collections::HashMap` is reachable at all.
+
+**Visibility markers:**
+
+| marker | reachable from |
+|---|---|
+| *(none)* | this module and its descendants |
+| `pub` | anywhere, including other crates |
+| `pub(crate)` | anywhere in this crate, invisible to dependents |
+| `pub(super)` | the parent module and below |
+
+**Fields are separate.** `pub struct` opens the type, not the fields — each field
+needs its own `pub`. Leaving them off is how an invariant is enforced: writing to
+a private field from outside is `E0616`, and building one with a struct literal is
+`E0451`. `pub enum` is the exception: it makes every variant and their fields
+public, since callers must be able to `match`.
+
+**Files.** `mod weather;` (semicolon, no body) says the body is in `weather.rs`
+beside the declaring file, or `weather/mod.rs`. The **`mod` line creates the
+module; the file is only where its body is kept** — a `.rs` file no `mod` line
+mentions is never compiled, checked, or warned about.
+
+**It costs nothing.** Modules are resolved entirely at compile time: no lookup, no
+allocation, no size. The only trace left is name mangling, where the path becomes
+part of each symbol (`_RNvNtNt..6mangle7weather7sensors12read_celsius`) and of
+`std::any::type_name`.
+
+See also [`use` declarations](#use), [`pub fn`](#pub-fn).
+
+First seen in: [From-Zero concept 42 — modules](../from-zero/rust/42-modules/use-it.md)

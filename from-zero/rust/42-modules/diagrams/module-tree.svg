@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 760" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="698" height="758" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328">A module is a named box with a one-way wall.</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">Closed by default. A child sees everything above it; a parent sees only what is marked <tspan font-family="ui-monospace,monospace" font-weight="700">pub</tspan>.</text>
+
+  <defs>
+    <marker id="mdArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#1a7f37"/>
+    </marker>
+    <marker id="mdBlocked" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#cf222e"/>
+    </marker>
+    <marker id="mdGrey" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <!-- ① the module tree -->
+  <rect x="30" y="86" width="640" height="300" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="112" font-size="13.5" font-weight="700" fill="#8250df">① the module tree — and the wall around each box</text>
+
+  <!-- crate root -->
+  <rect x="60" y="126" width="580" height="238" rx="10" fill="#f6f8fa" stroke="#57606a" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="76" y="147" font-size="12" font-weight="700" fill="#1f2328" font-family="ui-monospace,monospace">crate</text>
+  <text x="132" y="147" font-size="10.5" fill="#57606a">the root — your main.rs file, the whole tree lives inside it</text>
+  <text x="76" y="170" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">const SITE_NAME</text>
+  <rect x="196" y="159" width="62" height="15" rx="7" fill="#eef2f5" stroke="#57606a"/>
+  <text x="227" y="170" font-size="9" fill="#57606a" text-anchor="middle">private</text>
+
+  <!-- weather -->
+  <rect x="80" y="186" width="540" height="162" rx="10" fill="#fff" stroke="#0969da" stroke-width="2"/>
+  <text x="96" y="207" font-size="12" font-weight="700" fill="#0969da" font-family="ui-monospace,monospace">mod weather</text>
+  <text x="96" y="230" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">fn label()</text>
+  <rect x="182" y="219" width="62" height="15" rx="7" fill="#eef2f5" stroke="#57606a"/>
+  <text x="213" y="230" font-size="9" fill="#57606a" text-anchor="middle">private</text>
+  <text x="96" y="251" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">pub fn report()</text>
+  <rect x="212" y="240" width="34" height="15" rx="7" fill="#eafaef" stroke="#1a7f37"/>
+  <text x="229" y="251" font-size="9" fill="#1a7f37" text-anchor="middle">pub</text>
+
+  <!-- sensors -->
+  <rect x="100" y="264" width="500" height="70" rx="9" fill="#fff" stroke="#8250df" stroke-width="2"/>
+  <text x="116" y="284" font-size="12" font-weight="700" fill="#8250df" font-family="ui-monospace,monospace">pub mod sensors</text>
+  <text x="116" y="305" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">pub fn read_celsius()</text>
+  <rect x="272" y="294" width="34" height="15" rx="7" fill="#eafaef" stroke="#1a7f37"/>
+  <text x="289" y="305" font-size="9" fill="#1a7f37" text-anchor="middle">pub</text>
+  <text x="116" y="325" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">fn calibration_offset()</text>
+  <rect x="290" y="314" width="62" height="15" rx="7" fill="#eef2f5" stroke="#57606a"/>
+  <text x="321" y="325" font-size="9" fill="#57606a" text-anchor="middle">private</text>
+
+  <!-- arrows: looking up allowed -->
+  <path d="M420,300 C480,300 500,250 500,214" fill="none" stroke="#1a7f37" stroke-width="2" marker-end="url(#mdArrow)"/>
+  <text x="512" y="268" font-size="10" font-weight="700" fill="#1a7f37">looking UP:</text>
+  <text x="512" y="282" font-size="10" fill="#1a7f37">always allowed,</text>
+  <text x="512" y="295" font-size="10" fill="#1a7f37">private or not</text>
+
+  <!-- arrow: looking down blocked -->
+  <path d="M180,258 C160,272 158,282 158,300" fill="none" stroke="#cf222e" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#mdBlocked)"/>
+  <text x="352" y="252" font-size="10" font-weight="700" fill="#cf222e">looking DOWN: only what says pub  →  E0603</text>
+
+  <!-- ② module tree is not the file tree -->
+  <rect x="30" y="400" width="640" height="176" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="426" font-size="13.5" font-weight="700" fill="#8250df">② the module tree is not the folder tree</text>
+
+  <rect x="50" y="440" width="296" height="120" rx="9" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="198" y="461" font-size="11" font-weight="700" fill="#57606a" text-anchor="middle">what is on disk</text>
+  <text x="66" y="483" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">main.rs</text>
+  <text x="66" y="501" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">weather.rs</text>
+  <text x="66" y="519" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">weather/sensors.rs</text>
+  <text x="66" y="537" font-size="10.5" font-family="ui-monospace,monospace" fill="#cf222e">scratch.rs</text>
+  <text x="190" y="537" font-size="9.5" font-style="italic" fill="#cf222e">nobody declares it</text>
+
+  <path d="M352,500 L376,500" stroke="#57606a" stroke-width="2" marker-end="url(#mdGrey)"/>
+
+  <rect x="388" y="440" width="262" height="120" rx="9" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="519" y="461" font-size="11" font-weight="700" fill="#57606a" text-anchor="middle">what the compiler builds</text>
+  <text x="404" y="483" font-size="10.5" font-family="ui-monospace,monospace" fill="#1a7f37">crate</text>
+  <text x="404" y="501" font-size="10.5" font-family="ui-monospace,monospace" fill="#1a7f37">└─ weather</text>
+  <text x="404" y="519" font-size="10.5" font-family="ui-monospace,monospace" fill="#1a7f37">   └─ sensors</text>
+  <text x="404" y="540" font-size="9.5" font-style="italic" fill="#cf222e">scratch.rs is never even read</text>
+
+  <text x="48" y="571" font-size="10.5" fill="#57606a">The <tspan font-family="ui-monospace,monospace" font-weight="700">mod</tspan> line is what creates a module. The file is only where its body is kept.</text>
+
+  <!-- ③ visibility vs scope -->
+  <rect x="30" y="590" width="640" height="146" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="616" font-size="13.5" font-weight="700" fill="#8250df">③ allowed to see it ≠ have it in scope</text>
+
+  <rect x="50" y="630" width="296" height="90" rx="9" fill="#ffebe9" stroke="#cf222e" stroke-width="2"/>
+  <text x="66" y="653" font-size="10.5" font-family="ui-monospace,monospace" fill="#1f2328">SITE_NAME</text>
+  <text x="66" y="675" font-size="10" fill="#cf222e">error[E0425]: cannot find value</text>
+  <text x="66" y="697" font-size="10" fill="#57606a">Not a privacy error. The name simply</text>
+  <text x="66" y="711" font-size="10" fill="#57606a">is not in this module's scope.</text>
+
+  <rect x="366" y="630" width="284" height="90" rx="9" fill="#eafaef" stroke="#1a7f37" stroke-width="2"/>
+  <text x="382" y="653" font-size="10.5" font-family="ui-monospace,monospace" fill="#1f2328">crate::SITE_NAME</text>
+  <text x="382" y="675" font-size="10" fill="#1a7f37">compiles</text>
+  <text x="382" y="697" font-size="10" fill="#57606a">Names never fall down the tree. You</text>
+  <text x="382" y="711" font-size="10" fill="#57606a">spell the path, or <tspan font-family="ui-monospace,monospace">use</tspan> it to shorten.</text>
+</svg>
