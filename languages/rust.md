@@ -77,6 +77,7 @@ how to program in *some* language — just not Rust yet.
 - [`unsafe` — the door out of the rules](#unsafe)
 - [raw pointers — `*const T` / `*mut T`](#raw-pointers)
 - [`mod` — modules, paths and privacy](#modules)
+- [custom error types — an enum, `Display`, `Error`, `From`](#custom-errors)
 - [`fn main` — the program's entry point](#main)
 - [unit structs — `struct Solution;`](#unit-struct)
 - [`println!` — print a line](#println)
@@ -2554,3 +2555,74 @@ part of each symbol (`_RNvNtNt..6mangle7weather7sensors12read_celsius`) and of
 See also [`use` declarations](#use), [`pub fn`](#pub-fn).
 
 First seen in: [From-Zero concept 42 — modules](../from-zero/rust/42-modules/use-it.md)
+
+## custom error types — an enum, `Display`, `Error`, `From` {#custom-errors}
+
+**In one line:** when a function can fail in more than one way, give it an
+[enum](#enum) of failures so the caller can `match` on which one happened.
+
+```rust
+use std::error::Error;
+use std::fmt;
+use std::num::ParseIntError;
+
+#[derive(Debug)]                       // required — Error demands it
+enum ReadingError {
+    NotANumber(ParseIntError),         // keep the cause
+    OutOfRange { value: i32, limit: i32 },
+    SensorOffline { name: String },
+}
+
+impl fmt::Display for ReadingError {   // the human sentence
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            ReadingError::NotANumber(_) => write!(f, "reading was not a number"),
+            ReadingError::OutOfRange { value, limit } => write!(f, "{value}C is above {limit}C"),
+            ReadingError::SensorOffline { name } => write!(f, "sensor {name} is offline"),
+        }
+    }
+}
+
+impl Error for ReadingError {          // membership, plus the chain
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match self {
+            ReadingError::NotANumber(cause) => Some(cause),
+            _ => None,
+        }
+    }
+}
+
+impl From<ParseIntError> for ReadingError {   // THIS is what makes `?` convert
+    fn from(cause: ParseIntError) -> Self { ReadingError::NotANumber(cause) }
+}
+```
+
+**The four pieces.** `Debug` (derive) is the programmer's view; `Display` is the
+human's — lowercase, no trailing period, because callers wrap it. `Error` requires
+both and adds `source()`, the link to whatever caused this one; it returns a
+[trait object](#dyn) because a chain is a linked list of unrelated types. `From`
+is what [`?`](#question-mark) calls: its desugaring is
+`Err(e) => return Err(From::from(e))`, so one impl per incoming error type makes
+every `?` in the function convert silently. Without it: *the trait
+`From<ParseIntError>` is not implemented for `ReadingError`*.
+
+**`Box<dyn Error>` is the loose alternative.** Any error converts into it (std
+provides `From<E> for Box<dyn Error>` for every `E: Error`, plus one for `&str`
+and `String`), and `fn main() -> Result<(), Box<dyn Error>>` lets `?` work at the
+top level. The caller can print it and nothing else — no matching, no reacting.
+Right for `main`, scripts and prototypes; wrong for a library.
+
+**Sizes.** A `Result<T, E>` is as wide as its widest arm, so **every success pays
+for the largest failure**: an enum with a `String` variant makes every `Ok` 24
+bytes. `Box<dyn Error>` is a fixed 16 (data pointer + vtable pointer) and only
+allocates when a call fails. `std::io::Error` is 8 bytes because std boxes it
+internally on purpose. Box a fat variant rather than widening the enum — clippy's
+`result_large_err` fires around 128 bytes.
+
+**In practice** most projects use `thiserror` (derives `Display`/`Error`/`From`
+from attributes) or `anyhow` (a better `Box<dyn Error>` with a chain and
+backtrace). Both generate exactly the code above.
+
+See also [`Result<T, E>`](#result), [`?`](#question-mark), [`enum`](#enum).
+
+First seen in: [From-Zero concept 43 — custom error types](../from-zero/rust/43-custom-error-types/use-it.md)

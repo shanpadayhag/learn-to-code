@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Phase 12 in progress — modules done, error types next
+**Current:** Phase 13 complete — crates, Cargo and testing up next
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -131,13 +131,19 @@ they aren't memory topics. This table is the source of truth for where you are.
 |---|---------|--------|
 | 42 | [Modules (`mod`, `pub`, and paths)](42-modules/use-it.md) | ✅ done |
 
+### Phase 13 — Errors that carry meaning
+
+| # | Concept | Status |
+|---|---------|--------|
+| 43 | [Custom error types (`Display` · `Error` · `From`)](43-custom-error-types/use-it.md) | ✅ done |
+
 ### Later — macro-phases (firmed up as we reach them)
 
 Phases 1–11 took the track from a number in a stack slot to the raw pointers that `Vec`, `Rc`,
 `Mutex` and the executor are all actually made of — the whole of *where does this value live, and
 who owns it?* The **macro-phases** that follow are about how a program is organized rather than how
-a value is stored: modules (Phase 12), error types beyond `Result` (Phase 13), then crates, Cargo
-and testing. Firmed up as we reach them.
+a value is stored: modules (Phase 12) and error types beyond `Result` (Phase 13) are done; crates,
+Cargo and testing come next. Firmed up as we reach them.
 
 ## How this relates to the rest of the repo
 
