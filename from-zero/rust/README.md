@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 41 — *(up next)*
+**Current:** Phase 11 complete — macro-phases up next
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -123,13 +123,15 @@ they aren't memory topics. This table is the source of truth for where you are.
 | # | Concept | Status |
 |---|---------|--------|
 | 40 | [`unsafe` (the door out of the rules)](40-unsafe/use-it.md) | ✅ done |
-| 41 | Raw pointers (`*const T` · `*mut T`) | ⬜ up next |
+| 41 | [Raw pointers (`*const T` · `*mut T`)](41-raw-pointers/use-it.md) | ✅ done |
 
 ### Later — macro-phases (firmed up as we reach them)
 
-Phases 1–10 are complete, and Phase 11 has opened the door. What remains in it is **raw
-pointers** — the address with every promise stripped off, and what `Vec`, `Rc` and `split_at_mut`
-are actually made of.
+Phases 1–11 are complete. The track runs from a number in a stack slot to the raw pointers that
+`Vec`, `Rc`, `Mutex` and the executor are all actually made of — the whole of *where does this value
+live, and who owns it?* What's left is the **macro-phases**, about how a program is organized rather
+than how a value is stored: modules and crates, error types beyond `Result`, and testing. Firmed up
+as we reach them.
 
 ## How this relates to the rest of the repo
 

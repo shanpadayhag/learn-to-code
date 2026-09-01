@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 740" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="698" height="738" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328">Same 8 bytes. Four fewer promises.</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">Making a raw pointer is <tspan font-weight="700" fill="#1a7f37">safe</tspan> — it is just a number. Believing it is <tspan font-weight="700" fill="#bc4c00">unsafe</tspan>.</text>
+
+  <defs>
+    <marker id="rpArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#57606a"/>
+    </marker>
+    <marker id="rpPurple" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#8250df"/>
+    </marker>
+  </defs>
+
+  <!-- (1) reference vs raw pointer -->
+  <rect x="30" y="86" width="640" height="196" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="112" font-size="13.5" font-weight="700" fill="#8250df">① what the compiler knows, and stops knowing</text>
+
+  <rect x="50" y="126" width="296" height="140" rx="9" fill="#eafaef" stroke="#1a7f37" stroke-width="2"/>
+  <text x="198" y="147" font-size="11.5" font-family="ui-monospace,monospace" font-weight="700" fill="#1a7f37" text-anchor="middle">&amp;i32 — a reference</text>
+  <text x="66" y="169" font-size="10" fill="#57606a">the compiler has PROVED, for you:</text>
+  <text x="70" y="188" font-size="10" fill="#1a7f37">✓ never null</text>
+  <text x="70" y="205" font-size="10" fill="#1a7f37">✓ correctly aligned</text>
+  <text x="70" y="222" font-size="10" fill="#1a7f37">✓ points at a live i32, right now</text>
+  <text x="70" y="239" font-size="10" fill="#1a7f37">✓ no &amp;mut to it exists at the same time</text>
+  <text x="198" y="258" font-size="10" font-style="italic" fill="#1a7f37" text-anchor="middle">so `*reference` needs no keyword</text>
+
+  <rect x="366" y="126" width="284" height="140" rx="9" fill="#fff1e7" stroke="#bc4c00" stroke-width="2"/>
+  <text x="508" y="147" font-size="11.5" font-family="ui-monospace,monospace" font-weight="700" fill="#bc4c00" text-anchor="middle">*const i32 — a raw pointer</text>
+  <text x="382" y="169" font-size="10" fill="#57606a">the compiler knows NOTHING. you promise:</text>
+  <text x="386" y="188" font-size="10" fill="#bc4c00">! not null</text>
+  <text x="386" y="205" font-size="10" fill="#bc4c00">! aligned</text>
+  <text x="386" y="222" font-size="10" fill="#bc4c00">! still alive, right type</text>
+  <text x="386" y="239" font-size="10" fill="#bc4c00">! not aliasing someone's &amp;mut</text>
+  <text x="508" y="258" font-size="10" font-style="italic" fill="#bc4c00" text-anchor="middle">so `*pointer` needs unsafe { }</text>
+
+  <text x="350" y="278" font-size="10.5" font-weight="700" fill="#57606a" text-anchor="middle">at runtime both are one address — 8 bytes. every difference above is compile-time knowledge.</text>
+
+  <!-- (2) split_at_mut -->
+  <rect x="30" y="298" width="640" height="250" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="324" font-size="13.5" font-weight="700" fill="#0969da">② <tspan font-family="ui-monospace,monospace">split_at_mut</tspan> — two &amp;mut the borrow checker cannot allow, and you can prove</text>
+
+  <text x="60" y="348" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">let start = values.as_mut_ptr();</text>
+  <text x="320" y="348" font-size="10" font-style="italic" fill="#8a94a0">one address, taken before either half exists</text>
+
+  <rect x="60" y="360" width="580" height="44" rx="7" fill="#f6f8fa" stroke="#8a94a0" stroke-width="1.6"/>
+  <text x="70" y="352" font-size="9" fill="#8a94a0"></text>
+  <rect x="70" y="368" width="90" height="28" rx="5" fill="#ddf4ff" stroke="#0969da" stroke-width="1.4"/>
+  <text x="115" y="387" font-size="10" font-family="ui-monospace,monospace" fill="#0969da" text-anchor="middle">1</text>
+  <rect x="166" y="368" width="90" height="28" rx="5" fill="#ddf4ff" stroke="#0969da" stroke-width="1.4"/>
+  <text x="211" y="387" font-size="10" font-family="ui-monospace,monospace" fill="#0969da" text-anchor="middle">2</text>
+  <rect x="262" y="368" width="90" height="28" rx="5" fill="#ddf4ff" stroke="#0969da" stroke-width="1.4"/>
+  <text x="307" y="387" font-size="10" font-family="ui-monospace,monospace" fill="#0969da" text-anchor="middle">3</text>
+  <rect x="358" y="368" width="90" height="28" rx="5" fill="#f5f0ff" stroke="#8250df" stroke-width="1.4"/>
+  <text x="403" y="387" font-size="10" font-family="ui-monospace,monospace" fill="#8250df" text-anchor="middle">4</text>
+  <rect x="454" y="368" width="90" height="28" rx="5" fill="#f5f0ff" stroke="#8250df" stroke-width="1.4"/>
+  <text x="499" y="387" font-size="10" font-family="ui-monospace,monospace" fill="#8250df" text-anchor="middle">5</text>
+  <rect x="550" y="368" width="80" height="28" rx="5" fill="#f5f0ff" stroke="#8250df" stroke-width="1.4"/>
+  <text x="590" y="387" font-size="10" font-family="ui-monospace,monospace" fill="#8250df" text-anchor="middle">6</text>
+
+  <line x1="70" y1="418" x2="70" y2="402" stroke="#0969da" stroke-width="2" marker-end="url(#rpArrow)"/>
+  <line x1="358" y1="418" x2="358" y2="402" stroke="#8250df" stroke-width="2" marker-end="url(#rpPurple)"/>
+  <text x="80" y="432" font-size="10" font-family="ui-monospace,monospace" fill="#0969da">start</text>
+  <text x="368" y="432" font-size="10" font-family="ui-monospace,monospace" fill="#8250df">start.add(3)</text>
+
+  <rect x="60" y="442" width="290" height="50" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1.8"/>
+  <text x="205" y="462" font-size="10.5" font-family="ui-monospace,monospace" font-weight="700" fill="#0969da" text-anchor="middle">from_raw_parts_mut(start, 3)</text>
+  <text x="205" y="481" font-size="10" fill="#57606a" text-anchor="middle">a real &amp;mut [i32] over elements 0..3</text>
+
+  <rect x="358" y="442" width="282" height="50" rx="8" fill="#f5f0ff" stroke="#8250df" stroke-width="1.8"/>
+  <text x="499" y="462" font-size="10.5" font-family="ui-monospace,monospace" font-weight="700" fill="#8250df" text-anchor="middle">from_raw_parts_mut(start.add(3), 3)</text>
+  <text x="499" y="481" font-size="10" fill="#57606a" text-anchor="middle">a real &amp;mut [i32] over elements 3..6</text>
+
+  <rect x="60" y="502" width="580" height="34" rx="7" fill="#fff8c5" stroke="#9a6700" stroke-width="1.4"/>
+  <text x="350" y="524" font-size="11" fill="#9a6700" text-anchor="middle">the windows never overlap, so no two &amp;mut ever reach one element — <tspan font-weight="700">assert!(middle &lt;= length)</tspan> is the whole proof</text>
+
+  <!-- (3) four ways to be wrong -->
+  <rect x="30" y="564" width="640" height="156" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="590" font-size="13.5" font-weight="700" fill="#cf222e">③ the four ways a deref goes wrong — none of them warn you</text>
+
+  <rect x="50" y="604" width="146" height="66" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.6"/>
+  <text x="123" y="624" font-size="10.5" font-family="ui-monospace,monospace" font-weight="700" fill="#cf222e" text-anchor="middle">null</text>
+  <text x="123" y="642" font-size="9.5" fill="#57606a" text-anchor="middle">address 0x0</text>
+  <text x="123" y="658" font-size="9.5" fill="#57606a" text-anchor="middle">usually a segfault</text>
+
+  <rect x="204" y="604" width="146" height="66" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.6"/>
+  <text x="277" y="624" font-size="10.5" font-family="ui-monospace,monospace" font-weight="700" fill="#cf222e" text-anchor="middle">unaligned</text>
+  <text x="277" y="642" font-size="9.5" fill="#57606a" text-anchor="middle">u32 at an odd byte</text>
+  <text x="277" y="658" font-size="9.5" fill="#57606a" text-anchor="middle">bytes exist, still UB</text>
+
+  <rect x="358" y="604" width="146" height="66" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.6"/>
+  <text x="431" y="624" font-size="10.5" font-family="ui-monospace,monospace" font-weight="700" fill="#cf222e" text-anchor="middle">dangling</text>
+  <text x="431" y="642" font-size="9.5" fill="#57606a" text-anchor="middle">the value already died</text>
+  <text x="431" y="658" font-size="9.5" fill="#57606a" text-anchor="middle">reads a plausible lie</text>
+
+  <rect x="512" y="604" width="138" height="66" rx="8" fill="#ffebe9" stroke="#cf222e" stroke-width="1.6"/>
+  <text x="581" y="624" font-size="10.5" font-family="ui-monospace,monospace" font-weight="700" fill="#cf222e" text-anchor="middle">aliasing a &amp;mut</text>
+  <text x="581" y="642" font-size="9.5" fill="#57606a" text-anchor="middle">two writers, one cell</text>
+  <text x="581" y="658" font-size="9.5" fill="#57606a" text-anchor="middle">optimizer caches stale</text>
+
+  <text x="350" y="700" font-size="10.5" fill="#57606a" text-anchor="middle">the compiler proved all four for every reference you have written since concept 10. now they are yours.</text>
+
+  <text x="350" y="732" font-size="11" fill="#8a94a0" text-anchor="middle">creating a bad pointer compiles fine — the keyword is on the deref, because that is where the lie is believed</text>
+</svg>

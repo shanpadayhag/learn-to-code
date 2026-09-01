@@ -75,6 +75,7 @@ how to program in *some* language — just not Rust yet.
 - [`async` / `.await` — a function that can pause](#async-await)
 - [`Future`, `poll`, and executors](#future-poll)
 - [`unsafe` — the door out of the rules](#unsafe)
+- [raw pointers — `*const T` / `*mut T`](#raw-pointers)
 - [`fn main` — the program's entry point](#main)
 - [unit structs — `struct Solution;`](#unit-struct)
 - [`println!` — print a line](#println)
@@ -2168,6 +2169,90 @@ unchecked read, for instance. The symptom lands far from the cause, in release b
 unsafe code with **Miri**: `cargo +nightly miri test`.
 
 First seen in: [From-Zero concept 40 — `unsafe`](../from-zero/rust/40-unsafe/use-it.md)
+
+## raw pointers — `*const T` / `*mut T` {#raw-pointers}
+
+**In one line:** an address with every promise stripped off — the same 8 bytes as a
+[reference](#borrow), minus the four things the compiler had proved about it.
+
+**What a reference carries that a raw pointer doesn't.** A `&i32` is an address *plus* four proofs:
+not null · correctly aligned · pointing at a live `i32` right now · no `&mut` to it exists at the
+same time. Those proofs are what a lifetime and the borrow checker produce, and they're why `*r`
+needs no keyword. A raw pointer has none of them, so every one becomes your promise.
+
+**Making one is safe; dereferencing is unsafe.** Writing down a number can't hurt anyone; believing
+it can.
+
+```rust
+let mut reading = 42;
+
+let a: *mut i32   = &raw mut reading;      // preferred: address, no reference ever created
+let b: *const i32 = &raw const reading;
+let c: *const i32 = &reading;              // a reference coerces
+let d: *const i32 = std::ptr::null();
+let e: *const i32 = numbers.as_ptr();      // a Vec's buffer
+
+println!("{a:p}");                          // safe
+let value = unsafe { *b };                  // unsafe
+```
+
+Prefer `&raw mut` / `&raw const` over `&mut x as *mut _` — the old spelling creates a real reference
+for an instant, which is occasionally the bug.
+
+**What they allow that references can't:** two `*mut` to one place, null, dangling (no lifetime, so
+no `E0597`), and arithmetic. `.add(n)` moves by **n elements, not n bytes** (`.byte_add()` is spelled
+differently on purpose).
+
+**Sizes are unchanged** — thin stays thin, fat stays fat:
+
+| | size | |
+|---|---|---|
+| `*const i32` / `&i32` | 8 | address |
+| `*const [i32]` / `&[i32]` | 16 | address + element count |
+| `*const dyn Trait` / `&dyn Trait` | 16 | address + vtable |
+
+Which is why `slice::from_raw_parts_mut(pointer, count)` takes two arguments: it assembles the two
+words a `&mut [T]` is made of.
+
+**The canonical use — `split_at_mut`.** Two `&mut` into one slice: the borrow checker must reject it
+(it can't reason about the *value* of `middle`), and it is provably fine:
+
+```rust
+fn split_at_mut(values: &mut [i32], middle: usize) -> (&mut [i32], &mut [i32]) {
+    let length = values.len();
+    let start = values.as_mut_ptr();     // the address, BEFORE either half exists
+    assert!(middle <= length);           // the entire safety argument
+    unsafe {
+        (
+            slice::from_raw_parts_mut(start, middle),
+            slice::from_raw_parts_mut(start.add(middle), length - middle),
+        )
+    }
+}
+```
+
+Soundness rests on the `assert!` *and* on the signature: elision ties both outputs to `values`, so
+neither half can outlive the array. Drop the assert and `length - middle` underflows in release to
+~18 quintillion.
+
+**`&mut` uniqueness is still assumed.** While a `&mut T` exists nothing else may touch that memory —
+including a raw pointer made earlier. The code generator was told `&mut` is unique (`noalias`) and
+optimizes on it; going raw removed the *checking*, not the assumption.
+
+**Alignment is UB, not slowness.** A `*const u32` at an odd address is undefined behaviour even
+though the bytes are there — some machines fault, and the compiler picks instructions assuming
+alignment. Use `ptr::read_unaligned` when you really need it.
+
+**Provenance.** A pointer is an address *plus* which allocation it may reach. `pointer as usize as
+*const T` compiles but discards that permission. Derive pointers from pointers (`.add`, `.offset`,
+`.wrapping_add`); if an address must live in an integer, use `.addr()` / `.with_addr()`. Check it
+all with Miri.
+
+**`NonNull<T>` buys the niche back:** `Option<&T>` is 8 bytes (null *is* `None`), `Option<*const T>`
+is 16, `Option<NonNull<T>>` is 8 again — which is why `Box`, `Vec` and `Rc` use `NonNull` internally
+and `Option<Box<T>>` costs nothing extra.
+
+First seen in: [From-Zero concept 41 — raw pointers](../from-zero/rust/41-raw-pointers/use-it.md)
 
 ## `fn main` — the program's entry point {#main}
 
