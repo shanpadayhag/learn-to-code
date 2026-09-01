@@ -74,6 +74,7 @@ how to program in *some* language — just not Rust yet.
 - [`Send` and `Sync` — what may cross a thread](#send-sync)
 - [`async` / `.await` — a function that can pause](#async-await)
 - [`Future`, `poll`, and executors](#future-poll)
+- [`unsafe` — the door out of the rules](#unsafe)
 - [`fn main` — the program's entry point](#main)
 - [unit structs — `struct Solution;`](#unit-struct)
 - [`println!` — print a line](#println)
@@ -2084,6 +2085,89 @@ and a work-stealing thread pool — which is why `spawn` demands `F: Future + Se
 shape, industrial version.
 
 First seen in: [From-Zero concept 39 — `Future`, `poll`, and the executor](../from-zero/rust/39-future-poll-and-the-executor/use-it.md)
+
+## `unsafe` — the door out of the rules {#unsafe}
+
+**In one line:** a permission slip for five operations the compiler cannot verify — and *nothing*
+else; the borrow checker, ownership, lifetimes and types all keep running inside an `unsafe` block.
+
+**The five superpowers.** This is the complete list:
+
+1. dereference a raw pointer — `*ptr` ([raw pointers](#raw-pointers))
+2. call an `unsafe fn` — `slice.get_unchecked(i)`, `String::from_utf8_unchecked`
+3. read or write a `static mut`
+4. implement an `unsafe trait` — `unsafe impl Send for MyType {}` ([`Send`/`Sync`](#send-sync))
+5. access a `union` field
+
+Anything else you were hoping it would allow, it does not:
+
+```rust
+let mut owner = 5;
+let borrowed = &owner;
+unsafe { owner += 1; println!("{borrowed}"); }
+```
+
+```
+error[E0506]: cannot assign to `owner` because it is borrowed
+warning: unnecessary `unsafe` block
+```
+
+**Two spellings, mirror meanings.**
+
+```rust
+unsafe { *pointer }                             // block:     I have checked the contract here.
+unsafe fn get_unchecked(&self, i: usize) -> &T  // signature: calling me is a promise. Yours to keep.
+```
+
+Since edition 2024 an `unsafe fn` body is still ordinary safe code, so it needs its own inner
+`unsafe { }`. Document every precondition under a `# Safety` / `// SAFETY:` note — an unwritten
+contract is one nobody can keep.
+
+**The safe-wrapper pattern** — the reason any of this is bearable. Write the unsafe once, then bury
+it under an API nobody can misuse:
+
+```rust
+// SAFETY: `count <= values.len()`.
+unsafe fn sum_first_unchecked(values: &[u32], count: usize) -> u32 { /* get_unchecked in a loop */ }
+
+fn sum_first(values: &[u32], count: usize) -> Option<u32> {
+    if count > values.len() { return None; }        // the check the core cannot do
+    Some(unsafe { sum_first_unchecked(values, count) })
+}
+```
+
+`Vec`, `String`, `Box`, `Rc`, `RefCell`, `Mutex`, channels and `Waker` are all this shape.
+
+**Vocabulary that makes bugs describable.** *Safe* = callable without the keyword. *Unsafe* = has an
+uncheckable precondition. *Sound* = cannot cause UB however it is called. **Unsound** = a **safe**
+thing that can — `get_unchecked` is unsafe-and-sound; `sum_first` with its check deleted is
+safe-and-unsound, and that is the real bug class.
+
+**The audit boundary is the module, not the block.** An unsafe block leans on an invariant that
+ordinary safe code maintains, so a safe `set_len`-style method can break it from outside the braces.
+Keep those fields private and the module small.
+
+**`static mut` is the door to avoid.** One copy for the whole program, writable by any thread, so a
+reference to it is unsound by construction — a hard error in edition 2024:
+
+```rust
+static mut COUNT: u32 = 0;
+unsafe { println!("{COUNT}") }   // error: creating a shared reference to mutable static
+unsafe { *(&raw const COUNT) }   // ok — address, never a reference
+```
+
+Prefer `AtomicU32` or a [`Mutex`](#mutex).
+
+**The keyword compiles to nothing.** `unsafe { *ptr }` and `*reference` emit the same load. There is
+no runtime cost and no runtime protection — only a compile-time permission and a note that a human
+checked.
+
+**Undefined behaviour is not "it might crash."** It is "the compiler was allowed to assume this never
+happens," so it optimizes on your promise — deleting the bounds check you wrote *after* an
+unchecked read, for instance. The symptom lands far from the cause, in release builds only. Check
+unsafe code with **Miri**: `cargo +nightly miri test`.
+
+First seen in: [From-Zero concept 40 — `unsafe`](../from-zero/rust/40-unsafe/use-it.md)
 
 ## `fn main` — the program's entry point {#main}
 

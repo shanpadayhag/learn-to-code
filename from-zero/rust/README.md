@@ -9,7 +9,7 @@ New here? Read [how to learn](../README.md#how-to-learn-here) first.
 
 ## Progress
 
-**Current:** Concept 40 — *(up next)*
+**Current:** Concept 41 — *(up next)*
 
 Each concept is a folder with a **Use it** lesson, an **Under the hood** lesson, and
 exercises. **Interludes** (numbered like `01a`) are lighter, single-lesson detours
@@ -117,12 +117,19 @@ they aren't memory topics. This table is the source of truth for where you are.
 |---|---------|--------|
 | 38 | [`async` and `.await` (a function that can pause)](38-async-and-await/use-it.md) | ✅ done |
 | 39 | [`Future`, `poll`, and the executor (who runs a paused function)](39-future-poll-and-the-executor/use-it.md) | ✅ done |
-| 40 | `unsafe` (the door out of the rules) | ⬜ up next |
+
+### Phase 11 — The floor (what every abstraction is built on)
+
+| # | Concept | Status |
+|---|---------|--------|
+| 40 | [`unsafe` (the door out of the rules)](40-unsafe/use-it.md) | ✅ done |
+| 41 | Raw pointers (`*const T` · `*mut T`) | ⬜ up next |
 
 ### Later — macro-phases (firmed up as we reach them)
 
-Phases 1–9 are complete, and Phase 10 has its async half. What remains is `unsafe` — the floor
-under every abstraction in this track.
+Phases 1–10 are complete, and Phase 11 has opened the door. What remains in it is **raw
+pointers** — the address with every promise stripped off, and what `Vec`, `Rc` and `split_at_mut`
+are actually made of.
 
 ## How this relates to the rest of the repo
 

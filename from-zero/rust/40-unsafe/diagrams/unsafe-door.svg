@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 730" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <rect x="1" y="1" width="698" height="728" rx="14" fill="#f6f8fa" stroke="#d0d7de"/>
+
+  <text x="32" y="40" font-size="19" font-weight="700" fill="#1f2328">`unsafe` opens five small doors. The wall stays up.</text>
+  <text x="32" y="63" font-size="13.5" fill="#57606a">It is not "checking off". It is <tspan font-weight="700">you</tspan> promising the compiler what it can no longer prove.</text>
+
+  <defs>
+    <marker id="usArrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#57606a"/>
+    </marker>
+    <marker id="usRed" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#cf222e"/>
+    </marker>
+  </defs>
+
+  <!-- (1) what it unlocks vs what stays on -->
+  <rect x="30" y="86" width="640" height="212" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="112" font-size="13.5" font-weight="700" fill="#8250df">① what the keyword actually changes</text>
+
+  <rect x="50" y="126" width="300" height="156" rx="9" fill="#fff1e7" stroke="#bc4c00" stroke-width="2"/>
+  <text x="200" y="147" font-size="11.5" font-weight="700" fill="#bc4c00" text-anchor="middle">UNLOCKED — the five superpowers</text>
+  <text x="66" y="169" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">1. deref a raw pointer  *ptr</text>
+  <text x="66" y="189" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">2. call an  unsafe fn</text>
+  <text x="66" y="209" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">3. touch a  static mut</text>
+  <text x="66" y="229" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">4. impl an  unsafe trait</text>
+  <text x="66" y="249" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">5. read a  union  field</text>
+  <text x="200" y="271" font-size="10" font-style="italic" fill="#bc4c00" text-anchor="middle">that is the whole list — nothing else</text>
+
+  <rect x="366" y="126" width="284" height="156" rx="9" fill="#eafaef" stroke="#1a7f37" stroke-width="2"/>
+  <text x="508" y="147" font-size="11.5" font-weight="700" fill="#1a7f37" text-anchor="middle">STILL ON — every other rule</text>
+  <text x="382" y="169" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">the borrow checker</text>
+  <text x="382" y="189" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">ownership and moves</text>
+  <text x="382" y="209" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">lifetimes</text>
+  <text x="382" y="229" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">type checking</text>
+  <text x="382" y="249" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a">Drop, at the same moment</text>
+  <text x="508" y="271" font-size="10" font-style="italic" fill="#1a7f37" text-anchor="middle">a borrow error inside unsafe { } is still an error</text>
+
+  <!-- (2) the sandwich -->
+  <rect x="30" y="314" width="640" height="216" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="340" font-size="13.5" font-weight="700" fill="#0969da">② why any of this is bearable: the safe wrapper</text>
+
+  <rect x="70" y="354" width="560" height="46" rx="8" fill="#eafaef" stroke="#1a7f37" stroke-width="2"/>
+  <text x="350" y="374" font-size="11.5" font-weight="700" fill="#1a7f37" text-anchor="middle">safe API — millions of callers, no unsafe in sight</text>
+  <text x="350" y="391" font-size="10" font-family="ui-monospace,monospace" fill="#57606a" text-anchor="middle">v.push(x)   s.len()   rc.clone()   m.lock()</text>
+
+  <line x1="350" y1="402" x2="350" y2="420" stroke="#57606a" stroke-width="1.8" marker-end="url(#usArrow)"/>
+
+  <rect x="210" y="424" width="280" height="46" rx="8" fill="#fff1e7" stroke="#bc4c00" stroke-width="2"/>
+  <text x="350" y="444" font-size="11.5" font-weight="700" fill="#bc4c00" text-anchor="middle">a few lines of unsafe</text>
+  <text x="350" y="461" font-size="10" fill="#57606a" text-anchor="middle">audited once, by hand, by a human</text>
+
+  <line x1="350" y1="472" x2="350" y2="490" stroke="#57606a" stroke-width="1.8" marker-end="url(#usArrow)"/>
+
+  <rect x="70" y="494" width="560" height="24" rx="6" fill="#f6f8fa" stroke="#8a94a0" stroke-width="1.4"/>
+  <text x="350" y="511" font-size="10.5" font-family="ui-monospace,monospace" fill="#57606a" text-anchor="middle">raw memory · the OS · the CPU</text>
+
+  <text x="648" y="380" font-size="10" fill="#8a94a0" text-anchor="end"></text>
+
+  <!-- (3) UB is not a crash -->
+  <rect x="30" y="546" width="640" height="164" rx="11" fill="#fff" stroke="#d0d7de"/>
+  <text x="48" y="572" font-size="13.5" font-weight="700" fill="#cf222e">③ break the promise and you do not get a crash — you get a different program</text>
+
+  <rect x="50" y="586" width="278" height="102" rx="9" fill="#f6f8fa" stroke="#8a94a0" stroke-width="1.6"/>
+  <text x="189" y="606" font-size="10.5" font-weight="700" fill="#57606a" text-anchor="middle">what you wrote</text>
+  <text x="66" y="628" font-size="10" font-family="ui-monospace,monospace" fill="#57606a">let x = unsafe {</text>
+  <text x="66" y="644" font-size="10" font-family="ui-monospace,monospace" fill="#57606a">    *v.get_unchecked(i)</text>
+  <text x="66" y="660" font-size="10" font-family="ui-monospace,monospace" fill="#57606a">};</text>
+  <text x="66" y="678" font-size="10" font-family="ui-monospace,monospace" fill="#0969da">if i &lt; v.len() { ok() }</text>
+
+  <line x1="336" y1="637" x2="374" y2="637" stroke="#cf222e" stroke-width="2" marker-end="url(#usRed)"/>
+  <rect x="330" y="612" width="52" height="16" fill="#fff"/>
+  <text x="356" y="624" font-size="9.5" font-weight="700" fill="#cf222e" text-anchor="middle">optimizer</text>
+
+  <rect x="386" y="586" width="264" height="102" rx="9" fill="#ffebe9" stroke="#cf222e" stroke-width="1.8"/>
+  <text x="518" y="606" font-size="10.5" font-weight="700" fill="#cf222e" text-anchor="middle">what actually runs</text>
+  <text x="402" y="628" font-size="10" font-family="ui-monospace,monospace" fill="#57606a">let x = load(v, i);</text>
+  <text x="402" y="650" font-size="10" font-family="ui-monospace,monospace" fill="#cf222e" text-decoration="line-through">if i &lt; v.len() { ok() }</text>
+  <text x="518" y="674" font-size="9.5" font-style="italic" fill="#cf222e" text-anchor="middle">"you promised i was in bounds,</text>
+  <text x="518" y="686" font-size="9.5" font-style="italic" fill="#cf222e" text-anchor="middle">so this check can never be false"</text>
+
+  <text x="350" y="722" font-size="11" fill="#8a94a0" text-anchor="middle">undefined behaviour is not "it might crash" — it is "the compiler was allowed to assume this never happens"</text>
+</svg>
