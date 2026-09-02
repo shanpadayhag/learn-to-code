@@ -65,8 +65,7 @@ the final `Vec`**, growing it one push at a time. The steps in between are just 
 single value passing through.
 
 ## Why it's zero-cost
-Each adapter is its own unique struct type, and each closure is [its own unique
-type](../26-closures/under-the-hood.md#why-its-zero-cost) too. So the compiler knows the exact type
+Each adapter is its own unique struct type, and each closure is [its own unique type](../26-closures/under-the-hood.md#why-its-zero-cost) too. So the compiler knows the exact type
 at every link of the chain and **inlines everything** —
 [monomorphization](../19-generics/under-the-hood.md), the same static-dispatch trick behind
 generics and closures. There's no per-item function-call overhead and no dynamic lookup.

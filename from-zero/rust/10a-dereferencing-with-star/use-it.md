@@ -95,8 +95,7 @@ had that `&`: it peels each `&i32` to an `i32` up front, so the body never needs
 
 ## Next
 
-- The memory picture beneath all of this: [Under the hood — a reference is an
-  address](under-the-hood.md). Read it next; `*` makes complete sense once you see what a
+- The memory picture beneath all of this: [Under the hood — a reference is an address](under-the-hood.md). Read it next; `*` makes complete sense once you see what a
   reference physically is.
 - Back to the main line: [Concept 11 — `&mut` and the borrow rules](../11-mut-references-and-borrow-rules/use-it.md).
 - Terse reference: [`*` dereference](../../../languages/rust.md#deref) and

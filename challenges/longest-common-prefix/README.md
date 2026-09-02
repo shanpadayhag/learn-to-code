@@ -166,8 +166,7 @@ word**, so nothing is allocated or copied.
 repo: the `&[&'a str]` parameter type and the `|(a, b)| a == b` closure.
 
 ## Remember This
-- **`break` leaves only the nearest loop.** My whole bug. To bail out of an outer loop, [label
-  it and `break 'label`](../../languages/rust.md#loop-control) — or, better, restructure so
+- **`break` leaves only the nearest loop.** My whole bug. To bail out of an outer loop, [label it and `break 'label`](../../languages/rust.md#loop-control) — or, better, restructure so
   you're not nesting at all (which is what "compare to the first word" achieved here).
 - **`.chars().nth(k)` is `O(k)`, not `O(1)`.** A string isn't an array you can jump into;
   walking positions with `.nth()` inside a loop is quietly quadratic. Reach for one forward pass.

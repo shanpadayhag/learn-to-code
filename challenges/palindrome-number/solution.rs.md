@@ -19,8 +19,7 @@ solution.
 - `let number: u64 = input.trim().parse().unwrap()` — `.trim()` drops the trailing newline,
   `.parse()` reads the text as a number, and the `: u64` annotation is what tells `.parse()`
   *which* number type to produce. `u64` (unsigned) suits a non-negative input.
-- `if is_palindrome(number) { "Yes" } else { "No" }` — an [`if` used as an
-  expression](../../from-zero/rust/05-expressions-statements-and-return/use-it.md): the whole
+- `if is_palindrome(number) { "Yes" } else { "No" }` — an [`if` used as an expression](../../from-zero/rust/05-expressions-statements-and-return/use-it.md): the whole
   thing *evaluates to* one of the two string literals, which `println!` then prints. No
   intermediate variable needed.
 - `let mut remaining_number = number;` / `let mut reversed_half = 0;` — both are `mut` because

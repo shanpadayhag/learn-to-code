@@ -36,8 +36,7 @@ from [Concept 18](../18-hashmap/under-the-hood.md):
 | ~O(1) speed | the same **hash-to-slot jump**, not a scan |
 
 That last row is the whole payoff, and it's borrowed wholesale. The map doesn't *search* for a key —
-it hashes the key into a slot number and looks **only** there ([the trick from Concept
-18](../18-hashmap/under-the-hood.md)). A set checking membership does the identical jump. Take the
+it hashes the key into a slot number and looks **only** there ([the trick from Concept 18](../18-hashmap/under-the-hood.md)). A set checking membership does the identical jump. Take the
 hashing away and both collapse back to scanning a list, O(n) per check.
 
 ## Why a set has no order

@@ -103,8 +103,7 @@ stays home.
 > **Where you'll feel this hardest:** walking a **linked list**. A traversal holds an
 > `Option<Box<Node>>` and, every loop, must read the current node, step to the next, *and keep the
 > variable usable for the following pass*. That's `.take()` to step forward and `.as_mut()` to
-> grow the list — the exact tools above. That's the payoff lesson: [Interlude 29a — Walking and
-> building a linked list](../29a-walking-a-linked-list/use-it.md), after you've met
+> grow the list — the exact tools above. That's the payoff lesson: [Interlude 29a — Walking and building a linked list](../29a-walking-a-linked-list/use-it.md), after you've met
 > [`Box`](../29-box/use-it.md).
 
 ## Exercises
