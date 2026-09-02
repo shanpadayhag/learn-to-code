@@ -142,34 +142,37 @@ invented.
 ```rust
 impl Solution {
     pub fn add_two_numbers(
-        first_number: Option<Box<ListNode>>,
-        second_number: Option<Box<ListNode>>,
+        first_number_head: Option<Box<ListNode>>,
+        second_number_head: Option<Box<ListNode>>,
     ) -> Option<Box<ListNode>> {
-        let mut result_head = Box::new(ListNode::new(0));
-        let mut result_tail = &mut result_head;
-        let mut carry = 0;
+        let mut total_list_head = Box::new(ListNode::new(0));
+        let mut total_list_tail = &mut total_list_head;
+        let mut carried_digit_value = 0;
 
-        let mut first_digit = first_number;
-        let mut second_digit = second_number;
+        let mut remaining_first_digits = first_number_head;
+        let mut remaining_second_digits = second_number_head;
 
-        while first_digit.is_some() || second_digit.is_some() || carry != 0 {
-            let mut digit_sum = carry;
+        while remaining_first_digits.is_some()
+            || remaining_second_digits.is_some()
+            || carried_digit_value != 0
+        {
+            let mut current_digit_sum = carried_digit_value;
 
-            if let Some(node) = first_digit.take() {
-                digit_sum += node.val;
-                first_digit = node.next;
+            if let Some(first_digit_node) = remaining_first_digits.take() {
+                current_digit_sum += first_digit_node.val;
+                remaining_first_digits = first_digit_node.next;
             }
-            if let Some(node) = second_digit.take() {
-                digit_sum += node.val;
-                second_digit = node.next;
+            if let Some(second_digit_node) = remaining_second_digits.take() {
+                current_digit_sum += second_digit_node.val;
+                remaining_second_digits = second_digit_node.next;
             }
 
-            carry = digit_sum / 10;
-            result_tail.next = Some(Box::new(ListNode::new(digit_sum % 10)));
-            result_tail = result_tail.next.as_mut().unwrap();
+            carried_digit_value = current_digit_sum / 10;
+            total_list_tail.next = Some(Box::new(ListNode::new(current_digit_sum % 10)));
+            total_list_tail = total_list_tail.next.as_mut().unwrap();
         }
 
-        result_head.next
+        total_list_head.next
     }
 }
 ```
