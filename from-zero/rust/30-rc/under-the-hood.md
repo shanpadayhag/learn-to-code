@@ -33,14 +33,14 @@ This is the entire mechanism, and it's smaller than it sounds:
 
 Trace it on a real run — the numbers below are printed by actual code:
 
-| step | code | strong count |
-|------|------|-------------|
-| 1 | `let a = Rc::new(s);` | **1** |
-| 2 | `let b = Rc::clone(&a);` | **2** |
-| 3 | `{ let c = Rc::clone(&a);` | **3** |
-| 4 | `}` — `c` leaves scope | **2** |
-| 5 | `drop(a);` | **1** |
-| 6 | end — `b` leaves scope | **0** → value freed here |
+| step | code                       | strong count             |
+| ---- | -------------------------- | ------------------------ |
+| 1    | `let a = Rc::new(s);`      | **1**                    |
+| 2    | `let b = Rc::clone(&a);`   | **2**                    |
+| 3    | `{ let c = Rc::clone(&a);` | **3**                    |
+| 4    | `}` — `c` leaves scope     | **2**                    |
+| 5    | `drop(a);`                 | **1**                    |
+| 6    | end — `b` leaves scope     | **0** → value freed here |
 
 The value outlives `a`, `c`, and every owner *except the last*. Only when the final owner lets go (count reaches `0`) does the free happen — automatically, driven entirely by the count. Nobody frees too early (the value is alive while *anyone* holds it) and nobody frees twice (only the zero-transition frees).
 

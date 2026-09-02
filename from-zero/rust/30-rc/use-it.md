@@ -104,11 +104,7 @@ takes(Rc::clone(&a));   // and another — a is still yours
 ```
 
 ## The catch: `Rc` gives you shared reads, not writes
-Shared ownership comes with a limit that follows straight from the [borrow
-rules](../11-mut-references-and-borrow-rules/use-it.md): if several owners can all reach one
-value, letting any of them *mutate* it would be exactly the "many aliases + mutation" that Rust
-forbids. So `Rc<T>` only ever hands out **shared, read-only** access to the value. You can read
-through any owner; you cannot get a `&mut` to the inside:
+Shared ownership comes with a limit that follows straight from the [borrow rules](../11-mut-references-and-borrow-rules/use-it.md): if several owners can all reach one value, letting any of them *mutate* it would be exactly the "many aliases + mutation" that Rust forbids. So `Rc<T>` only ever hands out **shared, read-only** access to the value. You can read through any owner; you cannot get a `&mut` to the inside:
 
 ```rust
 let shared = Rc::new(String::from("hi"));
@@ -116,21 +112,12 @@ let shared = Rc::new(String::from("hi"));
 println!("{shared}");       // ✅ reading is fine
 ```
 
-That's not a dead end — it's the exact seam the **next** tool fills. `RefCell<T>` re-introduces
-mutation *safely* by moving the borrow check from compile time to run time, and `Rc<RefCell<T>>`
-— "shared ownership *and* the ability to mutate" — is one of Rust's workhorse combinations.
-This lesson is the "shared ownership" half.
+That's not a dead end — it's the exact seam the **next** tool fills. `RefCell<T>` re-introduces mutation *safely* by moving the borrow check from compile time to run time, and `Rc<RefCell<T>>` — "shared ownership *and* the ability to mutate" — is one of Rust's workhorse combinations. This lesson is the "shared ownership" half.
 
 ## One more note: single-threaded
-`Rc`'s counter is *not* safe to touch from two threads at once (two threads bumping the same
-count could corrupt it). So `Rc` is for **single-threaded** sharing only — the compiler will
-stop you from sending one across threads. When you need the same sharing *across* threads, the
-thread-safe sibling is `Arc<T>` (**a**tomically **r**eference **c**ounted); it works identically
-but pays a small cost to make the count safe. You'll meet `Arc` in the concurrency phase; for now,
-`Rc` within one thread.
+`Rc`'s counter is *not* safe to touch from two threads at once (two threads bumping the same count could corrupt it). So `Rc` is for **single-threaded** sharing only — the compiler will stop you from sending one across threads. When you need the same sharing *across* threads, the thread-safe sibling is `Arc<T>` (**a**tomically **r**eference **c**ounted); it works identically but pays a small cost to make the count safe. You'll meet `Arc` in the concurrency phase; for now, `Rc` within one thread.
 
-> Quick reference: the [`Rc<T>` handbook entry](../../../languages/rust.md#rc) is the terse
-> lookup version.
+> Quick reference: the [`Rc<T>` handbook entry](../../../languages/rust.md#rc) is the terse lookup version.
 
 ## Exercises
 1. **Watch the count move** — [starter](exercises/1-starter.rs) · [solution](exercises/1-solution.rs).
