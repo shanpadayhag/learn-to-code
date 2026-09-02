@@ -102,8 +102,9 @@ So for each tile at the right edge we:
 
 ### Watch it run
 Same strip, `s = "abba"` (positions `a`=0, `b`=1, `b`=2, `a`=3). The map stores
-`character → last index seen`. `left` is the window's left edge; the window is
-everything from `left` to the current position.
+`character → last index seen`. `left` is shorthand for the window's left edge —
+`current_substring_start_index` in the code below; the window is everything from
+`left` to the current position.
 
 | Step | Right edge (index) | Seen this colour before? | Move left edge? | Window | Width | Longest so far | Map afterwards |
 |---|---|---|---|---|---|---|---|
@@ -177,22 +178,27 @@ the largest.
 use std::collections::HashMap;
 
 impl Solution {
-    pub fn length_of_longest_substring(text: String) -> i32 {
-        let mut last_seen_index: HashMap<char, usize> = HashMap::new();
-        let mut window_start = 0;
-        let mut longest = 0;
+    pub fn length_of_longest_substring(input_text: String) -> i32 {
+        let mut last_seen_character_index: HashMap<char, usize> = HashMap::new();
+        let mut current_substring_start_index = 0;
+        let mut longest_substring_length = 0;
 
-        for (current_index, current_char) in text.chars().enumerate() {
-            if let Some(&previous_index) = last_seen_index.get(&current_char) {
-                if previous_index >= window_start {
-                    window_start = previous_index + 1;
+        for (current_character_index, current_character) in input_text.chars().enumerate() {
+            if let Some(&existing_character_index) =
+                last_seen_character_index.get(&current_character)
+            {
+                if existing_character_index >= current_substring_start_index {
+                    current_substring_start_index = existing_character_index + 1;
                 }
             }
-            last_seen_index.insert(current_char, current_index);
-            longest = longest.max(current_index - window_start + 1);
+            last_seen_character_index.insert(current_character, current_character_index);
+
+            let current_substring_length =
+                current_character_index - current_substring_start_index + 1;
+            longest_substring_length = longest_substring_length.max(current_substring_length);
         }
 
-        longest as i32
+        longest_substring_length as i32
     }
 }
 ```

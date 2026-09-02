@@ -3,22 +3,27 @@ use std::collections::HashMap;
 struct Solution;
 
 impl Solution {
-    pub fn length_of_longest_substring(text: String) -> i32 {
-        let mut last_seen_index: HashMap<char, usize> = HashMap::new();
-        let mut window_start = 0;
-        let mut longest = 0;
+    pub fn length_of_longest_substring(input_text: String) -> i32 {
+        let mut last_seen_character_index: HashMap<char, usize> = HashMap::new();
+        let mut current_substring_start_index = 0;
+        let mut longest_substring_length = 0;
 
-        for (current_index, current_char) in text.chars().enumerate() {
-            if let Some(&previous_index) = last_seen_index.get(&current_char) {
-                if previous_index >= window_start {
-                    window_start = previous_index + 1;
+        for (current_character_index, current_character) in input_text.chars().enumerate() {
+            if let Some(&existing_character_index) =
+                last_seen_character_index.get(&current_character)
+            {
+                if existing_character_index >= current_substring_start_index {
+                    current_substring_start_index = existing_character_index + 1;
                 }
             }
-            last_seen_index.insert(current_char, current_index);
-            longest = longest.max(current_index - window_start + 1);
+            last_seen_character_index.insert(current_character, current_character_index);
+
+            let current_substring_length =
+                current_character_index - current_substring_start_index + 1;
+            longest_substring_length = longest_substring_length.max(current_substring_length);
         }
 
-        longest as i32
+        longest_substring_length as i32
     }
 }
 
@@ -33,8 +38,11 @@ fn main() {
     check("aabbaa", 2);
 }
 
-fn check(text: &str, expected: i32) {
-    let longest = Solution::length_of_longest_substring(text.to_string());
-    assert_eq!(longest, expected);
-    println!("length_of_longest_substring({:?}) = {}", text, longest);
+fn check(input_text: &str, expected_length: i32) {
+    let longest_substring_length = Solution::length_of_longest_substring(input_text.to_string());
+    assert_eq!(longest_substring_length, expected_length);
+    println!(
+        "length_of_longest_substring({:?}) = {}",
+        input_text, longest_substring_length
+    );
 }
