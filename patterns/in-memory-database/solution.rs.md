@@ -45,9 +45,9 @@ the handbook.
 - `fn format_live_fields<'a>(...)` —
   [lifetimes](../../languages/rust.md#lifetimes): names the borrow shared by the
   iterator's `&String`/`&TimedValue` items.
-- `format!("{field}({})", stored.value)` —
+- `format!("{field}({})", stored_value.value)` —
   [`format!`](../../languages/rust.md#format): builds the `field(value)` output strings.
-- `key.to_owned()` / `stored.value.clone()` —
+- `key.to_owned()` / `stored_value.value.clone()` —
   [`.to_owned()` / `.clone()`](../../languages/rust.md#to-owned-clone): make the owned
   copies a map must hold.
 
@@ -70,7 +70,7 @@ The interesting methods — the rest follow the same shapes.
 ```rust
 fn is_alive_at(&self, timestamp: Timestamp) -> bool {
     match self.expires_at {
-        Some(expiry) => timestamp < expiry,
+        Some(expiry_timestamp) => timestamp < expiry_timestamp,
         None => true,
     }
 }
@@ -96,9 +96,9 @@ of the same name.
 
 **A read that can miss twice.**
 ```rust
-let stored = self.records.get(key)?.get(field)?;
-if stored.is_alive_at(timestamp) {
-    Some(stored.value.as_str())
+let stored_value = self.records.get(key)?.get(field)?;
+if stored_value.is_alive_at(timestamp) {
+    Some(stored_value.value.as_str())
 } else {
     None
 }
@@ -123,11 +123,14 @@ parameter, so this range chain and the plain `.iter()` in `scan_at` reuse one fu
 
 **Backup: snapshot only what's alive, storing *remaining* time.**
 ```rust
-let remaining_ttl = stored.expires_at.map(|expiry| expiry - timestamp);
+let remaining_ttl = stored_value
+    .expires_at
+    .map(|expiry_timestamp| expiry_timestamp - timestamp);
 ```
 [`Option::map`](../../languages/rust.md#option) converts an absolute deadline into a
 duration (`Some(25)` → `Some(15)`), leaving immortal fields as `None`. The subtraction is
-safe because this runs after a `.filter` to live fields, so `timestamp < expiry` — no
+safe because this runs after a `.filter` to live fields, so
+`timestamp < expiry_timestamp` — no
 [`usize`/`u64` underflow](../../languages/rust.md#usize).
 
 **Restore: find the snapshot, then rebase.**

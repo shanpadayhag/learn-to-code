@@ -10,7 +10,7 @@ struct TimedValue {
 impl TimedValue {
     fn is_alive_at(&self, timestamp: Timestamp) -> bool {
         match self.expires_at {
-            Some(expiry) => timestamp < expiry,
+            Some(expiry_timestamp) => timestamp < expiry_timestamp,
             None => true,
         }
     }
@@ -59,9 +59,9 @@ impl InMemoryDatabase {
     }
 
     pub fn get_at(&self, key: &str, field: &str, timestamp: Timestamp) -> Option<&str> {
-        let stored = self.records.get(key)?.get(field)?;
-        if stored.is_alive_at(timestamp) {
-            Some(stored.value.as_str())
+        let stored_value = self.records.get(key)?.get(field)?;
+        if stored_value.is_alive_at(timestamp) {
+            Some(stored_value.value.as_str())
         } else {
             None
         }
@@ -71,10 +71,10 @@ impl InMemoryDatabase {
         let Some(record) = self.records.get_mut(key) else {
             return false;
         };
-        let Some(stored) = record.get(field) else {
+        let Some(stored_value) = record.get(field) else {
             return false;
         };
-        if !stored.is_alive_at(timestamp) {
+        if !stored_value.is_alive_at(timestamp) {
             return false;
         }
         record.remove(field);
@@ -128,22 +128,24 @@ impl InMemoryDatabase {
 }
 
 fn format_live_fields<'a>(
-    fields: impl Iterator<Item = (&'a String, &'a TimedValue)>,
+    record_fields: impl Iterator<Item = (&'a String, &'a TimedValue)>,
     timestamp: Timestamp,
 ) -> Vec<String> {
-    fields
-        .filter(|(_, stored)| stored.is_alive_at(timestamp))
-        .map(|(field, stored)| format!("{field}({})", stored.value))
+    record_fields
+        .filter(|(_, stored_value)| stored_value.is_alive_at(timestamp))
+        .map(|(field, stored_value)| format!("{field}({})", stored_value.value))
         .collect()
 }
 
 fn capture_live_fields(record: &Record, timestamp: Timestamp) -> SnapshotRecord {
     record
         .iter()
-        .filter(|(_, stored)| stored.is_alive_at(timestamp))
-        .map(|(field, stored)| {
-            let remaining_ttl = stored.expires_at.map(|expiry| expiry - timestamp);
-            (field.clone(), SnapshotValue { value: stored.value.clone(), remaining_ttl })
+        .filter(|(_, stored_value)| stored_value.is_alive_at(timestamp))
+        .map(|(field, stored_value)| {
+            let remaining_ttl = stored_value
+                .expires_at
+                .map(|expiry_timestamp| expiry_timestamp - timestamp);
+            (field.clone(), SnapshotValue { value: stored_value.value.clone(), remaining_ttl })
         })
         .collect()
 }
@@ -159,7 +161,9 @@ fn rebuild_record(snapshot_record: &SnapshotRecord, timestamp: Timestamp) -> Rec
     snapshot_record
         .iter()
         .map(|(field, snapshot_value)| {
-            let expires_at = snapshot_value.remaining_ttl.map(|remaining| timestamp + remaining);
+            let expires_at = snapshot_value
+                .remaining_ttl
+                .map(|remaining_ttl| timestamp + remaining_ttl);
             (field.clone(), TimedValue { value: snapshot_value.value.clone(), expires_at })
         })
         .collect()
@@ -203,11 +207,11 @@ fn main() {
     check("get session at 37", database.get_at("user:1", "session", 37), None);
 }
 
-fn check<T, U>(label: &str, actual: T, expected: U)
+fn check<T, U>(case_label: &str, actual_result: T, expected_result: U)
 where
     T: std::fmt::Debug + PartialEq<U>,
     U: std::fmt::Debug,
 {
-    assert_eq!(actual, expected);
-    println!("{label} = {actual:?}");
+    assert_eq!(actual_result, expected_result);
+    println!("{case_label} = {actual_result:?}");
 }
