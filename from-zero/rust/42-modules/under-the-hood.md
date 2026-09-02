@@ -89,11 +89,8 @@ Before you run it: how many bytes does `nested` occupy, how many does `flat`, an
 
 <details>
 <summary>Answer</summary>
-
-`8 8`. Both are one `f64` and nothing else. `nested` sits in `main`'s stack frame exactly like `flat` does — three levels of module did not add a header, a pointer, a tag, or a hop. There is no such thing as "inside a module" at run time; there is only a value in a slot.
-
-The second line prints `<crate>::deep::deeper::deepest::Reading`, with the crate name first. That is the *only* place the nesting still exists: in the name the compiler uses to keep this `Reading` distinct from the one at the root. And no, the first line's answer does not depend on it at all — the two `Reading` types are different types with different names and identical layouts, which is the point. The path disambiguates the name; it never touches the bytes.
-
+<p><code>8 8</code>. Both are one <code>f64</code> and nothing else. <code>nested</code> sits in <code>main</code>'s stack frame exactly like <code>flat</code> does — three levels of module did not add a header, a pointer, a tag, or a hop. There is no such thing as "inside a module" at run time; there is only a value in a slot.</p>
+<p>The second line prints <code>&lt;crate&gt;::deep::deeper::deepest::Reading</code>, with the crate name first. That is the <em>only</em> place the nesting still exists: in the name the compiler uses to keep this <code>Reading</code> distinct from the one at the root. And no, the first line's answer does not depend on it at all — the two <code>Reading</code> types are different types with different names and identical layouts, which is the point. The path disambiguates the name; it never touches the bytes.</p>
 </details>
 
 ## Next

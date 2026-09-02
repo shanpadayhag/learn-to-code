@@ -215,24 +215,12 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Four.** `pause(3)` returns `Pending` three times, decrementing each time, and answers `Ready` on
-   the fourth call — when it finds the counter at zero. The count is *pauses + 1*, because a future
-   has to be asked once more to report that it's finished. That off-by-one is the shape of every poll
-   loop.
-2. **Inside `work`'s future, as a field.** `pause(3)` is `.await`ed, so the whole `Pause` struct is
-   nested into `work`'s state machine — exactly the nesting you measured in
-   [Concept 38](../38-async-and-await/use-it.md). Nobody else owns it, nothing is allocated, and it
-   is dropped when `work`'s future is dropped. `self.polls_left -= 1` is writing to a field of a
-   struct that lives inside another struct on `main`'s stack.
-3. **In `block_on`'s frame**, because `future` was moved into the parameter and `pin!` parks it
-   there. And no — `pin!` is precisely the promise that no poll may move it. Each iteration calls
-   `.as_mut()` to re-borrow the same pinned address rather than handing the pin away. Once
-   `block_on` returns, its frame is gone and so is the future.
-4. **It would spin forever at 100% CPU** — not deadlock, not sleep. The loop would keep polling as
-   fast as the core allows, because `Waker::noop()` gives it nothing to wait for. This is the exact
-   failure a real `Waker` prevents: the executor sleeps until woken instead of asking again, and a
-   future that returns `Pending` without arranging a wake is a bug the runtime cannot fix for you.
+<ol>
+<li><strong>Four.</strong> <code>pause(3)</code> returns <code>Pending</code> three times, decrementing each time, and answers <code>Ready</code> on the fourth call — when it finds the counter at zero. The count is <em>pauses + 1</em>, because a future has to be asked once more to report that it's finished. That off-by-one is the shape of every poll loop.</li>
+<li><strong>Inside <code>work</code>'s future, as a field.</strong> <code>pause(3)</code> is <code>.await</code>ed, so the whole <code>Pause</code> struct is nested into <code>work</code>'s state machine — exactly the nesting you measured in <a href="../38-async-and-await/use-it.md">Concept 38</a>. Nobody else owns it, nothing is allocated, and it is dropped when <code>work</code>'s future is dropped. <code>self.polls_left -= 1</code> is writing to a field of a struct that lives inside another struct on <code>main</code>'s stack.</li>
+<li><strong>In <code>block_on</code>'s frame</strong>, because <code>future</code> was moved into the parameter and <code>pin!</code> parks it there. And no — <code>pin!</code> is precisely the promise that no poll may move it. Each iteration calls <code>.as_mut()</code> to re-borrow the same pinned address rather than handing the pin away. Once <code>block_on</code> returns, its frame is gone and so is the future.</li>
+<li><strong>It would spin forever at 100% CPU</strong> — not deadlock, not sleep. The loop would keep polling as fast as the core allows, because <code>Waker::noop()</code> gives it nothing to wait for. This is the exact failure a real <code>Waker</code> prevents: the executor sleeps until woken instead of asking again, and a future that returns <code>Pending</code> without arranging a wake is a bug the runtime cannot fix for you.</li>
+</ol>
 </details>
 
 ## Next

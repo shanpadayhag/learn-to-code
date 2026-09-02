@@ -99,16 +99,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **No extra byte — `Option<bool>` is 1 byte.** A `bool` uses only 2 of its 256 patterns,
-   so 254 are spare. Rust grabs one of them (it uses `2`) to mean `None`. Niche
-   optimization, just like the pointer's `0`.
-2. **No spare value.** Every one of the 256 patterns is a real `u8`, so there's nothing left
-   over to mean `None`.
-3. **`Option<u8>` is bigger — 2 bytes vs 1.** With no niche to reuse, `Option<u8>` must add a
-   separate tag byte (1 for the number + 1 for the tag = 2). `Option<bool>` stays 1 byte
-   because it had a hole to hide the tag in. Same idea as `Option<i32>` (tag byte) vs
-   `Option<Box>` (free) — it all comes down to whether the inner type has a spare pattern.
+<ol>
+<li><strong>No extra byte — <code>Option&lt;bool&gt;</code> is 1 byte.</strong> A <code>bool</code> uses only 2 of its 256 patterns, so 254 are spare. Rust grabs one of them (it uses <code>2</code>) to mean <code>None</code>. Niche optimization, just like the pointer's <code>0</code>.</li>
+<li><strong>No spare value.</strong> Every one of the 256 patterns is a real <code>u8</code>, so there's nothing left over to mean <code>None</code>.</li>
+<li><strong><code>Option&lt;u8&gt;</code> is bigger — 2 bytes vs 1.</strong> With no niche to reuse, <code>Option&lt;u8&gt;</code> must add a separate tag byte (1 for the number + 1 for the tag = 2). <code>Option&lt;bool&gt;</code> stays 1 byte because it had a hole to hide the tag in. Same idea as <code>Option&lt;i32&gt;</code> (tag byte) vs <code>Option&lt;Box&gt;</code> (free) — it all comes down to whether the inner type has a spare pattern.</li>
+</ol>
 </details>
 
 ## Next

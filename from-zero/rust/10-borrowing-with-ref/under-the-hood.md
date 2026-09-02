@@ -74,12 +74,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. It **borrows** it — the parameter is `&String`, a reference. Ownership stays with
-   `main`'s `city`.
-2. **Yes.** The reference owned nothing, so nothing was freed when `describe` returned.
-   `city` held its buffer the whole time.
-3. `Cebu 4` — `"Cebu"` is 4 bytes long.
+<ol>
+<li>It <strong>borrows</strong> it — the parameter is <code>&amp;String</code>, a reference. Ownership stays with <code>main</code>'s <code>city</code>.</li>
+<li><strong>Yes.</strong> The reference owned nothing, so nothing was freed when <code>describe</code> returned. <code>city</code> held its buffer the whole time.</li>
+<li><code>Cebu 4</code> — <code>"Cebu"</code> is 4 bytes long.</li>
+</ol>
 </details>
 
 ## Next

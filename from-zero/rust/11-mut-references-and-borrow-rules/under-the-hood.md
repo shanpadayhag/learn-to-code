@@ -182,12 +182,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. It **borrows it mutably** — the parameter is `&mut String`. Ownership stays in `main`.
-2. **Yes.** A borrow (even a mutable one) never takes ownership, so `word` is `main`'s the
-   whole time.
-3. `abab` — `twice` clones `"ab"`, then appends that copy onto the owner's buffer in place,
-   giving `"ab" + "ab"`.
+<ol>
+<li>It <strong>borrows it mutably</strong> — the parameter is <code>&amp;mut String</code>. Ownership stays in <code>main</code>.</li>
+<li><strong>Yes.</strong> A borrow (even a mutable one) never takes ownership, so <code>word</code> is <code>main</code>'s the whole time.</li>
+<li><code>abab</code> — <code>twice</code> clones <code>"ab"</code>, then appends that copy onto the owner's buffer in place, giving <code>"ab" + "ab"</code>.</li>
+</ol>
 </details>
 
 ## Next

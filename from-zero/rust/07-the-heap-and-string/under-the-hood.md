@@ -72,12 +72,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. The **handle** (ptr, len, capacity) is on the **stack**; the characters `h i ! ! !`
-   are on the **heap**.
-2. `5` — `"hi"` is 2 bytes, `"!!!"` adds 3, total 5.
-3. **No.** The handle stays put on the stack. Only the heap buffer and the handle's
-   `len`/`ptr` fields change; the handle itself never changes size or location.
+<ol>
+<li>The <strong>handle</strong> (ptr, len, capacity) is on the <strong>stack</strong>; the characters <code>h i ! ! !</code> are on the <strong>heap</strong>.</li>
+<li><code>5</code> — <code>"hi"</code> is 2 bytes, <code>"!!!"</code> adds 3, total 5.</li>
+<li><strong>No.</strong> The handle stays put on the stack. Only the heap buffer and the handle's <code>len</code>/<code>ptr</code> fields change; the handle itself never changes size or location.</li>
+</ol>
 </details>
 
 ## Next

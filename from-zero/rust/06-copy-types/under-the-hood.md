@@ -56,11 +56,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Two** boxes, both on `main`'s stack tray — `a` with `5`, `b` with its own copy.
-   `i32` is a `Copy` type, so `= a` duplicated it.
-2. **No.** They are separate boxes. `b += 1` writes only into `b`'s box.
-3. `5 6` — `a` is still `5`, `b` is now `6`.
+<ol>
+<li><strong>Two</strong> boxes, both on <code>main</code>'s stack tray — <code>a</code> with <code>5</code>, <code>b</code> with its own copy. <code>i32</code> is a <code>Copy</code> type, so <code>= a</code> duplicated it.</li>
+<li><strong>No.</strong> They are separate boxes. <code>b += 1</code> writes only into <code>b</code>'s box.</li>
+<li><code>5 6</code> — <code>a</code> is still <code>5</code>, <code>b</code> is now <code>6</code>.</li>
+</ol>
 </details>
 
 ## Next

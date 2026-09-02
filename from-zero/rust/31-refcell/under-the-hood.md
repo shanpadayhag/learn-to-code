@@ -94,15 +94,13 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Allowed.** The flag goes to "1 read." A shared read is always fine when nothing is written.
-2. **Allowed — flag "2 reads."** Many shared reads at once is exactly what the rules permit; `a`
-   and `b` coexist happily, so it prints `10 10`.
-3. **Flag back to `0`.** Each `drop` restores the flag; after both, nobody is borrowing.
-4. **Succeeds.** Because the flag is `0`, `.borrow_mut()` can take the exclusive write handle, set
-   the flag to "written," add `5`, and drop the handle at the end of the statement (flag back to
-   `0`). If either `a` or `b` had *still* been alive here, this line would have **panicked**.
-5. **`15`.** The final `.borrow()` reads the updated value.
+<ol>
+<li><strong>Allowed.</strong> The flag goes to "1 read." A shared read is always fine when nothing is written.</li>
+<li><strong>Allowed — flag "2 reads."</strong> Many shared reads at once is exactly what the rules permit; <code>a</code> and <code>b</code> coexist happily, so it prints <code>10 10</code>.</li>
+<li><strong>Flag back to <code>0</code>.</strong> Each <code>drop</code> restores the flag; after both, nobody is borrowing.</li>
+<li><strong>Succeeds.</strong> Because the flag is <code>0</code>, <code>.borrow_mut()</code> can take the exclusive write handle, set the flag to "written," add <code>5</code>, and drop the handle at the end of the statement (flag back to <code>0</code>). If either <code>a</code> or <code>b</code> had <em>still</em> been alive here, this line would have <strong>panicked</strong>.</li>
+<li><strong><code>15</code>.</strong> The final <code>.borrow()</code> reads the updated value.</li>
+</ol>
 </details>
 
 ## Next

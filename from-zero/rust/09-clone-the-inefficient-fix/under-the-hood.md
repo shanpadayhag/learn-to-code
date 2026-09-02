@@ -71,11 +71,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Two** — `a` owns one buffer holding `"hi"`, `b` owns a separate buffer that started
-   as its own copy of `"hi"`.
-2. **No.** `b` grows *its own* buffer; `a`'s buffer is untouched.
-3. `hi hi!!` — `a` is still `"hi"`, `b` became `"hi!!"`.
+<ol>
+<li><strong>Two</strong> — <code>a</code> owns one buffer holding <code>"hi"</code>, <code>b</code> owns a separate buffer that started as its own copy of <code>"hi"</code>.</li>
+<li><strong>No.</strong> <code>b</code> grows <em>its own</em> buffer; <code>a</code>'s buffer is untouched.</li>
+<li><code>hi hi!!</code> — <code>a</code> is still <code>"hi"</code>, <code>b</code> became <code>"hi!!"</code>.</li>
+</ol>
 </details>
 
 ## Next

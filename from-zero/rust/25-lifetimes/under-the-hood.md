@@ -103,16 +103,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **The span where *both* inputs are alive — i.e. as long as the shorter-lived one, `inner`.**
-   The shared `'a` ties the result to both `x` and `y`, so its lifetime is their overlap, which
-   ends when `inner` is dropped at the inner block's `}`.
-2. **A compiles; B does not.** At **A**, both `outer` and `inner` are still alive, so `picked` is
-   valid. At **B**, `inner` has been dropped, so `picked` would be a dangling reference —
-   `error[E0597]: `inner` does not live long enough`.
-3. **Yes.** If `inner` lived until the end of `main`, the shared span `'a` would extend that far
-   too, so `picked` would still be valid at **B** and it would compile. The value's lifespan is
-   what drives it — the annotation just tracks the relationship.
+<ol>
+<li><strong>The span where <em>both</em> inputs are alive — i.e. as long as the shorter-lived one, <code>inner</code>.</strong> The shared <code>'a</code> ties the result to both <code>x</code> and <code>y</code>, so its lifetime is their overlap, which ends when <code>inner</code> is dropped at the inner block's <code>}</code>.</li>
+<li><strong>A compiles; B does not.</strong> At <strong>A</strong>, both <code>outer</code> and <code>inner</code> are still alive, so <code>picked</code> is valid. At <strong>B</strong>, <code>inner</code> has been dropped, so <code>picked</code> would be a dangling reference — <code>error[E0597]: `inner` does not live long enough</code>.</li>
+<li><strong>Yes.</strong> If <code>inner</code> lived until the end of <code>main</code>, the shared span <code>'a</code> would extend that far too, so <code>picked</code> would still be valid at <strong>B</strong> and it would compile. The value's lifespan is what drives it — the annotation just tracks the relationship.</li>
+</ol>
 </details>
 
 ## Next

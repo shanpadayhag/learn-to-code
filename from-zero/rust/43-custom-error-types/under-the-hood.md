@@ -137,17 +137,11 @@ Before running it: which of the five numbers are equal to each other, and which 
 
 <details>
 <summary>Answer</summary>
-
-`8`, `8`, `24`, `16`, `16`.
-
-`Small` is 8: its widest payload is `TooBig`'s `i32` at 4 bytes, and the tag plus alignment to 4 rounds the whole thing to 8. `Result<i32, Small>` is **also 8** — no growth. Both arms need 4 bytes of payload, and `Small` has spare tag values left over, so `Ok`/`Err` is encoded in the gap rather than in a new byte.
-
-`Large` is 24, set entirely by `String`. But `Result<i32, Box<Large>>` is **16**: boxing the error replaces those 24 bytes with an 8-byte pointer, the `i32` needs 4, alignment rounds to 8, and the `Ok`/`Err` tag goes in the box pointer's null niche — 16 total.
-
-`Result<u8, Box<dyn Error>>` is 16 as well, but for a different reason worth noticing: the `Box<dyn Error>` half is already 16 (two words), and the `u8` and the tag both fit in the niche, so the payload is free. Two identical numbers, two different stories.
-
-The fourth variant with `[u8; 64]` changes `Large` to 72 and would change `Result<i32, Large>` with it — but `Result<i32, Box<Large>>` stays at 16, because a pointer's size does not depend on what it points at. That is the whole argument for boxing a fat variant, in one line.
-
+<p><code>8</code>, <code>8</code>, <code>24</code>, <code>16</code>, <code>16</code>.</p>
+<p><code>Small</code> is 8: its widest payload is <code>TooBig</code>'s <code>i32</code> at 4 bytes, and the tag plus alignment to 4 rounds the whole thing to 8. <code>Result&lt;i32, Small&gt;</code> is <strong>also 8</strong> — no growth. Both arms need 4 bytes of payload, and <code>Small</code> has spare tag values left over, so <code>Ok</code>/<code>Err</code> is encoded in the gap rather than in a new byte.</p>
+<p><code>Large</code> is 24, set entirely by <code>String</code>. But <code>Result&lt;i32, Box&lt;Large&gt;&gt;</code> is <strong>16</strong>: boxing the error replaces those 24 bytes with an 8-byte pointer, the <code>i32</code> needs 4, alignment rounds to 8, and the <code>Ok</code>/<code>Err</code> tag goes in the box pointer's null niche — 16 total.</p>
+<p><code>Result&lt;u8, Box&lt;dyn Error&gt;&gt;</code> is 16 as well, but for a different reason worth noticing: the <code>Box&lt;dyn Error&gt;</code> half is already 16 (two words), and the <code>u8</code> and the tag both fit in the niche, so the payload is free. Two identical numbers, two different stories.</p>
+<p>The fourth variant with <code>[u8; 64]</code> changes <code>Large</code> to 72 and would change <code>Result&lt;i32, Large&gt;</code> with it — but <code>Result&lt;i32, Box&lt;Large&gt;&gt;</code> stays at 16, because a pointer's size does not depend on what it points at. That is the whole argument for boxing a fat variant, in one line.</p>
 </details>
 
 ## Next

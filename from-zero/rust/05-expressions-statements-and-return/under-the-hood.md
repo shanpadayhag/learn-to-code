@@ -61,10 +61,7 @@ Does this compile? If not, why?
 
 <details>
 <summary>Show the answer</summary>
-
-**No.** The `n + 1;` has a semicolon, so it's a *statement* — the value is thrown away
-and the block produces `()` (nothing). But the function promised to hand back an `i32`,
-so Rust stops with *expected `i32`, found `()`*. Delete the semicolon and it works.
+<p><strong>No.</strong> The <code>n + 1;</code> has a semicolon, so it's a <em>statement</em> — the value is thrown away and the block produces <code>()</code> (nothing). But the function promised to hand back an <code>i32</code>, so Rust stops with <em>expected <code>i32</code>, found <code>()</code></em>. Delete the semicolon and it works.</p>
 </details>
 
 ## Next

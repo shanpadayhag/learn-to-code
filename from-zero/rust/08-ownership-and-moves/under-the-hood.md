@@ -91,11 +91,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **No.** `String` owns heap text, so `let b = a` **moves** it — `a` is retired.
-2. **Yes.** `i32` is a `Copy` type; `let m = n` **copies** it and `n` stays valid.
-3. **Yes** — it prints `cat 10 10`. It only touches `b`, `n`, and `m`; it never uses the
-   moved-away `a`, so the compiler is happy. (Add `println!("{a}")` and it would fail.)
+<ol>
+<li><strong>No.</strong> <code>String</code> owns heap text, so <code>let b = a</code> <strong>moves</strong> it — <code>a</code> is retired.</li>
+<li><strong>Yes.</strong> <code>i32</code> is a <code>Copy</code> type; <code>let m = n</code> <strong>copies</strong> it and <code>n</code> stays valid.</li>
+<li><strong>Yes</strong> — it prints <code>cat 10 10</code>. It only touches <code>b</code>, <code>n</code>, and <code>m</code>; it never uses the moved-away <code>a</code>, so the compiler is happy. (Add <code>println!("{a}")</code> and it would fail.)</li>
+</ol>
 </details>
 
 ## Next

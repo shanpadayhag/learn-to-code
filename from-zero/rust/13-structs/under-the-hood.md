@@ -72,13 +72,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **No.** `Label` has a `String` field (`text`), so the struct is **not `Copy`** —
-   `let b = a` **moves** it and retires `a`.
-2. **One.** A move doesn't copy the heap text; the single `"urgent"` buffer just belongs
-   to `b` now.
-3. **Yes** — it prints `urgent 1`. It only uses `b`, never the moved-away `a`. (Add
-   `println!("{}", a.text)` and it would fail with "borrow of moved value: `a`".)
+<ol>
+<li><strong>No.</strong> <code>Label</code> has a <code>String</code> field (<code>text</code>), so the struct is <strong>not <code>Copy</code></strong> — <code>let b = a</code> <strong>moves</strong> it and retires <code>a</code>.</li>
+<li><strong>One.</strong> A move doesn't copy the heap text; the single <code>"urgent"</code> buffer just belongs to <code>b</code> now.</li>
+<li><strong>Yes</strong> — it prints <code>urgent 1</code>. It only uses <code>b</code>, never the moved-away <code>a</code>. (Add <code>println!("{}", a.text)</code> and it would fail with "borrow of moved value: <code>a</code>".)</li>
+</ol>
 </details>
 
 ## Next

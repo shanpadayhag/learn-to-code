@@ -88,17 +88,11 @@ fn first_char(text: &str) -> Result<char, String> {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`c` is a `char`.** The `?` unwraps the `Ok`, so the value bound to `c` is the plain value
-   inside, not the `Result` around it.
-2. **The function returns early with the error.** `?` desugars to `match ... { Ok(v) => v,
-   Err(e) => return Err(From::from(e)) }`. The value is `Err(...)`, so the `Err` arm runs:
-   `From::from` leaves the `String` error unchanged (the function already returns `String`
-   errors), and `return Err("empty string".to_string())` exits `first_char` immediately — the
-   `Ok(c.to_ascii_uppercase())` line is never reached.
-3. **`first_char` returns `Result<char, String>`.** The `?`'s hidden `return Err(...)` needs a
-   `Result` return type to be legal, and the error type matches (`String`), so `From::from`
-   needs no real conversion. Both conditions are satisfied, so the `?` compiles.
+<ol>
+<li><strong><code>c</code> is a <code>char</code>.</strong> The <code>?</code> unwraps the <code>Ok</code>, so the value bound to <code>c</code> is the plain value inside, not the <code>Result</code> around it.</li>
+<li><strong>The function returns early with the error.</strong> <code>?</code> desugars to <code>match ... { Ok(v) =&gt; v, Err(e) =&gt; return Err(From::from(e)) }</code>. The value is <code>Err(...)</code>, so the <code>Err</code> arm runs: <code>From::from</code> leaves the <code>String</code> error unchanged (the function already returns <code>String</code> errors), and <code>return Err("empty string".to_string())</code> exits <code>first_char</code> immediately — the <code>Ok(c.to_ascii_uppercase())</code> line is never reached.</li>
+<li><strong><code>first_char</code> returns <code>Result&lt;char, String&gt;</code>.</strong> The <code>?</code>'s hidden <code>return Err(...)</code> needs a <code>Result</code> return type to be legal, and the error type matches (<code>String</code>), so <code>From::from</code> needs no real conversion. Both conditions are satisfied, so the <code>?</code> compiles.</li>
+</ol>
 </details>
 
 ## Next

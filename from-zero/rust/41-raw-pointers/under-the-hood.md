@@ -232,29 +232,12 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Promise 3 — "points at a live value."** `temporary` dies at the closing brace, so the pointer
-   outlives its target. The compiler doesn't catch it because **a raw pointer carries no lifetime**;
-   there is no `'a` in `*const i32` for the borrow checker to relate to the block. With `&temporary`
-   the type would be `&'a i32`, the region would be the inner block, and you'd get
-   `error[E0597]: 'temporary' does not live long enough`. Same address, same bug, entirely different
-   amount of compiler knowledge — and `unsafe { *dangling }` will very often still print `7`, because
-   nothing has reused the slot yet.
-2. **12 bytes, 3 elements.** `.add(n)` counts in elements, so `.add(3)` on a `*mut i32` moves
-   `3 * size_of::<i32>() = 12` bytes. This is the unit that C gets wrong constantly; Rust's API makes
-   it impossible to mean bytes by accident (that's `.byte_add()`, spelled differently on purpose).
-3. **The signature.** `fn split_at_mut(values: &mut [i32], …) -> (&mut [i32], &mut [i32])` elides to
-   one lifetime shared by the input and both outputs, so the borrow checker keeps `readings`
-   mutably borrowed for as long as either half is alive. The unsafe block *creates* the halves; the
-   safe signature is what makes them sound. Had it returned `&'static mut [i32]`, the code inside
-   would be unchanged and the function would be catastrophically wrong.
-4. **Debug: a panic** — `attempt to subtract with overflow` on `length - middle`, an unrelated check
-   that happens to fire first. **Release: silence** — overflow checks are off, `6 - 99` wraps to
-   about 18 quintillion, and you get a `&mut [i32]` claiming most of the address space; the first
-   write through it is undefined behaviour. **The release build is far more dangerous**, and the
-   debug panic is actively misleading: it looks like the language caught the bug, when it caught a
-   different symptom by luck. This is why the `assert!` is written as a real runtime check rather
-   than left to arithmetic.
+<ol>
+<li><strong>Promise 3 — "points at a live value."</strong> <code>temporary</code> dies at the closing brace, so the pointer outlives its target. The compiler doesn't catch it because <strong>a raw pointer carries no lifetime</strong>; there is no <code>'a</code> in <code>*const i32</code> for the borrow checker to relate to the block. With <code>&amp;temporary</code> the type would be <code>&amp;'a i32</code>, the region would be the inner block, and you'd get <code>error[E0597]: 'temporary' does not live long enough</code>. Same address, same bug, entirely different amount of compiler knowledge — and <code>unsafe { *dangling }</code> will very often still print <code>7</code>, because nothing has reused the slot yet.</li>
+<li><strong>12 bytes, 3 elements.</strong> <code>.add(n)</code> counts in elements, so <code>.add(3)</code> on a <code>*mut i32</code> moves <code>3 * size_of::&lt;i32&gt;() = 12</code> bytes. This is the unit that C gets wrong constantly; Rust's API makes it impossible to mean bytes by accident (that's <code>.byte_add()</code>, spelled differently on purpose).</li>
+<li><strong>The signature.</strong> <code>fn split_at_mut(values: &amp;mut [i32], …) -&gt; (&amp;mut [i32], &amp;mut [i32])</code> elides to one lifetime shared by the input and both outputs, so the borrow checker keeps <code>readings</code> mutably borrowed for as long as either half is alive. The unsafe block <em>creates</em> the halves; the safe signature is what makes them sound. Had it returned <code>&amp;'static mut [i32]</code>, the code inside would be unchanged and the function would be catastrophically wrong.</li>
+<li><strong>Debug: a panic</strong> — <code>attempt to subtract with overflow</code> on <code>length - middle</code>, an unrelated check that happens to fire first. <strong>Release: silence</strong> — overflow checks are off, <code>6 - 99</code> wraps to about 18 quintillion, and you get a <code>&amp;mut [i32]</code> claiming most of the address space; the first write through it is undefined behaviour. <strong>The release build is far more dangerous</strong>, and the debug panic is actively misleading: it looks like the language caught the bug, when it caught a different symptom by luck. This is why the <code>assert!</code> is written as a real runtime check rather than left to arithmetic.</li>
+</ol>
 </details>
 
 ## Next

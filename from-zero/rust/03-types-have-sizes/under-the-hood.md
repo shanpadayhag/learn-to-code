@@ -45,10 +45,7 @@ Both boxes hold the number `5`. Do they take up the same amount of room?
 
 <details>
 <summary>Show the answer</summary>
-
-**No.** `a` is **4 bytes** (it's an `i32`) and `b` is **8 bytes** (it's an `i64`).
-Same value, different-sized boxes — the size comes from the **type**, never from the
-value inside.
+<p><strong>No.</strong> <code>a</code> is <strong>4 bytes</strong> (it's an <code>i32</code>) and <code>b</code> is <strong>8 bytes</strong> (it's an <code>i64</code>). Same value, different-sized boxes — the size comes from the <strong>type</strong>, never from the value inside.</p>
 </details>
 
 ## Next

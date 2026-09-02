@@ -50,11 +50,10 @@ Two questions before you peek:
 
 <details>
 <summary>Show the answer</summary>
-
-1. `n` and `result` live on `add_one`'s tray. When it returns, that tray is thrown
-   away and **both vanish**. Only the returned value (`6`) comes back, copied into `y`.
-2. **No.** `main`'s `x` is a separate box on main's own tray. Its `5` was *copied* into
-   `n`, not shared — so nothing inside `add_one` could touch it.
+<ol>
+<li><code>n</code> and <code>result</code> live on <code>add_one</code>'s tray. When it returns, that tray is thrown away and <strong>both vanish</strong>. Only the returned value (<code>6</code>) comes back, copied into <code>y</code>.</li>
+<li><strong>No.</strong> <code>main</code>'s <code>x</code> is a separate box on main's own tray. Its <code>5</code> was <em>copied</em> into <code>n</code>, not shared — so nothing inside <code>add_one</code> could touch it.</li>
+</ol>
 </details>
 
 ## Next

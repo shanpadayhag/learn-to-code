@@ -94,16 +94,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`Some(2)`.** `"sun"` was inserted as `1`, then `entry("sun").or_insert(0) += 1` found the
-   existing slot and bumped it to `2`. `.get` returns an [`Option`](../15-option/use-it.md) —
-   `Some(&2)`, printed as `Some(2)` — because the key *might* have been missing; the type makes you
-   acknowledge that.
-2. **`None`.** `"moon"` was never inserted. The map hashed `"moon"` to a slot, looked there, found no
-   matching key, and reported the miss as `None` — no scan of the whole map, and no crash.
-3. **`len = 2`, and it changed an existing pair.** There are two keys, `"sun"` and `"sea"`. The
-   `entry("sun")` call found `"sun"` already present, so `or_insert` did *not* add anything — it just
-   handed back the existing slot to be incremented.
+<ol>
+<li><strong><code>Some(2)</code>.</strong> <code>"sun"</code> was inserted as <code>1</code>, then <code>entry("sun").or_insert(0) += 1</code> found the existing slot and bumped it to <code>2</code>. <code>.get</code> returns an <a href="../15-option/use-it.md"><code>Option</code></a> — <code>Some(&amp;2)</code>, printed as <code>Some(2)</code> — because the key <em>might</em> have been missing; the type makes you acknowledge that.</li>
+<li><strong><code>None</code>.</strong> <code>"moon"</code> was never inserted. The map hashed <code>"moon"</code> to a slot, looked there, found no matching key, and reported the miss as <code>None</code> — no scan of the whole map, and no crash.</li>
+<li><strong><code>len = 2</code>, and it changed an existing pair.</strong> There are two keys, <code>"sun"</code> and <code>"sea"</code>. The <code>entry("sun")</code> call found <code>"sun"</code> already present, so <code>or_insert</code> did <em>not</em> add anything — it just handed back the existing slot to be incremented.</li>
+</ol>
 </details>
 
 ## Next

@@ -97,14 +97,12 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`2`.** `Rc::clone` made a second owner; the borrow flag is untouched by this (still `0`).
-2. **Yes.** `a` and `b` own the *same* `RefCell`, so there's one shared `10`; `b`'s write changes
-   it for everyone.
-3. **`15`.** `a.borrow()` reads the shared, now-updated value.
-4. **A runtime panic** (`already borrowed: BorrowMutError`), not a compile error. Going through two
-   different `Rc` owners doesn't help — there's still one `RefCell`, and its flag forbids a second
-   live write. (The compiler happily built this; the `RefCell` catches it as it runs.)
+<ol>
+<li><strong><code>2</code>.</strong> <code>Rc::clone</code> made a second owner; the borrow flag is untouched by this (still <code>0</code>).</li>
+<li><strong>Yes.</strong> <code>a</code> and <code>b</code> own the <em>same</em> <code>RefCell</code>, so there's one shared <code>10</code>; <code>b</code>'s write changes it for everyone.</li>
+<li><strong><code>15</code>.</strong> <code>a.borrow()</code> reads the shared, now-updated value.</li>
+<li><strong>A runtime panic</strong> (<code>already borrowed: BorrowMutError</code>), not a compile error. Going through two different <code>Rc</code> owners doesn't help — there's still one <code>RefCell</code>, and its flag forbids a second live write. (The compiler happily built this; the <code>RefCell</code> catches it as it runs.)</li>
+</ol>
 </details>
 
 ## Next

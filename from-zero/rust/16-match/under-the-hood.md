@@ -101,14 +101,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`text` takes it over — no copy.** The match is by value, so binding `Msg::Say(text)`
-   *moves* the `String` out of `m` into `text`. The one heap buffer just changes owner.
-2. **No.** Because the `String` moved out, `m` is retired — using it after the `match` won't
-   compile. (Even the `Quit` variant carries nothing, but the *type* `Msg` was partially moved
-   out of, so the whole binding is gone.)
-3. **Match on `&m` instead of `m`.** Then `text` is a `&String` borrow, nothing moves, and `m`
-   stays valid — you just print through the borrow.
+<ol>
+<li><strong><code>text</code> takes it over — no copy.</strong> The match is by value, so binding <code>Msg::Say(text)</code> <em>moves</em> the <code>String</code> out of <code>m</code> into <code>text</code>. The one heap buffer just changes owner.</li>
+<li><strong>No.</strong> Because the <code>String</code> moved out, <code>m</code> is retired — using it after the <code>match</code> won't compile. (Even the <code>Quit</code> variant carries nothing, but the <em>type</em> <code>Msg</code> was partially moved out of, so the whole binding is gone.)</li>
+<li><strong>Match on <code>&amp;m</code> instead of <code>m</code>.</strong> Then <code>text</code> is a <code>&amp;String</code> borrow, nothing moves, and <code>m</code> stays valid — you just print through the borrow.</li>
+</ol>
 </details>
 
 ## Next

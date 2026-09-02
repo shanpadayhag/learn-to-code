@@ -86,14 +86,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **No.** `move` transferred ownership of `name` into the thread, so `main` no longer owns it;
-   using it here is a use-after-move — a compile error, caught before the program ever runs.
-2. **On the spawned thread's stack.** `move` put the `String`'s owner (`ptr/len/cap`) into the
-   closure's frame on the new thread; the heap buffer `"ada"` stays put and is now named from there.
-3. **Through `join`.** The closure *returns* the `String`; `.join()` hands that owned value back to
-   `main` inside `Ok(...)`, `.unwrap()` opens it, and `greeting` becomes its new owner on main's
-   stack. One owner throughout — the value simply moved home.
+<ol>
+<li><strong>No.</strong> <code>move</code> transferred ownership of <code>name</code> into the thread, so <code>main</code> no longer owns it; using it here is a use-after-move — a compile error, caught before the program ever runs.</li>
+<li><strong>On the spawned thread's stack.</strong> <code>move</code> put the <code>String</code>'s owner (<code>ptr/len/cap</code>) into the closure's frame on the new thread; the heap buffer <code>"ada"</code> stays put and is now named from there.</li>
+<li><strong>Through <code>join</code>.</strong> The closure <em>returns</em> the <code>String</code>; <code>.join()</code> hands that owned value back to <code>main</code> inside <code>Ok(...)</code>, <code>.unwrap()</code> opens it, and <code>greeting</code> becomes its new owner on main's stack. One owner throughout — the value simply moved home.</li>
+</ol>
 </details>
 
 ## Next

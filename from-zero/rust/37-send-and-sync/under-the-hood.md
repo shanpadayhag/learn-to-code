@@ -157,20 +157,12 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`Send` yes, `Sync` no.** Every field is `Send` (`String` is, and `RefCell<Vec<String>>` is because
-   its contents are), so the struct is. But `RefCell` is not `Sync`, and one non-`Sync` field is
-   enough — so `Job` isn't either.
-2. **Yes, it compiles.** `spawn` only demands `Send`, and the closure *moves* the whole `Job` in.
-   After the move, `main` can't touch `job` at all, so only one thread ever consults that borrow flag
-   — precisely the situation `RefCell` was built for. Being `!Sync` never comes up.
-3. **No.** An `Arc` gives *every* holder a shared reference to one value, so `Arc<T>` is only `Send`
-   when `T` is both `Send` **and** `Sync`. `RefCell` fails the second half, and the compiler says so
-   in one line: `required for Arc<RefCell<i32>> to implement Send`. The fix is
-   [`Arc<Mutex<T>>`](../35-arc-mutex/use-it.md) — swap the flag for a lock and `Sync` comes back.
-4. **8 bytes each** — one pointer, identical layout. `Rc` and `Arc` differ in the *instruction* used
-   on the count in the heap box and in the traits the compiler grants them, never in their size or
-   shape. The whole of this concept is bookkeeping that evaporates at compile time.
+<ol>
+<li><strong><code>Send</code> yes, <code>Sync</code> no.</strong> Every field is <code>Send</code> (<code>String</code> is, and <code>RefCell&lt;Vec&lt;String&gt;&gt;</code> is because its contents are), so the struct is. But <code>RefCell</code> is not <code>Sync</code>, and one non-<code>Sync</code> field is enough — so <code>Job</code> isn't either.</li>
+<li><strong>Yes, it compiles.</strong> <code>spawn</code> only demands <code>Send</code>, and the closure <em>moves</em> the whole <code>Job</code> in. After the move, <code>main</code> can't touch <code>job</code> at all, so only one thread ever consults that borrow flag — precisely the situation <code>RefCell</code> was built for. Being <code>!Sync</code> never comes up.</li>
+<li><strong>No.</strong> An <code>Arc</code> gives <em>every</em> holder a shared reference to one value, so <code>Arc&lt;T&gt;</code> is only <code>Send</code> when <code>T</code> is both <code>Send</code> <strong>and</strong> <code>Sync</code>. <code>RefCell</code> fails the second half, and the compiler says so in one line: <code>required for Arc&lt;RefCell&lt;i32&gt;&gt; to implement Send</code>. The fix is <a href="../35-arc-mutex/use-it.md"><code>Arc&lt;Mutex&lt;T&gt;&gt;</code></a> — swap the flag for a lock and <code>Sync</code> comes back.</li>
+<li><strong>8 bytes each</strong> — one pointer, identical layout. <code>Rc</code> and <code>Arc</code> differ in the <em>instruction</em> used on the count in the heap box and in the traits the compiler grants them, never in their size or shape. The whole of this concept is bookkeeping that evaporates at compile time.</li>
+</ol>
 </details>
 
 ## Next

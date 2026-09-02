@@ -94,14 +94,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **A holds `&base` (a shared borrow), and yes, `base` stays usable.** `add_base` only *reads*
-   `base`, so Rust captures the gentlest way — a shared borrow — and never disturbs the original.
-2. **B holds `&mut hits`, so it needs `let mut`.** `record` *writes* to `hits`, which requires a
-   mutable borrow of it; calling a closure that holds a `&mut` capture mutates the closure's own
-   state, so the binding itself must be `mut`.
-3. **A is `Fn`** (reads only → callable many times), **B is `FnMut`** (mutates a capture → callable
-   repeatedly but needs `&mut`). Neither is `FnOnce`, since neither moves a captured value *out*.
+<ol>
+<li><strong>A holds <code>&amp;base</code> (a shared borrow), and yes, <code>base</code> stays usable.</strong> <code>add_base</code> only <em>reads</em> <code>base</code>, so Rust captures the gentlest way — a shared borrow — and never disturbs the original.</li>
+<li><strong>B holds <code>&amp;mut hits</code>, so it needs <code>let mut</code>.</strong> <code>record</code> <em>writes</em> to <code>hits</code>, which requires a mutable borrow of it; calling a closure that holds a <code>&amp;mut</code> capture mutates the closure's own state, so the binding itself must be <code>mut</code>.</li>
+<li><strong>A is <code>Fn</code></strong> (reads only → callable many times), <strong>B is <code>FnMut</code></strong> (mutates a capture → callable repeatedly but needs <code>&amp;mut</code>). Neither is <code>FnOnce</code>, since neither moves a captured value <em>out</em>.</li>
+</ol>
 </details>
 
 ## Next

@@ -91,15 +91,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`s` is `&mut String`** (a mutable borrow of each slot). `.iter_mut()` never takes ownership, so
-   `a` survives — line A prints `["x!", "y!"]`. The `push('!')` wrote through the reference into the
-   existing slots.
-2. **Each item is an owned `String`** (`T`, moved out of `b`). `.into_iter()` moved the two `String`
-   handles into the chain and `.collect()` moved their text into `joined` — **no clone**. `joined`
-   is `"pq"`.
-3. **It would not compile.** `b.into_iter()` consumed `b` — its heap block was emptied and freed —
-   so `b` no longer exists. Any later use is a use-after-move, which the compiler rejects.
+<ol>
+<li><strong><code>s</code> is <code>&amp;mut String</code></strong> (a mutable borrow of each slot). <code>.iter_mut()</code> never takes ownership, so <code>a</code> survives — line A prints <code>["x!", "y!"]</code>. The <code>push('!')</code> wrote through the reference into the existing slots.</li>
+<li><strong>Each item is an owned <code>String</code></strong> (<code>T</code>, moved out of <code>b</code>). <code>.into_iter()</code> moved the two <code>String</code> handles into the chain and <code>.collect()</code> moved their text into <code>joined</code> — <strong>no clone</strong>. <code>joined</code> is <code>"pq"</code>.</li>
+<li><strong>It would not compile.</strong> <code>b.into_iter()</code> consumed <code>b</code> — its heap block was emptied and freed — so <code>b</code> no longer exists. Any later use is a use-after-move, which the compiler rejects.</li>
+</ol>
 </details>
 
 ## Next

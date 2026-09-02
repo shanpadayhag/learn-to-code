@@ -103,14 +103,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`Block`** — the largest variant, at 100 bytes. The payload slot must fit the biggest.
-2. **Closer to 100** (it's 101: a 1-byte tag + the 100-byte payload; no padding is needed
-   because `u8` aligns to 1). Every `Packet` is this size, even an `Empty` one — the slot
-   is always sized for `Block`.
-3. **Just the tag + 1 byte.** A `Byte(7)` uses 1 byte of the 100-byte slot and leaves the
-   other 99 unused. That wasted room is the price of "one type, many shapes" — the value
-   must be ready to become the biggest variant at any moment.
+<ol>
+<li><strong><code>Block</code></strong> — the largest variant, at 100 bytes. The payload slot must fit the biggest.</li>
+<li><strong>Closer to 100</strong> (it's 101: a 1-byte tag + the 100-byte payload; no padding is needed because <code>u8</code> aligns to 1). Every <code>Packet</code> is this size, even an <code>Empty</code> one — the slot is always sized for <code>Block</code>.</li>
+<li><strong>Just the tag + 1 byte.</strong> A <code>Byte(7)</code> uses 1 byte of the 100-byte slot and leaves the other 99 unused. That wasted room is the price of "one type, many shapes" — the value must be ready to become the biggest variant at any moment.</li>
+</ol>
 </details>
 
 ## Next

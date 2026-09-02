@@ -100,15 +100,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Zero.** `plan` is just a struct describing the work. Adapters are lazy; not a single `n + 1`
-   has run at line A. The `println!` proves it — building the plan printed nothing about numbers.
-2. **No temporary `Vec`.** Items pass through one at a time, so nothing is collected between the
-   steps. The program allocates **one** `Vec` for the pipeline: the final `result` built by
-   `.collect()`. (`numbers` itself is a separate, pre-existing `Vec` that `.iter()` only borrows.)
-3. **One number all the way through at a time.** `.collect` pulls `20` → passes the filter → becomes
-   `21` → pushed; *then* pulls `30` → `31` → pushed; *then* `40` → `41`. (`10` is pulled first but
-   dropped by the filter.) Only ever one value in flight.
+<ol>
+<li><strong>Zero.</strong> <code>plan</code> is just a struct describing the work. Adapters are lazy; not a single <code>n + 1</code> has run at line A. The <code>println!</code> proves it — building the plan printed nothing about numbers.</li>
+<li><strong>No temporary <code>Vec</code>.</strong> Items pass through one at a time, so nothing is collected between the steps. The program allocates <strong>one</strong> <code>Vec</code> for the pipeline: the final <code>result</code> built by <code>.collect()</code>. (<code>numbers</code> itself is a separate, pre-existing <code>Vec</code> that <code>.iter()</code> only borrows.)</li>
+<li><strong>One number all the way through at a time.</strong> <code>.collect</code> pulls <code>20</code> → passes the filter → becomes <code>21</code> → pushed; <em>then</em> pulls <code>30</code> → <code>31</code> → pushed; <em>then</em> <code>40</code> → <code>41</code>. (<code>10</code> is pulled first but dropped by the filter.) Only ever one value in flight.</li>
+</ol>
 </details>
 
 ## Next

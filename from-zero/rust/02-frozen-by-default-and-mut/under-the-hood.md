@@ -54,12 +54,10 @@ Two questions before you expand the answer:
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Same address.** `x = 6` overwrites the same 4-byte slot in place — mutation never
-   relocates the box.
-2. **No.** A `mut i32` and a frozen `i32` are identical in memory (both 4 bytes on the
-   stack). `mut` only changes what the *compiler* lets you do; it adds nothing at
-   runtime.
+<ol>
+<li><strong>Same address.</strong> <code>x = 6</code> overwrites the same 4-byte slot in place — mutation never relocates the box.</li>
+<li><strong>No.</strong> A <code>mut i32</code> and a frozen <code>i32</code> are identical in memory (both 4 bytes on the stack). <code>mut</code> only changes what the <em>compiler</em> lets you do; it adds nothing at runtime.</li>
+</ol>
 </details>
 
 ## Next

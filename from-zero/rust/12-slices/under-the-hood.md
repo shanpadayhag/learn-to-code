@@ -73,12 +73,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **One.** `s` owns the single buffer `"boathouse"`; `boat` and `house` are just windows
-   into it — no new buffers.
-2. Each is a **pointer + a length**: `boat = {ptr → byte 0, len 4}`,
-   `house = {ptr → byte 4, len 5}`. No copied text.
-3. `boat house 9` — `"boathouse"` is 9 bytes long.
+<ol>
+<li><strong>One.</strong> <code>s</code> owns the single buffer <code>"boathouse"</code>; <code>boat</code> and <code>house</code> are just windows into it — no new buffers.</li>
+<li>Each is a <strong>pointer + a length</strong>: <code>boat = {ptr → byte 0, len 4}</code>, <code>house = {ptr → byte 4, len 5}</code>. No copied text.</li>
+<li><code>boat house 9</code> — <code>"boathouse"</code> is 9 bytes long.</li>
+</ol>
 </details>
 
 ## Phase 2 complete — where the memory model lands

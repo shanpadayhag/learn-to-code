@@ -208,27 +208,12 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **No — `error[E0506]: cannot assign to `owner` because it is borrowed`, plus
-   `warning: unnecessary unsafe block`.** The borrow checker never stopped running; `unsafe` unlocks
-   five specific operations and mutating a borrowed local is not one of them. The warning is the
-   compiler saying the block gave you nothing, because none of the five were used inside it.
-2. **In the program's static data, not on any stack or heap.** A `static` is baked into the
-   executable and lives at one fixed address for the entire run, so there is exactly **one** copy no
-   matter how many threads touch it. That is precisely the problem: three threads calling `add`
-   concurrently is a data race — undefined behaviour, not merely a wrong total. The keyword is what
-   makes you notice. Use an `AtomicU32` or a `Mutex` instead.
-3. **`set_live` is the bug**, even though it contains no `unsafe`. It can set `live` past
-   `values.len()`, turning `get`'s bounds check into a check against the wrong number and its
-   `get_unchecked` into an out-of-bounds read. And the region you must audit is **the whole module**,
-   because everything with access to the private fields can break the invariant the unsafe block
-   depends on. Fix it by making `set_live` clamp to `values.len()`, or by marking it `unsafe fn` and
-   documenting the contract.
-4. **The instructions are identical** — one load each; `unsafe` emits nothing. The guarantees are
-   not: for `&u32` the compiler *proved* the address is non-null, aligned and pointing at a live
-   `u32` for the whole of the reference's lifetime, whereas for `*const u32` it proved nothing and
-   you promised all four. Same instruction, entirely different amount of knowledge behind it — which
-   is exactly what the next lesson is about.
+<ol>
+<li><strong>No — <code>error[E0506]: cannot assign to </code>owner<code> because it is borrowed</code>, plus <code>warning: unnecessary unsafe block</code>.</strong> The borrow checker never stopped running; <code>unsafe</code> unlocks five specific operations and mutating a borrowed local is not one of them. The warning is the compiler saying the block gave you nothing, because none of the five were used inside it.</li>
+<li><strong>In the program's static data, not on any stack or heap.</strong> A <code>static</code> is baked into the executable and lives at one fixed address for the entire run, so there is exactly <strong>one</strong> copy no matter how many threads touch it. That is precisely the problem: three threads calling <code>add</code> concurrently is a data race — undefined behaviour, not merely a wrong total. The keyword is what makes you notice. Use an <code>AtomicU32</code> or a <code>Mutex</code> instead.</li>
+<li><strong><code>set_live</code> is the bug</strong>, even though it contains no <code>unsafe</code>. It can set <code>live</code> past <code>values.len()</code>, turning <code>get</code>'s bounds check into a check against the wrong number and its <code>get_unchecked</code> into an out-of-bounds read. And the region you must audit is <strong>the whole module</strong>, because everything with access to the private fields can break the invariant the unsafe block depends on. Fix it by making <code>set_live</code> clamp to <code>values.len()</code>, or by marking it <code>unsafe fn</code> and documenting the contract.</li>
+<li><strong>The instructions are identical</strong> — one load each; <code>unsafe</code> emits nothing. The guarantees are not: for <code>&amp;u32</code> the compiler <em>proved</em> the address is non-null, aligned and pointing at a live <code>u32</code> for the whole of the reference's lifetime, whereas for <code>*const u32</code> it proved nothing and you promised all four. Same instruction, entirely different amount of knowledge behind it — which is exactly what the next lesson is about.</li>
+</ol>
 </details>
 
 ## Next

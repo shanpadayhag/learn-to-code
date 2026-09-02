@@ -137,14 +137,11 @@ Before running it, answer:
 
 <details>
 <summary>Reveal</summary>
-
-1. **`2`** — `s` is now the `&str` `"hi"`, which is 2 bytes long.
-2. **`&str`.** `.trim()` returns `&str`, so that's what the name means after the second
-   `let`. The type changed precisely *because* shadowing made a new box.
-3. **Two.** The original `String` (owning `"  hi  "` on the heap) is **still alive** — it
-   is *not* dropped at the shadow. It has to stay, because the `&str` is borrowing into
-   its buffer. Both live until the end of `main`; the buffer is freed only then.
-
+<ol>
+<li><strong><code>2</code></strong> — <code>s</code> is now the <code>&amp;str</code> <code>"hi"</code>, which is 2 bytes long.</li>
+<li><strong><code>&amp;str</code>.</strong> <code>.trim()</code> returns <code>&amp;str</code>, so that's what the name means after the second <code>let</code>. The type changed precisely <em>because</em> shadowing made a new box.</li>
+<li><strong>Two.</strong> The original <code>String</code> (owning <code>"  hi  "</code> on the heap) is <strong>still alive</strong> — it is <em>not</em> dropped at the shadow. It has to stay, because the <code>&amp;str</code> is borrowing into its buffer. Both live until the end of <code>main</code>; the buffer is freed only then.</li>
+</ol>
 </details>
 
 ## Exercises

@@ -96,13 +96,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`Big` is 1000 bytes.** The array lives inline, so the whole value is exactly its contents.
-2. **`Box<Big>` is 8 bytes.** The 1000 bytes moved to the heap; the box keeps only the 8-byte
-   address, regardless of how big `Big` is. This is the whole point of a box.
-3. **`Option<Box<Big>>` is 8 bytes** — no extra byte. A heap address is never `0`, so that
-   impossible pattern *is* the `None` tag (niche optimization). "A pointer to a `Big`, or
-   nothing" is the same size as the bare pointer.
+<ol>
+<li><strong><code>Big</code> is 1000 bytes.</strong> The array lives inline, so the whole value is exactly its contents.</li>
+<li><strong><code>Box&lt;Big&gt;</code> is 8 bytes.</strong> The 1000 bytes moved to the heap; the box keeps only the 8-byte address, regardless of how big <code>Big</code> is. This is the whole point of a box.</li>
+<li><strong><code>Option&lt;Box&lt;Big&gt;&gt;</code> is 8 bytes</strong> — no extra byte. A heap address is never <code>0</code>, so that impossible pattern <em>is</em> the <code>None</code> tag (niche optimization). "A pointer to a <code>Big</code>, or nothing" is the same size as the bare pointer.</li>
+</ol>
 </details>
 
 ## Next

@@ -94,16 +94,13 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`1 1`.** One owner (strong `1`); `downgrade` added a weak handle (weak `1`) and left strong
-   alone.
-2. **`Some`.** `owner` is still alive, so the strong count is `> 0`; `upgrade` succeeds and briefly
-   makes strong `2` for as long as `got` lives.
-3. **`true`.**
-4. Dropping `owner` takes strong to `0`, so the **`String` value is dropped** (its heap buffer is
-   freed). The little count box lingers because `peek` (weak `1`) still points at it.
-5. **`None`.** The value is gone; `upgrade` reads strong `== 0` and safely returns `None` instead of
-   a dangling pointer. When `peek` drops too, weak hits `0` and the box itself is finally freed.
+<ol>
+<li><strong><code>1 1</code>.</strong> One owner (strong <code>1</code>); <code>downgrade</code> added a weak handle (weak <code>1</code>) and left strong alone.</li>
+<li><strong><code>Some</code>.</strong> <code>owner</code> is still alive, so the strong count is <code>&gt; 0</code>; <code>upgrade</code> succeeds and briefly makes strong <code>2</code> for as long as <code>got</code> lives.</li>
+<li><strong><code>true</code>.</strong></li>
+<li>Dropping <code>owner</code> takes strong to <code>0</code>, so the <strong><code>String</code> value is dropped</strong> (its heap buffer is freed). The little count box lingers because <code>peek</code> (weak <code>1</code>) still points at it.</li>
+<li><strong><code>None</code>.</strong> The value is gone; <code>upgrade</code> reads strong <code>== 0</code> and safely returns <code>None</code> instead of a dangling pointer. When <code>peek</code> drops too, weak hits <code>0</code> and the box itself is finally freed.</li>
+</ol>
 </details>
 
 ## Next

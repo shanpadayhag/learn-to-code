@@ -47,10 +47,7 @@ How many boxes are there, where do they live, and when do they disappear?
 
 <details>
 <summary>Show the answer</summary>
-
-**Two boxes**, both on the **stack**, inside `main`'s frame — one labeled `a` holding
-`10`, one labeled `b` holding `20`, each 4 bytes wide. They disappear **together**,
-the instant `main`'s frame is thrown away at the closing `}`.
+<p><strong>Two boxes</strong>, both on the <strong>stack</strong>, inside <code>main</code>'s frame — one labeled <code>a</code> holding <code>10</code>, one labeled <code>b</code> holding <code>20</code>, each 4 bytes wide. They disappear <strong>together</strong>, the instant <code>main</code>'s frame is thrown away at the closing <code>}</code>.</p>
 </details>
 
 ## Next

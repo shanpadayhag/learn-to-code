@@ -108,18 +108,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`Result<i32, i32>` is 8 bytes.** The shared slot fits one 4-byte `i32`, and since every
-   32-bit pattern is a real `i32` there's no niche — so a separate tag is needed, padded out to
-   4 bytes to keep the number aligned. 4 (tag) + 4 (slot) = 8.
-2. **`Result<u8, ()>` is 2 bytes.** `Err(())` needs no storage, so only the `u8` takes room —
-   but a `u8` uses all 256 patterns, so there's no spare value to mean `Err`. Rust adds a
-   1-byte tag: 1 (number) + 1 (tag) = 2.
-3. **`Result<bool, ()>` is 1 byte.** A `bool` uses only 2 of its 256 patterns, so 254 are
-   spare. Rust grabs one of them to mean `Err(())` — niche optimization, exactly like
-   `Option<bool>`. No separate tag, so it stays a single byte. Same idea as `Result<Box, ()>`
-   being free: whenever one variant is empty and the other has a hole, the tag hides in the
-   hole.
+<ol>
+<li><strong><code>Result&lt;i32, i32&gt;</code> is 8 bytes.</strong> The shared slot fits one 4-byte <code>i32</code>, and since every 32-bit pattern is a real <code>i32</code> there's no niche — so a separate tag is needed, padded out to 4 bytes to keep the number aligned. 4 (tag) + 4 (slot) = 8.</li>
+<li><strong><code>Result&lt;u8, ()&gt;</code> is 2 bytes.</strong> <code>Err(())</code> needs no storage, so only the <code>u8</code> takes room — but a <code>u8</code> uses all 256 patterns, so there's no spare value to mean <code>Err</code>. Rust adds a 1-byte tag: 1 (number) + 1 (tag) = 2.</li>
+<li><strong><code>Result&lt;bool, ()&gt;</code> is 1 byte.</strong> A <code>bool</code> uses only 2 of its 256 patterns, so 254 are spare. Rust grabs one of them to mean <code>Err(())</code> — niche optimization, exactly like <code>Option&lt;bool&gt;</code>. No separate tag, so it stays a single byte. Same idea as <code>Result&lt;Box, ()&gt;</code> being free: whenever one variant is empty and the other has a hole, the tag hides in the hole.</li>
+</ol>
 </details>
 
 ## Next

@@ -92,16 +92,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Two** — one for `Dog`, one for `Cat`. The third call `greet_all(&Dog)` reuses the `Dog` copy;
-   it's one copy *per type*, not per call (same rule as generics in Concept 19).
-2. **Already decided, at compile time.** Inside the `Dog` copy, `x` is known to be a `&Dog`, so
-   `x.hello()` was resolved to `Dog::hello` and baked in as a direct jump. Nothing is looked up while
-   the program runs.
-3. **No.** With static dispatch the trait leaves no trace in the value — a `Dog` is just a `Dog`. The
-   "it implements `Greet`" fact lived only at compile time and is gone by runtime. (This is exactly
-   what changes with a `dyn` trait object next concept, where a method table *does* get carried
-   around.)
+<ol>
+<li><strong>Two</strong> — one for <code>Dog</code>, one for <code>Cat</code>. The third call <code>greet_all(&amp;Dog)</code> reuses the <code>Dog</code> copy; it's one copy <em>per type</em>, not per call (same rule as generics in Concept 19).</li>
+<li><strong>Already decided, at compile time.</strong> Inside the <code>Dog</code> copy, <code>x</code> is known to be a <code>&amp;Dog</code>, so <code>x.hello()</code> was resolved to <code>Dog::hello</code> and baked in as a direct jump. Nothing is looked up while the program runs.</li>
+<li><strong>No.</strong> With static dispatch the trait leaves no trace in the value — a <code>Dog</code> is just a <code>Dog</code>. The "it implements <code>Greet</code>" fact lived only at compile time and is gone by runtime. (This is exactly what changes with a <code>dyn</code> trait object next concept, where a method table <em>does</em> get carried around.)</li>
+</ol>
 </details>
 
 ## Next

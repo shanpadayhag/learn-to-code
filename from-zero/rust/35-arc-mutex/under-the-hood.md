@@ -123,15 +123,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. `main`'s stack holds only the `Arc` **handle** — one pointer. The heap allocation holds the strong
-   count, the lock flag, and the `Mutex`'s `Vec` owner (`ptr/len/cap`); the vector's elements
-   `[1, 2, 3]` sit in a second heap buffer that owner points to.
-2. Just the **pointer**, plus an atomic `+1` on the strong count (now `2`). No `Vec`, no `Mutex`, and
-   no elements are copied — that's why sharing is cheap.
-3. The lock is released when `guard` **drops** at the end of the closure — automatically, no unlock
-   call. When the thread finishes, `handle_a` drops too, so the count goes back to `1`; `main`'s
-   handle is the last owner, and the box is freed when `main` ends.
+<ol>
+<li><code>main</code>'s stack holds only the <code>Arc</code> <strong>handle</strong> — one pointer. The heap allocation holds the strong count, the lock flag, and the <code>Mutex</code>'s <code>Vec</code> owner (<code>ptr/len/cap</code>); the vector's elements <code>[1, 2, 3]</code> sit in a second heap buffer that owner points to.</li>
+<li>Just the <strong>pointer</strong>, plus an atomic <code>+1</code> on the strong count (now <code>2</code>). No <code>Vec</code>, no <code>Mutex</code>, and no elements are copied — that's why sharing is cheap.</li>
+<li>The lock is released when <code>guard</code> <strong>drops</strong> at the end of the closure — automatically, no unlock call. When the thread finishes, <code>handle_a</code> drops too, so the count goes back to <code>1</code>; <code>main</code>'s handle is the last owner, and the box is freed when <code>main</code> ends.</li>
+</ol>
 </details>
 
 ## Next

@@ -108,13 +108,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **`len=2 cap=4`.** Two items are stored; the buffer still has room for 4.
-2. **No new allocation.** `with_capacity(4)` reserved a 4-slot buffer up front, so both pushes
-   just dropped into existing free slots — no regrow. (Reserving capacity ahead of time is how
-   you avoid repeated regrows when you know roughly how many items are coming.)
-3. **`24`, and no — it stays 24.** The header is always three numbers (ptr, len, cap). The
-   items live on the heap, so the stack-side size never changes with the item count.
+<ol>
+<li><strong><code>len=2 cap=4</code>.</strong> Two items are stored; the buffer still has room for 4.</li>
+<li><strong>No new allocation.</strong> <code>with_capacity(4)</code> reserved a 4-slot buffer up front, so both pushes just dropped into existing free slots — no regrow. (Reserving capacity ahead of time is how you avoid repeated regrows when you know roughly how many items are coming.)</li>
+<li><strong><code>24</code>, and no — it stays 24.</strong> The header is always three numbers (ptr, len, cap). The items live on the heap, so the stack-side size never changes with the item count.</li>
+</ol>
 </details>
 
 ## Next

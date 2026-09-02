@@ -100,15 +100,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Two** — it's a fat pointer. One **data pointer** to the boxed value on the heap (the `Dog` or
-   `Cat`), and one **vtable pointer** to that type's `Greet` method table.
-2. It **follows the `Cat`'s vtable pointer** to the `Cat` `Greet` vtable, reads the `hello` slot (the
-   address of `Cat::hello`), and jumps there — passing the data pointer as `&self`. The choice is made
-   *at run time* by reading the table, not baked in at compile time.
-3. **Two** vtables — one for `Dog`, one for `Cat`. A vtable is built **per (type, trait) pair**, not
-   per value, so a `Vec` of a thousand dogs and cats still shares just those two tables; each element
-   only *points at* the right one.
+<ol>
+<li><strong>Two</strong> — it's a fat pointer. One <strong>data pointer</strong> to the boxed value on the heap (the <code>Dog</code> or <code>Cat</code>), and one <strong>vtable pointer</strong> to that type's <code>Greet</code> method table.</li>
+<li>It <strong>follows the <code>Cat</code>'s vtable pointer</strong> to the <code>Cat</code> <code>Greet</code> vtable, reads the <code>hello</code> slot (the address of <code>Cat::hello</code>), and jumps there — passing the data pointer as <code>&amp;self</code>. The choice is made <em>at run time</em> by reading the table, not baked in at compile time.</li>
+<li><strong>Two</strong> vtables — one for <code>Dog</code>, one for <code>Cat</code>. A vtable is built <strong>per (type, trait) pair</strong>, not per value, so a <code>Vec</code> of a thousand dogs and cats still shares just those two tables; each element only <em>points at</em> the right one.</li>
+</ol>
 </details>
 
 ## Next

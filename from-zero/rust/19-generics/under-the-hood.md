@@ -92,18 +92,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Three.** One for `i32`, one for `u8`, one for `&str` — one concrete copy per distinct type the
-   generic is actually used with. (Call `wrap(9_i32)` again and it reuses the `i32` copy — it's *per
-   type*, not per call.)
-2. **Because they're laid out differently** — an `i32` is 4 bytes, a `u8` is 1, so the two copies
-   move different amounts of memory and can't share one body. And **no runtime check**: each copy is
-   fully concrete, so calling it is just an ordinary function call, exactly like a hand-written
-   `wrap_i32` would be.
-3. **Not into final machine code.** The generic body is kept as a *template*; the compiler can
-   check it for correctness, but it can't lay out `value` or finish compiling until monomorphization
-   fills `T` with a concrete, known-size type. The real code for `wrap` only exists once a concrete
-   type flows in.
+<ol>
+<li><strong>Three.</strong> One for <code>i32</code>, one for <code>u8</code>, one for <code>&amp;str</code> — one concrete copy per distinct type the generic is actually used with. (Call <code>wrap(9_i32)</code> again and it reuses the <code>i32</code> copy — it's <em>per type</em>, not per call.)</li>
+<li><strong>Because they're laid out differently</strong> — an <code>i32</code> is 4 bytes, a <code>u8</code> is 1, so the two copies move different amounts of memory and can't share one body. And <strong>no runtime check</strong>: each copy is fully concrete, so calling it is just an ordinary function call, exactly like a hand-written <code>wrap_i32</code> would be.</li>
+<li><strong>Not into final machine code.</strong> The generic body is kept as a <em>template</em>; the compiler can check it for correctness, but it can't lay out <code>value</code> or finish compiling until monomorphization fills <code>T</code> with a concrete, known-size type. The real code for <code>wrap</code> only exists once a concrete type flows in.</li>
+</ol>
 </details>
 
 ## Next

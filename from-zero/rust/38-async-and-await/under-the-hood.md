@@ -176,24 +176,12 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. **Zero times.** `one()` allocated no stack frame and executed no statement. It built a
-   `NotStarted` value on `main`'s stack and returned it. `counter` does not exist yet — it comes into
-   being the first time something polls the future.
-2. **No — but the pointer to it is.** The `Vec` is still three words on the stack
-   ([Concept 17](../17-vec/use-it.md)): pointer, length, capacity. Those 24 bytes become a field of
-   the future because `words` is alive across the `.await`. The buffer they point at stays on the
-   heap, untouched and unmoved. This is the general shape: a future stores the *stack part* of every
-   local it must carry, and heap data is reached through the pointers it carries.
-3. **Because a zero-sized value has no address of its own,** and Rust guarantees every distinct value
-   you can take a reference to has a distinct address. One byte is the minimum for a type you hold,
-   move, and poll through a `&mut`. The state tag needs it anyway — even "not started vs finished" is
-   two states.
-4. **No.** Dropping `two`'s future drops its fields, and one of those fields is `words` — so `Vec`'s
-   `Drop` frees the heap buffer exactly as it would at the end of any scope. Nothing about being
-   paused suspends ownership. This is what makes async cancellation in Rust cheap and safe: **you
-   cancel a task by dropping it**, and ordinary [ownership](../08-ownership-and-moves/use-it.md)
-   cleans up everything it was holding.
+<ol>
+<li><strong>Zero times.</strong> <code>one()</code> allocated no stack frame and executed no statement. It built a <code>NotStarted</code> value on <code>main</code>'s stack and returned it. <code>counter</code> does not exist yet — it comes into being the first time something polls the future.</li>
+<li><strong>No — but the pointer to it is.</strong> The <code>Vec</code> is still three words on the stack (<a href="../17-vec/use-it.md">Concept 17</a>): pointer, length, capacity. Those 24 bytes become a field of the future because <code>words</code> is alive across the <code>.await</code>. The buffer they point at stays on the heap, untouched and unmoved. This is the general shape: a future stores the <em>stack part</em> of every local it must carry, and heap data is reached through the pointers it carries.</li>
+<li><strong>Because a zero-sized value has no address of its own,</strong> and Rust guarantees every distinct value you can take a reference to has a distinct address. One byte is the minimum for a type you hold, move, and poll through a <code>&amp;mut</code>. The state tag needs it anyway — even "not started vs finished" is two states.</li>
+<li><strong>No.</strong> Dropping <code>two</code>'s future drops its fields, and one of those fields is <code>words</code> — so <code>Vec</code>'s <code>Drop</code> frees the heap buffer exactly as it would at the end of any scope. Nothing about being paused suspends ownership. This is what makes async cancellation in Rust cheap and safe: <strong>you cancel a task by dropping it</strong>, and ordinary <a href="../08-ownership-and-moves/use-it.md">ownership</a> cleans up everything it was holding.</li>
+</ol>
 </details>
 
 ## Next

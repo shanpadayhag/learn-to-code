@@ -119,17 +119,12 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. The bytes `"done"` are in a **heap** buffer. The worker's stack frame holds only the `String`'s
-   owner triple — `ptr` to that buffer, `len 4`, `cap 4`.
-2. **The owner triple, into a queue slot on the heap.** The text buffer doesn't move an inch; it's
-   simply named from the queue now instead of from the worker's frame. Sending a huge `String` costs
-   the same as sending a tiny one.
-3. **No.** `send` *moved* the `String`, so the worker no longer owns it — using `report` afterwards is
-   a use-after-move, rejected at compile time. Ownership travelled down the pipe.
-4. **The sender dropped.** `move` gave the worker the only `Sender`; when the closure ends, that
-   sender dies and the count of live senders hits 0. The channel closes, `recv` returns `Err`, and the
-   `for` loop finishes — which also proves the worker is done, so no `.join()` is needed.
+<ol>
+<li>The bytes <code>"done"</code> are in a <strong>heap</strong> buffer. The worker's stack frame holds only the <code>String</code>'s owner triple — <code>ptr</code> to that buffer, <code>len 4</code>, <code>cap 4</code>.</li>
+<li><strong>The owner triple, into a queue slot on the heap.</strong> The text buffer doesn't move an inch; it's simply named from the queue now instead of from the worker's frame. Sending a huge <code>String</code> costs the same as sending a tiny one.</li>
+<li><strong>No.</strong> <code>send</code> <em>moved</em> the <code>String</code>, so the worker no longer owns it — using <code>report</code> afterwards is a use-after-move, rejected at compile time. Ownership travelled down the pipe.</li>
+<li><strong>The sender dropped.</strong> <code>move</code> gave the worker the only <code>Sender</code>; when the closure ends, that sender dies and the count of live senders hits 0. The channel closes, <code>recv</code> returns <code>Err</code>, and the <code>for</code> loop finishes — which also proves the worker is done, so no <code>.join()</code> is needed.</li>
+</ol>
 </details>
 
 ## Next

@@ -67,14 +67,11 @@ fn main() {
 
 <details>
 <summary>Show the answer</summary>
-
-1. `a = true` (7 was new), `b = false` (7 was already there — insert changed nothing), `c = true`
-   (7 is a member). Prints `true false true`.
-2. The values are the **unit type `()`**, and each takes **0 bytes**. A `HashSet<i32>` is a
-   `HashMap<i32, ()>`, so only the keys really occupy space.
-3. It **hashes `7` to its slot and checks only that slot** — ~O(1), no walking. A `Vec<i32>` has no
-   hashing, so `.contains(&7)` **scans** from the front comparing every element until it finds 7 or
-   reaches the end — O(n). That gap is the entire reason to pick a set for membership.
+<ol>
+<li><code>a = true</code> (7 was new), <code>b = false</code> (7 was already there — insert changed nothing), <code>c = true</code> (7 is a member). Prints <code>true false true</code>.</li>
+<li>The values are the <strong>unit type <code>()</code></strong>, and each takes <strong>0 bytes</strong>. A <code>HashSet&lt;i32&gt;</code> is a <code>HashMap&lt;i32, ()&gt;</code>, so only the keys really occupy space.</li>
+<li>It <strong>hashes <code>7</code> to its slot and checks only that slot</strong> — ~O(1), no walking. A <code>Vec&lt;i32&gt;</code> has no hashing, so <code>.contains(&amp;7)</code> <strong>scans</strong> from the front comparing every element until it finds 7 or reaches the end — O(n). That gap is the entire reason to pick a set for membership.</li>
+</ol>
 </details>
 
 ## Next

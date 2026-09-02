@@ -66,15 +66,12 @@ Before running it, answer:
 
 <details>
 <summary>Reveal</summary>
-
-1. **Neither — it borrows.** `&x` just reads x's address; `x` is untouched and still
-   fully usable. (Borrowing never disturbs the owner.)
-2. **The address of `x`**, not `10`. `r` is a `&i32` — one machine word holding the
-   location of the slot where `10` lives.
-3. **A load:** it goes to the address in `r` and reads the value there → `10`. Since
-   `i32` is [`Copy`](../06-copy-types/use-it.md), that `10` is copied out cheaply.
-4. **`20`.** `value` is `10` (from the first `*r`), and `value + *r` is `10 + 10`.
-
+<ol>
+<li><strong>Neither — it borrows.</strong> <code>&amp;x</code> just reads x's address; <code>x</code> is untouched and still fully usable. (Borrowing never disturbs the owner.)</li>
+<li><strong>The address of <code>x</code></strong>, not <code>10</code>. <code>r</code> is a <code>&amp;i32</code> — one machine word holding the location of the slot where <code>10</code> lives.</li>
+<li><strong>A load:</strong> it goes to the address in <code>r</code> and reads the value there → <code>10</code>. Since <code>i32</code> is <a href="../06-copy-types/use-it.md"><code>Copy</code></a>, that <code>10</code> is copied out cheaply.</li>
+<li><strong><code>20</code>.</strong> <code>value</code> is <code>10</code> (from the first <code>*r</code>), and <code>value + *r</code> is <code>10 + 10</code>.</li>
+</ol>
 </details>
 
 ## The takeaway
