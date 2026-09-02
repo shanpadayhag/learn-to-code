@@ -30,6 +30,7 @@ fn main() {
     check(" ", 1);
     check("dvdf", 3);
     check("abcdefg", 7);
+    check("aabbaa", 2);
 }
 
 fn check(text: &str, expected: i32) {
