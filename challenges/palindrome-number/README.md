@@ -36,12 +36,12 @@ and flipping the string — only with arithmetic on the digits.
 The tempting shortcut is to turn the number into text, reverse the text, and compare:
 
 ```rust
-let number = input.trim().to_string();
+let candidate_number = input_line.trim().to_string();
 let mut reversed = String::new();
-for character in number.chars().rev() {   // walk the characters backwards
+for character in candidate_number.chars().rev() {  // walk the characters backwards
     reversed.push(character);
 }
-number == reversed                         // "121" == "121" -> Yes
+candidate_number == reversed                       // "121" == "121" -> Yes
 ```
 
 It **works** — every test passes. But it's the wrong answer for two reasons, one of them fatal
@@ -56,10 +56,10 @@ So it passes, yet misses the point. The real challenge is to never leave numbers
 
 ### The trick
 You can take a number apart with two operations, no text involved:
-- `number % 10` — the [remainder](../../languages/rust.md#remainder) after dividing by 10 — is
-  the **last digit**. `1234 % 10` is `4`.
-- `number / 10` — [integer division](../../languages/rust.md#int-division) — **drops** the last
-  digit. `1234 / 10` is `123`.
+- `candidate_number % 10` — the [remainder](../../languages/rust.md#remainder) after
+  dividing by 10 — is the **last digit**. `1234 % 10` is `4`.
+- `candidate_number / 10` — [integer division](../../languages/rust.md#int-division) —
+  **drops** the last digit. `1234 / 10` is `123`.
 
 With those you can rebuild a number reversed, digit by digit. But the sharp idea is: **you don't
 need the whole reverse — only half.** A number is a palindrome when its front half mirrors its
@@ -68,45 +68,48 @@ reversed-back in the middle. Half the work — and the half-size reversed value 
 because it's never bigger than half the original.
 
 ```rust
-while remaining_number > reversed_half {
-    reversed_half = reversed_half * 10 + remaining_number % 10;  // push last digit onto the reversed half
-    remaining_number /= 10;                                      // drop it from the front
+while remaining_front_half > reversed_back_half {
+    // push the last digit onto the reversed half
+    reversed_back_half = reversed_back_half * 10 + remaining_front_half % 10;
+    // drop it from the front
+    remaining_front_half /= 10;
 }
 ```
 
-Each turn: peel the last digit off `remaining_number` and stick it onto `reversed_half`
-(multiply by 10 to make room, then add). `remaining_number` shrinks; `reversed_half` grows. When
-`reversed_half` catches up, we've crossed the middle. This works — instead of just looking
+Each turn: peel the last digit off `remaining_front_half` and stick it onto
+`reversed_back_half` (multiply by 10 to make room, then add). `remaining_front_half`
+shrinks; `reversed_back_half` grows. When
+`reversed_back_half` catches up, we've crossed the middle. This works — instead of just looking
 right — because `% 10` and `/ 10` are *exact* on integers: no rounding, no lost digits, so the
 reversed half is a faithful mirror of the back half.
 
 ### Watch it run
 `1221` (even length):
 
-| step | `remaining_number` | `reversed_half` | `remaining > reversed`? |
+| step | `remaining_front_half` | `reversed_back_half` | loop condition |
 |---|---|---|---|
 | start | 1221 | 0  | 1221 > 0 → go |
 | 1 | 122 | 1  | 122 > 1 → go |
 | 2 | 12  | 12 | 12 > 12 → **stop** |
 
-`remaining_number == reversed_half` (both `12`) → palindrome. And `12321` (odd length), where a
-middle digit is left over:
+`remaining_front_half == reversed_back_half` (both `12`) → palindrome. And `12321`
+(odd length), where a middle digit is left over:
 
-| step | `remaining_number` | `reversed_half` | `remaining > reversed`? |
+| step | `remaining_front_half` | `reversed_back_half` | loop condition |
 |---|---|---|---|
 | start | 12321 | 0 | go |
 | 1 | 1232 | 1 | go |
 | 2 | 123 | 12 | go |
 | 3 | 12 | 123 | 12 > 123? no → **stop** |
 
-They never land equal, because the middle `3` sits in `reversed_half`. Drop it with
-`reversed_half / 10` (`123 / 10 = 12`) and compare: `12 == 12` → palindrome.
+They never land equal, because the middle `3` sits in `reversed_back_half`. Drop it with
+`reversed_back_half / 10` (`123 / 10 = 12`) and compare: `12 == 12` → palindrome.
 
 ### The answer
 Compare the two halves, allowing for that leftover middle digit:
 
 ```rust
-remaining_number == reversed_half || remaining_number == reversed_half / 10
+remaining_front_half == reversed_back_half || remaining_front_half == reversed_back_half / 10
 //        even-length case         ||        odd-length case (ignore the middle)
 ```
 
@@ -121,26 +124,26 @@ middle digit).
 use std::io;
 
 fn main() {
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    let number: u64 = input.trim().parse().unwrap();
+    let mut input_line = String::new();
+    io::stdin().read_line(&mut input_line).unwrap();
+    let candidate_number: u64 = input_line.trim().parse().unwrap();
 
-    println!("{}", if is_palindrome(number) { "Yes" } else { "No" });
+    println!("{}", if is_palindrome(candidate_number) { "Yes" } else { "No" });
 }
 
-fn is_palindrome(number: u64) -> bool {
-    if number % 10 == 0 && number != 0 {
+fn is_palindrome(candidate_number: u64) -> bool {
+    if candidate_number % 10 == 0 && candidate_number != 0 {
         return false;
     }
 
-    let mut remaining_number = number;
-    let mut reversed_half = 0;
-    while remaining_number > reversed_half {
-        reversed_half = reversed_half * 10 + remaining_number % 10;
-        remaining_number /= 10;
+    let mut remaining_front_half = candidate_number;
+    let mut reversed_back_half = 0;
+    while remaining_front_half > reversed_back_half {
+        reversed_back_half = reversed_back_half * 10 + remaining_front_half % 10;
+        remaining_front_half /= 10;
     }
 
-    remaining_number == reversed_half || remaining_number == reversed_half / 10
+    remaining_front_half == reversed_back_half || remaining_front_half == reversed_back_half / 10
 }
 ```
 
@@ -156,7 +159,7 @@ allocation, whatever the size of the number.
   half and stop when it meets the front. Half the work, and the half-size value can't overflow.
 - **Mind the trailing-zero edge case.** Any number ending in `0` except `0` itself can't be a
   palindrome (its first digit would have to be `0`, but numbers don't keep leading zeros), so
-  `if number % 10 == 0 && number != 0 { return false; }` rules them out up front.
+  `if candidate_number % 10 == 0 && candidate_number != 0 { return false; }` rules them out up front.
 - **"It passes" ≠ "it's the answer."** The string version passed every test but broke the rule
   *and* allocated. Read what the problem is actually teaching — here, the arithmetic was the
   point, and the tests just didn't check for it.
