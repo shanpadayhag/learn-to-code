@@ -1,4 +1,10 @@
-.obsidian/
+# macOS
+.DS_Store
+
+# Obsidian: the vault config is tracked so the reading experience travels with
+# the repo, but per-machine UI state is not.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
 
 # compiled solutions and exercises
 solution
