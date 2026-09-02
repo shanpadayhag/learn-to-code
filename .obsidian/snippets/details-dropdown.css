@@ -1,0 +1,159 @@
+/* ---------------------------------------------------------------------------
+   Collapsible answers  —  <details> / <summary>
+   ---------------------------------------------------------------------------
+   Every "predict the memory" check in the From-Zero lessons hides its answer in
+   a <details> block. GitHub styles those for you; Obsidian does not, so out of
+   the box the marker is missing, the summary is unclickable-looking, and the
+   revealed markdown runs straight into the surrounding text.
+
+   This snippet gives them a card with a rotating chevron, in both Reading view
+   and Live Preview, using Obsidian's own theme variables so it follows whatever
+   theme and colour scheme is active.
+--------------------------------------------------------------------------- */
+
+.markdown-rendered details,
+.markdown-preview-view details,
+.cm-html-embed details {
+  margin: 1.2em 0;
+  padding: 0;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m, 8px);
+  background-color: var(--background-primary-alt);
+  overflow: hidden;
+  transition: border-color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+}
+
+.markdown-rendered details:hover,
+.markdown-preview-view details:hover,
+.cm-html-embed details:hover {
+  border-color: var(--background-modifier-border-hover);
+}
+
+.markdown-rendered details[open],
+.markdown-preview-view details[open],
+.cm-html-embed details[open] {
+  background-color: var(--background-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* --- the clickable header ------------------------------------------------ */
+
+.markdown-rendered details > summary,
+.markdown-preview-view details > summary,
+.cm-html-embed details > summary {
+  /* `list-item` is what Obsidian's default stylesheet strips; without it the
+     element still toggles but stops looking like anything you would click. */
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0.6em 0.9em 0.6em 2.1em;
+  font-weight: 600;
+  color: var(--text-normal);
+  background-color: var(--background-secondary);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background-color 120ms ease-in-out, color 120ms ease-in-out;
+}
+
+/* Two ways to hide the browser's own triangle — Chromium honours the first,
+   the second is the standards-track spelling. Both are needed. */
+.markdown-rendered details > summary::-webkit-details-marker,
+.markdown-preview-view details > summary::-webkit-details-marker,
+.cm-html-embed details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.markdown-rendered details > summary::marker,
+.markdown-preview-view details > summary::marker,
+.cm-html-embed details > summary::marker {
+  content: "";
+}
+
+.markdown-rendered details > summary:hover,
+.markdown-preview-view details > summary:hover,
+.cm-html-embed details > summary:hover {
+  background-color: var(--background-modifier-hover);
+  color: var(--text-accent);
+}
+
+.markdown-rendered details > summary:focus-visible,
+.markdown-preview-view details > summary:focus-visible,
+.cm-html-embed details > summary:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: -2px;
+}
+
+/* --- the chevron --------------------------------------------------------- */
+
+.markdown-rendered details > summary::before,
+.markdown-preview-view details > summary::before,
+.cm-html-embed details > summary::before {
+  content: "";
+  position: absolute;
+  left: 0.85em;
+  top: 50%;
+  width: 0.42em;
+  height: 0.42em;
+  border-right: 2px solid var(--text-accent);
+  border-bottom: 2px solid var(--text-accent);
+  transform: translateY(-60%) rotate(-45deg);
+  transition: transform 150ms ease-in-out;
+}
+
+.markdown-rendered details[open] > summary::before,
+.markdown-preview-view details[open] > summary::before,
+.cm-html-embed details[open] > summary::before {
+  transform: translateY(-25%) rotate(45deg);
+}
+
+.markdown-rendered details[open] > summary,
+.markdown-preview-view details[open] > summary,
+.cm-html-embed details[open] > summary {
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+/* --- the revealed body --------------------------------------------------- */
+
+/* Obsidian renders the inner markdown into whatever elements it likes, so the
+   padding has to live on the children rather than on a wrapper that may not
+   exist. */
+.markdown-rendered details > *:not(summary),
+.markdown-preview-view details > *:not(summary),
+.cm-html-embed details > *:not(summary) {
+  margin-left: 0.9em;
+  margin-right: 0.9em;
+}
+
+.markdown-rendered details > *:not(summary):first-of-type,
+.markdown-preview-view details > *:not(summary):first-of-type,
+.cm-html-embed details > *:not(summary):first-of-type {
+  margin-top: 0.8em;
+}
+
+.markdown-rendered details > *:not(summary):last-child,
+.markdown-preview-view details > *:not(summary):last-child,
+.cm-html-embed details > *:not(summary):last-child {
+  margin-bottom: 0.8em;
+}
+
+/* Code blocks inside an answer keep their own background, which fights the
+   card unless it is pulled back in a little. */
+.markdown-rendered details pre,
+.markdown-preview-view details pre,
+.cm-html-embed details pre {
+  border-radius: var(--radius-s, 6px);
+}
+
+/* --- Live Preview -------------------------------------------------------- */
+
+/* In editing view Obsidian drops raw HTML into a .cm-html-embed wrapper that
+   has no padding of its own and, on some themes, a zero line-height that
+   collapses the block. Undo both so the dropdown is usable while writing. */
+.markdown-source-view.mod-cm6 .cm-html-embed {
+  line-height: var(--line-height-normal);
+}
+
+.markdown-source-view.mod-cm6 .cm-html-embed > details {
+  margin: 0.8em 0;
+}
