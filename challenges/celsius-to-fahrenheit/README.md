@@ -34,8 +34,8 @@ number (integer) type does in Rust.
 My first attempt typed everything as `i32` — plain whole numbers:
 
 ```rust
-let celsius: i32 = input.trim().parse().unwrap();
-let fahrenheit: i32 = (celsius * (9 / 5)) + 32;
+let celsius_temperature: i32 = input_line.trim().parse().unwrap();
+let fahrenheit_temperature: i32 = (celsius_temperature * (9 / 5)) + 32;
 ```
 
 For `100` it printed `100 Celsius = 132 Fahrenheit`. The real answer is `212`, so something was
@@ -44,7 +44,7 @@ eating the math. **Why:** `9` and `5` are both integers, so `9 / 5` is
 than rounding, so `1.8` becomes `1`. The formula silently collapsed to:
 
 ```
-celsius * 1 + 32   →   celsius + 32          100 + 32 = 132
+celsius_temperature * 1 + 32   →   celsius_temperature + 32          100 + 32 = 132
 ```
 
 The conversion never ran. Nothing warned me, because as far as Rust was concerned this was a
@@ -57,11 +57,11 @@ Two separate fixes, for two separate problems.
 **Value — use floats so the fraction survives.** Make the number and the literals `f32`:
 
 ```rust
-let celsius: f32 = input.trim().parse().unwrap();
-let fahrenheit = (celsius * (9.0 / 5.0)) + 32.0;
+let celsius_temperature: f32 = input_line.trim().parse().unwrap();
+let fahrenheit_temperature = (celsius_temperature * (9.0 / 5.0)) + 32.0;
 ```
 
-Now `9.0 / 5.0` keeps its `1.8`. Writing the literals as `9.0`/`5.0` matters: because `celsius`
+Now `9.0 / 5.0` keeps its `1.8`. Writing the literals as `9.0`/`5.0` matters: because `celsius_temperature`
 is `f32`, they're inferred as `f32` too, so there's no type mismatch.
 
 **Display — ask for the decimal to be printed.** Getting the math right isn't enough: plain `{}`
@@ -70,7 +70,10 @@ prints an `f32` of `77.0` as just `77`. The value is *already* `77.0` in memory;
 separate from the type — solved with `{:.1}` ("one digit after the point"):
 
 ```rust
-println!("{} Celsius = {:.1} Fahrenheit", celsius, fahrenheit);
+println!(
+    "{} Celsius = {:.1} Fahrenheit",
+    celsius_temperature, fahrenheit_temperature
+);
 ```
 
 ### Watch it run
@@ -91,13 +94,16 @@ Fahrenheit`, correct in both value and display.
 use std::io;
 
 fn main() {
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    let celsius: f32 = input.trim().parse().unwrap();
+    let mut input_line = String::new();
+    io::stdin().read_line(&mut input_line).unwrap();
+    let celsius_temperature: f32 = input_line.trim().parse().unwrap();
 
-    let fahrenheit = (celsius * (9.0 / 5.0)) + 32.0;
+    let fahrenheit_temperature = (celsius_temperature * (9.0 / 5.0)) + 32.0;
 
-    println!("{} Celsius = {:.1} Fahrenheit", celsius, fahrenheit);
+    println!(
+        "{} Celsius = {:.1} Fahrenheit",
+        celsius_temperature, fahrenheit_temperature
+    );
 }
 ```
 
