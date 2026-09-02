@@ -141,7 +141,8 @@ First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
 
 **In one line:** a shorthand for building a `Vec` from listed values.
 
-`vec![earlier_index, current_index]` creates a two-element vector; `vec![]` creates
+`vec![existing_number_index, current_number_index]` creates a two-element vector;
+`vec![]` creates
 an empty one. The `!` marks it as a *macro* (code that expands into more code at
 compile time), not a function — that's how it can take any number of arguments and
 figure out the element type from them.
@@ -156,7 +157,7 @@ First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
 In Rust, variables are *immutable* unless you opt out. `let x = 5;` binds `x` once
 and forever. `let mut x = 5;` lets you later do `x = 6;` or call methods that
 mutate it. This default-immutable rule is a safety feature: the compiler stops you
-from changing things you didn't mean to. We use `let mut index_of_seen_value`
+from changing things you didn't mean to. We use `let mut seen_number_index`
 because we insert into the map as we scan.
 
 First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
@@ -223,10 +224,10 @@ First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
 value by copy instead of a pointer to it.
 
 `.iter()` yields `&i32` (references to integers), but arithmetic like
-`target - current_value` is cleaner on a plain `i32`. Writing the loop variable as
-`&current_value` says "the thing I'm receiving is a reference — peel it off and
+`target - current_number_value` is cleaner on a plain `i32`. Writing the loop variable as
+`&current_number_value` says "the thing I'm receiving is a reference — peel it off and
 bind the value underneath." Since `i32` is cheaply copyable, this just copies the
-number out. The same move appears in `if let Some(&earlier_index) = ...`, peeling
+number out. The same move appears in `if let Some(&existing_number_index) = ...`, peeling
 the reference that `.get()` hands back. Without the `&`, you'd be holding a `&i32`
 and would have to [dereference with `*`](#deref) everywhere you used it.
 
@@ -273,8 +274,8 @@ in the same line.
 
 Rust has no `null`. A value that might be absent has type `Option<T>`, which is
 either `Some(value)` or `None`. `.get()` on a map returns one of these.
-`if let Some(&earlier_index) = index_of_seen_value.get(&needed_value) { ... }` means
-"if the lookup returned `Some`, bind what's inside to `earlier_index` and run the
+`if let Some(&existing_number_index) = seen_number_index.get(&needed_number_value) { ... }` means
+"if the lookup returned `Some`, bind what's inside to `existing_number_index` and run the
 block; otherwise skip it." It's the concise alternative to a full `match` when you
 only care about one case.
 
@@ -284,9 +285,9 @@ First seen in: [1. Two Sum](../problems/0001-two-sum/solution.rs.md)
 
 **In one line:** converts a number from one type to another, explicitly.
 
-Rust never silently mixes number types, so `current_index` (a `usize`, the type
+Rust never silently mixes number types, so `current_number_index` (a `usize`, the type
 used for indexes and lengths) must be converted before it can sit in a `Vec<i32>`.
-`current_index as i32` performs that conversion. `as` is the blunt cast for
+`current_number_index as i32` performs that conversion. `as` is the blunt cast for
 primitives — quick and direct, though for conversions that could lose data Rust
 also offers safer checked options elsewhere.
 
@@ -318,7 +319,8 @@ struct ListNode { val: i32, next: Option<Box<ListNode>> }   // ✅
 
 **Trace the types.** `Box::new(ListNode::new(0))` allocates a `ListNode` on the heap
 and hands back a `Box<ListNode>` that owns it. You rarely write `*` to reach inside —
-field access like `node.val` and `result_tail.next` *auto-dereferences* through the
+field access like `first_digit_node.val` and `total_list_tail.next` *auto-dereferences*
+through the
 box for you.
 
 **Why this way.** It's the smallest possible indirection that makes a self-referential
@@ -443,20 +445,20 @@ without taking ownership of it. The rule Rust enforces: at any moment a value ca
 **many** `&` readers **or exactly one** `&mut` writer — never both at once. That
 single-writer guarantee is what makes data races impossible.
 
-**Here.** `let mut result_tail = &mut result_head;` borrows the head node mutably, so
-we can grow the list *through* the borrow — `result_tail.next = Some(...)` writes into
-the real node, not a copy. Later `result_tail = result_tail.next.as_mut().unwrap();`
+**Here.** `let mut total_list_tail = &mut total_list_head;` borrows the head node mutably, so
+we can grow the list *through* the borrow — `total_list_tail.next = Some(...)` writes into
+the real node, not a copy. Later `total_list_tail = total_list_tail.next.as_mut().unwrap();`
 re-points the borrow at the freshly added node so the next write lands at the new end.
 
-**Without it.** With a plain `&result_head` the line `result_tail.next = Some(...)`
+**Without it.** With a plain `&total_list_head` the line `total_list_tail.next = Some(...)`
 won't compile — you can't assign through a read-only borrow. The alternative would be
 to pass *ownership* of the list around and hand it back each step, which is far
 clumsier than borrowing it once and writing through the borrow.
 
 **One confusing overlap.** `mut` shows up in two different roles. In `let mut x`, the
 `mut` makes the *binding* reassignable (`x = ...` later). In `&mut x`, the `mut` makes
-a *reference through which you can mutate* the pointed-to value. `let mut result_tail =
-&mut result_head;` uses both: the binding is reassignable (we re-point it each loop)
+a *reference through which you can mutate* the pointed-to value. `let mut total_list_tail =
+&mut total_list_head;` uses both: the binding is reassignable (we re-point it each loop)
 *and* it's a mutable reference (we write through it).
 
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
@@ -471,7 +473,10 @@ false. Two Sum used a `for` loop because it walked a known sequence to its end. 
 use `while` because we stop on a *dynamic* condition — "both lists are used up **and**
 no carry is left" — not a fixed number of steps:
 ```rust
-while first_digit.is_some() || second_digit.is_some() || carry != 0 { ... }
+while remaining_first_digits.is_some()
+    || remaining_second_digits.is_some()
+    || carried_digit_value != 0
+{ ... }
 ```
 
 First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs.md)
@@ -538,7 +543,8 @@ First seen in: [From-Zero Interlude 05a](../from-zero/rust/05a-loops-and-ranges/
 **In one line:** asks an [`Option`](#if-let) "are you holding a value?" and answers
 `true` or `false`.
 
-`first_digit.is_some()` is `true` when `first_digit` is `Some(...)` and `false` when
+`remaining_first_digits.is_some()` is `true` when `remaining_first_digits` is
+`Some(...)` and `false` when
 it's `None`. It only *peeks* — it doesn't take the value out — which is exactly what a
 loop condition wants: we check whether digits remain without disturbing them. (Its
 mirror image is `.is_none()`.)
@@ -550,25 +556,26 @@ First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs
 **In one line:** rips the value out of an `Option`, leaves `None` in its place, and
 hands you what was there.
 
-**The problem it solves.** `first_digit` is an owned `Option<Box<ListNode>>`, and we
+**The problem it solves.** `remaining_first_digits` is an owned `Option<Box<ListNode>>`, and we
 want the node inside to read its digit and step to `.next`. The obvious
-`if let Some(node) = first_digit` *moves* `first_digit` into the match — and Rust then
-considers `first_digit` used-up for the rest of the loop, so the next iteration's
-`first_digit.is_some()` won't compile. We need the inside *without* destroying the
-variable.
+`if let Some(first_digit_node) = remaining_first_digits` *moves* `remaining_first_digits`
+into the match — and Rust then considers `remaining_first_digits` used-up for the rest of
+the loop, so the next iteration's `remaining_first_digits.is_some()` won't compile. We
+need the inside *without* destroying the variable.
 
 **What `.take()` does.** It swaps the slot to `None` and returns the old contents,
 working through a `&mut`:
-- before: `first_digit` is `Some(box)`
-- `first_digit.take()` returns `Some(box)` **and** sets `first_digit` to `None`
-- we match the returned `Some(node)`, then immediately overwrite the now-`None`
-  `first_digit` with `node.next`
+- before: `remaining_first_digits` is `Some(box)`
+- `remaining_first_digits.take()` returns `Some(box)` **and** sets
+  `remaining_first_digits` to `None`
+- we match the returned `Some(first_digit_node)`, then immediately overwrite the
+  now-`None` `remaining_first_digits` with `first_digit_node.next`
 
 So the variable is always left in a valid state. If the list was already empty,
-`.take()` returns `None`, the `if let` simply doesn't fire, and `first_digit` stays
+`.take()` returns `None`, the `if let` simply doesn't fire, and `remaining_first_digits` stays
 `None` — precisely the "treat a missing digit as nothing" behavior we want.
 
-**Without it.** You'd reach for `std::mem::replace(&mut first_digit, None)` by hand —
+**Without it.** You'd reach for `std::mem::replace(&mut remaining_first_digits, None)` by hand —
 which is exactly what `.take()` is shorthand for.
 
 Taught from zero — `.take()` alongside `.as_ref()` / `.as_mut()` as the three ways to reach
@@ -582,10 +589,10 @@ First seen in: [2. Add Two Numbers](../problems/0002-add-two-numbers/solution.rs
 **In one line:** turns a `&mut Option<T>` into an `Option<&mut T>` — lets you reach a
 mutable pointer to the value *inside* without removing it.
 
-After `result_tail.next = Some(Box::new(...))`, we want to advance the tail to that
+After `total_list_tail.next = Some(Box::new(...))`, we want to advance the tail to that
 brand-new node. `.take()` would be wrong here — it would yank the node back out, the
 opposite of what we want. `.as_mut()` instead borrows into the `Option`:
-- `result_tail.next` is an `Option<Box<ListNode>>`
+- `total_list_tail.next` is an `Option<Box<ListNode>>`
 - `.as_mut()` gives `Option<&mut Box<ListNode>>` — a mutable peek, value left in place
 - [`.unwrap()`](#unwrap) pulls out the `&mut Box<ListNode>` we re-point the tail to
 
@@ -607,7 +614,7 @@ if it's `None` instead.
 `.unwrap()` is the blunt way to get inside an [`Option`](#if-let): on `Some(x)` it
 returns `x`, on `None` it panics. That makes it risky in general — a `None` you didn't
 expect takes the whole program down. It's safe *here* only because the line right above
-just set `result_tail.next = Some(...)`, so the value is provably present; we use
+just set `total_list_tail.next = Some(...)`, so the value is provably present; we use
 `.unwrap()` to say "I know this is `Some`." When you *can't* prove that, reach for
 [`if let`](#if-let) or a `match`, which handle the `None` case instead of exploding.
 
@@ -630,7 +637,7 @@ Rust has two main string types, and the split trips up newcomers:
   literal like `"abc"` is a `&str`.
 
 Think of `String` as owning the notebook and `&str` as being allowed to read a page
-of someone else's notebook. Here we only read `text`, so `&str` would also have worked —
+of someone else's notebook. Here we only read `input_text`, so `&str` would also have worked —
 but LeetCode's signature hands us an owned `String`, so that's what we take. We never
 need to reach for the difference in this solution; we immediately walk it with
 [`.chars()`](#chars).
@@ -653,23 +660,24 @@ Rust text is stored as UTF-8, where one character can take several bytes. So Rus
 makes you say *how* you want to walk it, and `.chars()` is the "give me whole
 characters" choice.
 
-**What types are flowing.** Trace `for (current_index, current_char) in text.chars().enumerate()`:
-- `text` is a `String`
+**What types are flowing.** Trace
+`for (current_character_index, current_character) in input_text.chars().enumerate()`:
+- `input_text` is a `String`
 - `.chars()` yields `char` — each Unicode character, **by value** (a `char` is a
   cheap 4-byte `Copy` type, so you get your own copy, not a reference)
 - `.enumerate()` wraps each into `(usize, char)`, counting from 0
 
-So each loop item is a `(usize, char)`, unpacked into `current_index` and
-`current_char`.
+So each loop item is a `(usize, char)`, unpacked into `current_character_index` and
+`current_character`.
 
 **Why no `&` peel here?** Compare with the [`.iter()` loop in Two Sum](#for-iter-enumerate),
-where we wrote `&current_value` to strip a reference. That was needed because
+where we wrote `&current_number_value` to strip a reference. That was needed because
 `.iter()` yields *references* (`&i32`). `.chars()` is different — it yields owned
 `char` values outright, so there's nothing to peel and the pattern is a plain
-`current_char`. One fewer `&` to remember, purely because of what the iterator
+`current_character`. One fewer `&` to remember, purely because of what the iterator
 produces.
 
-**A word on the index.** `current_index` here counts **characters**, not bytes —
+**A word on the index.** `current_character_index` here counts **characters**, not bytes —
 because `.enumerate()` numbers the items `.chars()` produces. That's exactly what we
 want for measuring a substring's length in characters.
 
@@ -713,15 +721,18 @@ can't go negative, and subtracting past zero **crashes** rather than wrapping to
 minus number.
 
 Positions and lengths in Rust are `usize` (an unsigned integer: zero or above,
-never negative). That's why `current_index` and `window_start` are `usize`. The
+never negative). That's why `current_character_index` and
+`current_substring_start_index` are `usize`. The
 catch: because it can't represent `-1`, a subtraction like `a - b` where `b > a`
 doesn't give a negative — in debug builds it **panics** (crashes), and in release
 builds it silently wraps to a huge number. Either way it's a bug.
 
-So `current_index - window_start + 1` is only safe because we can *prove*
-`window_start` never passes `current_index`. And we can: `window_start` only ever
-jumps to `previous_index + 1`, and `previous_index` is always an earlier position
-than `current_index`, so `window_start ≤ current_index` at that line — the
+So `current_character_index - current_substring_start_index + 1` is only safe because we
+can *prove* `current_substring_start_index` never passes `current_character_index`. And
+we can: `current_substring_start_index` only ever jumps to
+`existing_character_index + 1`, and `existing_character_index` is always an earlier
+position than `current_character_index`, so
+`current_substring_start_index ≤ current_character_index` at that line — the
 subtraction is always `≥ 0`. When you subtract `usize` values, always check that the
 left side can't dip below the right.
 
@@ -785,15 +796,16 @@ First seen in: [Palindrome Number](../challenges/palindrome-number/README.md)
 returns the smaller.
 
 Any two values that can be ordered (all the number types, for instance) support
-`.max()` and `.min()` as methods. `longest = longest.max(current_index - window_start + 1)`
-reads as "set `longest` to the bigger of its current value and the new window
-width" — the standard way to keep a running maximum without an `if`.
+`.max()` and `.min()` as methods.
+`longest_substring_length = longest_substring_length.max(current_substring_length)`
+reads as "set `longest_substring_length` to the bigger of its current value and the new
+window width" — the standard way to keep a running maximum without an `if`.
 
 **The "without it" version.** You could write it by hand:
 ```rust
-let width = current_index - window_start + 1;
-if width > longest {
-    longest = width;
+let current_substring_length = current_character_index - current_substring_start_index + 1;
+if current_substring_length > longest_substring_length {
+    longest_substring_length = current_substring_length;
 }
 ```
 Same effect, three lines instead of one. `.max()` is just the tidy, idiomatic form
@@ -2401,21 +2413,21 @@ It's [`if let`](#if-let) with a loop instead of a branch. Walking a linked list 
 classic use — keep going while there's still a node, stop at the `None` end:
 
 ```rust
-let mut node = head;
-while let Some(current) = node {
-    digits.push(current.val);
-    node = current.next;
+let mut remaining_node = head;
+while let Some(current_node) = remaining_node {
+    digit_values.push(current_node.val);
+    remaining_node = current_node.next;
 }
 ```
 
-**Trace what happens.** `node` is an `Option<Box<ListNode>>` — a node, or the end of
-the list. Each pass, `while let Some(current) = node` tries the pattern: if `node` is
-a `Some`, `current` is bound to the node inside and the body runs; if it's `None`,
-the pattern fails and the loop ends. The last line moves the loop on by making `node`
-the next link.
+**Trace what happens.** `remaining_node` is an `Option<Box<ListNode>>` — a node, or the
+end of the list. Each pass, `while let Some(current_node) = remaining_node` tries the
+pattern: if `remaining_node` is a `Some`, `current_node` is bound to the node inside and
+the body runs; if it's `None`, the pattern fails and the loop ends. The last line moves
+the loop on by making `remaining_node` the next link.
 
 **The `while` version is clumsier.** With a plain [`while`](#while) you'd write
-`while node.is_some()` and then dig the value out by hand with
+`while remaining_node.is_some()` and then dig the value out by hand with
 [`.unwrap()`](#unwrap) — a second step that can panic, guarding a condition you
 already tested. `while let` does the test and the extraction in one move, and there's
 no `unwrap` to get wrong.
